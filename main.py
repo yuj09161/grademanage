@@ -8,12 +8,14 @@ from tkinter.filedialog import asksaveasfilename as asksave
 
 import copy,pickle,json,decimal
 
+CUTS=(4,11,23,40,60,77,89,96,100)
+
 #초기화
 win=tk.Tk()
 win.resizable(False,False)
 win.title('성적계산기')
 #전역 변수 생성
-current_exam='311'; file_name=''
+current_exam='111'; file_name=''
 result_semester,result_exam={},{}
 for a in range(1,4):
     for b in range(1,3):
@@ -31,20 +33,20 @@ def get_score(subject=None):
     def calc(subject):
         if subject in current_wrong.keys(): #과목 존재?
             wrong=current_wrong[subject]
-            score,num=decimal.Decimal(100),0
+            score,err_cnt=decimal.Decimal(100),0
             #객관식 오답 계산
             wrong_sel=tuple(wrong[0].values())
             if wrong_sel:
-                num+=len(wrong_sel)
+                err_cnt+=len(wrong_sel)
                 for j in range(len(wrong_sel)):
                     score-=decimal.Decimal(str(wrong_sel[j][2]))
             #서술형 오답 계산
             wrong_exp=tuple(wrong[1].values())
             if wrong_exp:
-                num+=len(wrong_exp)
+                err_cnt+=len(wrong_exp)
                 for j in range(len(wrong_exp)):
                     score-=decimal.Decimal(str(wrong_exp[j][1]))-decimal.Decimal(str(wrong_exp[j][0]))
-            return score,num
+            return str(score),str(err_cnt)
         else:
             return None
     if subject:
@@ -85,6 +87,12 @@ def update_btn():
         btn[1][0]['state']='disable'
         btn[1][1]['state']='disable'
         btn[1][2]['state']='disable'
+
+def cut(person):
+    cuts=(4,11,23,40,60,77,89,96,100); result=[]
+    for cut in cuts:
+        result.append(round(person*cut*0.01))
+    return result
 
 '''창 클래스들'''
 #진행 바(연속형)
@@ -238,9 +246,9 @@ class grade_ing():
             if x:
                 for k in range(len(x[0])):
                     if x[0][k]<=5 and x[0][k]!=x[1][k]:
-                        self.__err1[k+1]=[x[0][k],x[1][k]]
+                        self.__err1[k+1]=(x[0][k],x[1][k])
                     elif x[0][k]==7:
-                        self.__err2[k+1]=[]
+                        self.__err2[k+1]=None
                 n,m=len(self.__err1),len(self.__err2)
                 var=msgbox.askyesno("오답 확인",
                     "<오답 개수>\n선택형: %s\n서답형: %s\n채점 진행?"
@@ -289,7 +297,7 @@ class grade_ing():
         def next():
             try:
                 for k in range(len(score_in)):
-                    self.__err1[num[k]]=tuple(self.__err1[num[k]]+[decimal.Decimal(score_in[k].get())])
+                    self.__err1[num[k]]=self.__err1[num[k]]+(score_in[k].get(),)
                 if self.__err2:
                     top.destroy()
                     self.__err_comp()
@@ -310,7 +318,8 @@ class grade_ing():
         score_in=[]
         for k in range(len(self.__err1)):
             tk.Label(mid,text=num[k]).grid(row=k+1,column=0)
-            score_in.append(tk.Entry(mid,width=7)); score_in[k].grid(row=k+1,column=1)
+            score_in.append(tk.Entry(mid,width=7))
+            score_in[k].grid(row=k+1,column=1)
         mid.grid(row=0,column=0,columnspan=2)
         if self.__err1:
             str_btn='다음→'
@@ -328,7 +337,7 @@ class grade_ing():
         def next():
             try:
                 for k in range(len(score_in)):
-                    self.__err2[num[k]]=(decimal.Decimal(score_in[k].get()),decimal.Decimal(score_in2[k].get()))
+                    self.__err2[num[k]]=(score_in[k].get(),score_in2[k].get())
                 var=msgbox.askyesno('채점 완료?','채점 완료?')
                 if var:
                     top.destroy()
@@ -428,11 +437,11 @@ class grad_res():
             tk.Label(f_mid,text=subjects[k]).grid(row=k+1,column=0)
             lab.append([])
             if score[k]:
-                lab[k].append(tk.Label(f_mid,text=str(score[k][1])))
+                lab[k].append(tk.Label(f_mid,text=score[k][1]))
                 lab[k][0].grid(row=k+1,column=1)
-                lab[k].append(tk.Label(f_mid,text=str(score[k][0])))
+                lab[k].append(tk.Label(f_mid,text=score[k][0]))
                 lab[k][1].grid(row=k+1,column=2,padx=5)
-                if score[k][0]!=100:
+                if score[k][0]!='100':
                     btn_make(subjects[k],k+1)
             else:
                 tk.Label(f_mid,text='채점 전').grid(row=k+1,column=1,columnspan=2,padx=5)
@@ -473,6 +482,8 @@ class grad_res():
                     tk.Label(err_comp,text=wrong[1][err_num[k]][j]).grid(row=k+1,column=j+2)
             err_comp.grid(row=1,column=0,padx=5,pady=5,sticky='w')
         tk.Button(top,text='닫기',command=top.destroy).grid(row=2,column=0,sticky='e')
+
+
 #(예상)등급계산
 class grade_calc():
     def __init__(self):
@@ -550,13 +561,14 @@ class grade_calc():
         else:
             msgbox.showerror('Error','개수 오류')
             return None,None
+
+
 #성적 입력
 class exam_input():
     def __init__(self):
         global current_num,current_result
         def btn_make(n):
-            tk.Button(f_mid,text='X',command=lambda:
-            del_subject(n)).grid(row=n+1,column=5,padx=3)
+            tk.Button(f_mid,text='X',command=lambda: del_subject(n)).grid(row=n+1,column=5,padx=3)
         def del_subject(n):
             for k in range(3):
                 ent[n][k].set('')
@@ -564,13 +576,11 @@ class exam_input():
             for k in range(length):
                 del_subject(k)
         def exit():
-            var_b,var_p,res=False,False,[]
+            var_b=False; res=[]
             try:
                 for k in range(length):
                     a,b,c=ent[k][0].get(),ent[k][1].get(),ent[k][2].get()
-                    if a:
-                        a=decimal.Decimal(a)
-                    else:
+                    if not a:
                         a,var_b=None,True
                     if b:
                         b=int(b)
@@ -624,18 +634,24 @@ class exam_input():
             f_bot2.grid(row=1,column=1,sticky='e')
         else:
             msgbox.showerror('Error','과목 입력 안됨')
+
+
 #시혐 결과
 class exam_res():
     def __init__(self):
         global current_result
         def grade(rank,person):
             percent=rank/person*100
-            cuts=(4,11,23,40,60,77,89,96,100)
-            grade=1
+            cuts=cut(person)
+            grade=0
             for k in range(9):
-                if percent<=cuts[k]:
+                if rank<=cuts[k]:
                     grade=k+1
                     break
+            '''
+            if not grade:
+                grade=9
+            '''
             return grade,percent
         def calc(subjects,num,grd):
             result=0
@@ -694,7 +710,7 @@ class cut_calc():
     def __init__(self):
         result=['','','','','','','','','']
         cuts=(4,11,23,40,60,77,89,96,100)
-        def get(*args):
+        def get():
             try:
                 a=int(ent.get())
             except ValueError:
@@ -815,7 +831,6 @@ def save(name=None):
         name=asksave()
     if name:
         prog=progbar('Save','Saving...')
-        global current_num,current_wrong,current_result
         if current_exam[2]=='3': #학기말
             result_semester[current_exam[:2]]=[current_num,current_result]
         else: #중간고사or기말고사
