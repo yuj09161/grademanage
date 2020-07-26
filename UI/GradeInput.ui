@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GradeCalc</class>
- <widget class="QWidget" name="GradeCalc">
+ <class>GradeInput</class>
+ <widget class="QWidget" name="GradeInput">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -135,7 +135,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>인원계산</string>
+       <string>초기화</string>
       </property>
      </widget>
     </item>
@@ -161,7 +161,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>초기화</string>
+       <string>취소</string>
       </property>
      </widget>
     </item>
@@ -174,7 +174,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>닫기</string>
+       <string>입력</string>
       </property>
      </widget>
     </item>
