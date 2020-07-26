@@ -1,45 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Grading1</class>
- <widget class="QMainWindow" name="Grading1">
+ <widget class="QWidget" name="Grading1">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>175</width>
-    <height>67</height>
+    <width>220</width>
+    <height>80</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>과목선택</string>
+   <string>Form</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>과목:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QComboBox" name="comboBox"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>취소</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="text">
-       <string>다음</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+  <widget class="QPushButton" name="btnNext">
+   <property name="geometry">
+    <rect>
+     <x>113</x>
+     <y>43</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>다음</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbSubject">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>15</y>
+     <width>35</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>과목:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboSubject">
+   <property name="geometry">
+    <rect>
+     <x>56</x>
+     <y>15</y>
+     <width>151</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnBack">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>43</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>취소</string>
+   </property>
   </widget>
  </widget>
  <resources/>
