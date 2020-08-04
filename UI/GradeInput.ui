@@ -236,6 +236,9 @@
    <property name="inputMask">
     <string>Ddd</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
   <widget class="QLineEdit" name="lnGrd2">
    <property name="geometry">
@@ -249,6 +252,9 @@
    <property name="inputMask">
     <string>Ddd</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
   <widget class="QLineEdit" name="lnGrd2_2">
    <property name="geometry">
@@ -261,6 +267,9 @@
    </property>
    <property name="inputMask">
     <string>Ddd</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="lbEnd_2">

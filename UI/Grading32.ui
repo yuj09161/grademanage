@@ -25,6 +25,9 @@
    <property name="inputMask">
     <string>D.d</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
   </widget>
   <widget class="QLabel" name="lbGet">
    <property name="geometry">
@@ -53,6 +56,9 @@
    </property>
    <property name="inputMask">
     <string>D.d</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QPushButton" name="btnNext">
