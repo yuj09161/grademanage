@@ -388,8 +388,10 @@ class grade_ing():
         score_in,score_in2=[],[]
         for k in range(len(self.__err2)):
             tk.Label(mid,text=num[k]).grid(row=k+1,column=0)
-            score_in.append(tk.Entry(mid,width=7)); score_in[k].grid(row=k+1,column=1)
-            score_in2.append(tk.Entry(mid,width=7)); score_in2[k].grid(row=k+1,column=2)
+            score_in.append(tk.Entry(mid,width=7))
+            score_in2.append(tk.Entry(mid,width=7))
+            score_in[k].grid(row=k+1,column=1)
+            score_in2[k].grid(row=k+1,column=2)
         mid.grid(row=0,column=0,columnspan=2)
         tk.Button(top,text='←이전',command=priv).grid(row=1,column=0,sticky='w',padx=10)
         tk.Button(top,text='채점',command=next).grid(row=1,column=1,sticky='e',padx=10)
@@ -409,10 +411,11 @@ class grade_ing():
         top.title('결과')
         if self.__err1 or self.__err2:
             score=100
+            print(self.__err1,self.__err2)
             for err1 in self.__err1:
-                score=score-err1[2]
+                score=score-self.__err1[err1][2]
             for err2 in self.__err2:
-                score=score-err2[1]+err2[0]
+                score=score-self.__err2[err2][1]+self.__err2[err2][0]
             tk.Label(top,text='오답 수: %s\n점수: %s' %(str(len(self.__err1)+len(self.__err2)),str(score))).grid(row=0,column=0,columnspan=2)
         else:
             tk.Label(top,text='만점!\n점수: 100').grid(row=0,column=0,columnspan=2)
