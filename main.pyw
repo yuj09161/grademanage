@@ -6,7 +6,8 @@ from tkinter.ttk import Progressbar
 from tkinter.filedialog import askopenfilename as askopen
 from tkinter.filedialog import asksaveasfilename as asksave
 
-import copy,pickle,json,decimal
+import copy,pickle,json
+from decimal import Decimal as dec
 
 ASK_ON_CLOSE=True
 
@@ -35,19 +36,19 @@ def get_score(subject=None):
     def calc(subject):
         if subject in current_wrong.keys(): #과목 존재?
             wrong=current_wrong[subject]
-            score,err_cnt=decimal.Decimal(100),0
+            score,err_cnt=dec(100),0
             #객관식 오답 계산
             wrong_sel=tuple(wrong[0].values())
             if wrong_sel:
                 err_cnt+=len(wrong_sel)
                 for j in range(len(wrong_sel)):
-                    score-=decimal.Decimal(str(wrong_sel[j][2]))
+                    score-=dec(str(wrong_sel[j][2]))
             #서술형 오답 계산
             wrong_exp=tuple(wrong[1].values())
             if wrong_exp:
                 err_cnt+=len(wrong_exp)
                 for j in range(len(wrong_exp)):
-                    score-=decimal.Decimal(str(wrong_exp[j][1]))-decimal.Decimal(str(wrong_exp[j][0]))
+                    score-=dec(str(wrong_exp[j][1]))-dec(str(wrong_exp[j][0]))
             return str(score),str(err_cnt)
         else:
             return None
@@ -246,7 +247,7 @@ class grade_ing():
                         if len(a)!=len(b) or len(a)>5 or len(b)>5:
                             raise ValueError
                         if a and b:
-                            a,b=list(a),list(b)
+                            a=list(a); b=list(b)
                             for x in range(len(a)):
                                 a[x]=int(a[x])
                                 b[x]=int(b[x])
@@ -264,8 +265,7 @@ class grade_ing():
                 return None
             else:
                 if len(ans)==len(cor):
-                    ans,cor=tuple(ans),tuple(cor)
-                    return (ans,cor)
+                    return ans,cor
                 else:
                     msgbox.showerror(title='ERROR',message='개수 오류')
                     return None
@@ -291,14 +291,12 @@ class grade_ing():
                     %(n,m)
                 )
                 if var:
+                    top.destroy()
                     if self.__err1:
-                        top.destroy()
                         self.__err_sel()
                     elif self.__err2:
-                        top.destroy()
                         self.__err_comp()
                     else:
-                        top.destroy()
                         self.__result()
         #메인
         top=tk.Toplevel(win)
@@ -332,7 +330,7 @@ class grade_ing():
         def next():
             try:
                 for k in range(len(score_in)):
-                    self.__err1[num[k]]=self.__err1[num[k]]+(score_in[k].get(),)
+                    self.__err1[err_num[k]]+=(dec(score_in[k].get()),)
                 if self.__err2:
                     top.destroy()
                     self.__err_comp()
@@ -349,10 +347,10 @@ class grade_ing():
         mid=tk.Frame(top)
         tk.Label(mid,text='번호').grid(row=0,column=0)
         tk.Label(mid,text='배점').grid(row=0,column=1)
-        num=list(self.__err1.keys())
+        err_num=list(self.__err1.keys())
         score_in=[]
         for k in range(len(self.__err1)):
-            tk.Label(mid,text=num[k]).grid(row=k+1,column=0)
+            tk.Label(mid,text=err_num[k]).grid(row=k+1,column=0)
             score_in.append(tk.Entry(mid,width=7))
             score_in[k].grid(row=k+1,column=1)
         mid.grid(row=0,column=0,columnspan=2)
@@ -372,7 +370,7 @@ class grade_ing():
         def next():
             try:
                 for k in range(len(score_in)):
-                    self.__err2[num[k]]=(score_in[k].get(),score_in2[k].get())
+                    self.__err2[num[k]]=(dec(score_in[k].get()),dec(score_in2[k].get()))
                 var=msgbox.askyesno('채점 완료?','채점 완료?')
                 if var:
                     top.destroy()
@@ -409,15 +407,13 @@ class grade_ing():
         top=tk.Toplevel(win)
         top.resizable(False,False)
         top.title('결과')
-        score=100
-        key_num=list(self.__err1.keys())
-        for k in range(len(self.__err1)):
-            score=score-self.__err1[key_num[k]][2]
-        key_num=list(self.__err2.keys())
-        for k in range(len(self.__err2)):
-            score=score-self.__err2[key_num[k]][1]+self.__err2[key_num[k]][0]
         if self.__err1 or self.__err2:
-            tk.Label(top,text='오답 수: %s\n점수: %s' %(str(len(self.__err1)+len(self.__err2)),score)).grid(row=0,column=0,columnspan=2)
+            score=100
+            for err1 in self.__err1:
+                score=score-err1[2]
+            for err2 in self.__err2:
+                score=score-err2[1]+err2[0]
+            tk.Label(top,text='오답 수: %s\n점수: %s' %(str(len(self.__err1)+len(self.__err2)),str(score))).grid(row=0,column=0,columnspan=2)
         else:
             tk.Label(top,text='만점!\n점수: 100').grid(row=0,column=0,columnspan=2)
         tk.Button(top,text='상세',command=next).grid(row=1,column=0,sticky='w',padx=10)
@@ -442,11 +438,11 @@ class grad_res():
         def btn_make(subject,n):
             tk.Button(f_mid,text='상세?',command=lambda:
             self.__detail(subject)).grid(row=n,column=3)
-        def del_res(mode=False):
+        def del_res(all_subject=False):
             global current_wrong
             var=msgbox.askyesno('삭제?','복원 불가\n삭제?')
             if var:
-                if mode:
+                if all_subject:
                     for k in range(len(current_subjects)):
                         if current_subjects[k] in current_wrong.keys():
                             del current_wrong[current_subjects[k]]
