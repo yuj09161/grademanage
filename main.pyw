@@ -313,7 +313,7 @@ class Input_subject:
                 for b in range(5):
                     self.__inbox[a][b].grid(row=a+1,column=b)
     def __del_subject(self,n):
-        for a in range(3):
+        for a in range(5):
             self.__inbox[n][a].grid_forget()
         self.__inbox[n]=None
     def __set_subject(self):
@@ -324,6 +324,7 @@ class Input_subject:
                 if self.__inbox[k]:
                     current_num[self.__invar[k][0].get()]=(int(self.__invar[k][1].get()),self.__invar[k][2].get(),self.__invar[k][3].get())
                     saved=False
+                    print(saved)
         except ValueError:
             msgbox.showerror(title='ERROR',message='잘못된 값 입력')
         else:
@@ -984,11 +985,15 @@ def load(name=None):
                 load()
     if not name:
         name=askopen()
-    if saved:
+    elif saved:
         worker()
     else:
         var=msgbox.askyesnocancel('Info','저장 안됨\n저장?')
         print(var)
+        '''
+        if var:
+            worker()
+        '''
 
 
 #쓰기
