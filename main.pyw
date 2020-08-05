@@ -42,13 +42,13 @@ def get_score(subject=None):
             if wrong_sel:
                 err_cnt+=len(wrong_sel)
                 for j in range(len(wrong_sel)):
-                    score-=dec(str(wrong_sel[j][2]))
+                    score-=dec(wrong_sel[j][2])
             #서술형 오답 계산
             wrong_exp=tuple(wrong[1].values())
             if wrong_exp:
                 err_cnt+=len(wrong_exp)
                 for j in range(len(wrong_exp)):
-                    score-=dec(str(wrong_exp[j][1]))-dec(str(wrong_exp[j][0]))
+                    score-=dec(wrong_exp[j][1])-dec(wrong_exp[j][0])
             return str(score),str(err_cnt)
         else:
             return None
@@ -330,7 +330,7 @@ class grade_ing():
         def next():
             try:
                 for k in range(len(score_in)):
-                    self.__err1[err_num[k]]+=(dec(score_in[k].get()),)
+                    self.__err1[err_num[k]]+=(score_in[k].get(),)
                 if self.__err2:
                     top.destroy()
                     self.__err_comp()
@@ -370,7 +370,7 @@ class grade_ing():
         def next():
             try:
                 for k in range(len(score_in)):
-                    self.__err2[num[k]]=(dec(score_in[k].get()),dec(score_in2[k].get()))
+                    self.__err2[num[k]]=(score_in[k].get(),score_in2[k].get())
                 var=msgbox.askyesno('채점 완료?','채점 완료?')
                 if var:
                     top.destroy()
@@ -413,9 +413,9 @@ class grade_ing():
             score=100
             print(self.__err1,self.__err2)
             for err1 in self.__err1:
-                score=score-self.__err1[err1][2]
+                score=score-dec(self.__err1[err1][2])
             for err2 in self.__err2:
-                score=score-self.__err2[err2][1]+self.__err2[err2][0]
+                score=score-dec(self.__err2[err2][1])+dec(self.__err2[err2][0])
             tk.Label(top,text='오답 수: %s\n점수: %s' %(str(len(self.__err1)+len(self.__err2)),str(score))).grid(row=0,column=0,columnspan=2)
         else:
             tk.Label(top,text='만점!\n점수: 100').grid(row=0,column=0,columnspan=2)
