@@ -616,21 +616,6 @@ class Grade_ing(tk.Toplevel):
         tk.Button(top,text='닫기',command=close).grid(row=1,column=1,sticky='e',padx=10)
         write()
 
-'''
-#가채점결과
-class Grad_res(tk.Toplevel):
-    def __init__(self,subject=None):
-        if current_wrong:
-            if subject:
-                if subject in current_subjects:
-                    self.__detail(subject)
-                else:
-                    msgbox.showerror('Error','없는 과목')
-            else:
-                self.__main()
-        else:
-            msgbox.showerror(title='ERROR',message='가채점 안됨')
-'''
 
 class Grad_result(tk.Toplevel):
     def __init__(self):
@@ -718,31 +703,13 @@ class Grad_detail(tk.Toplevel):
                         tk.Label(err_comp,text=wrong[1][err_num[k]][j]).grid(row=k+1,column=j+2)
                 err_comp.grid(row=1,column=0,padx=5,pady=5,sticky='w')
             tk.Button(self,text='닫기',command=self.destroy).grid(row=2,column=0,sticky='e')
-
         else:
             msgbox.showerror('Error','없는 과목')
+
 
 #(예상)등급계산
 class Grade_calc(tk.Toplevel):
     def __init__(self):
-        def get():
-            grd1,grd2=[],[]
-            try:
-                for k in range(len(current_subjects)):
-                    grd1.append(int(grade1[k].get()))
-                    tmp=grade2[k].get()
-                    if tmp:
-                        grd2.append(int(tmp))
-                    else:
-                        grd2.append(None)
-                max,min=self.__calc(grd1,grd2)
-                msgbox.showinfo('결과','최고: %s\n최저: %s' %(max,min))
-            except ValueError:
-                msgbox.showerror('Error','잘못된 값 입력')
-        def del_all():
-            for k in range(len(current_subjects)):
-                grade1[k].set('')
-                grade2[k].set('')
         if len(current_subjects)==0:
             msgbox.showerror('Error','과목 입력 안됨')
         else:
@@ -753,24 +720,63 @@ class Grade_calc(tk.Toplevel):
             str_self=('과목명','시수','등급1','등급2')
             for a in range(4):
                 tk.Label(f_mid,text=str_self[a]).grid(row=0,column=a)
-            grade1,grade2=[],[]
+            self.__grade1,self.__grade2=[],[]
             k=0
             for subject in current_subjects:
                 tk.Label(f_mid,text=subject).grid(row=k+1,column=0)
                 tk.Label(f_mid,text=current_num[subject][0]).grid(row=k+1,column=1)
-                grade1.append(tk.StringVar())
-                grade2.append(tk.StringVar())
-                tk.Entry(f_mid,width=7,textvariable=grade1[k]).grid(row=k+1,column=2)
-                tk.Entry(f_mid,width=7,textvariable=grade2[k]).grid(row=k+1,column=3)
+                self.__grade1.append(tk.StringVar())
+                self.__grade2.append(tk.StringVar())
+                tk.Entry(f_mid,width=7,textvariable=self.__grade1[-1]).grid(row=k+1,column=2)
+                tk.Entry(f_mid,width=7,textvariable=self.__grade2[-1]).grid(row=k+1,column=3)
                 k+=1
             f_mid.grid(row=0,column=0,columnspan=2)
             tk.Button(self,text='극간계산',command=Cut_calc).grid(row=1,column=0,sticky='w')
-            tk.Button(f_bot,text='초기화',command=del_all).grid(row=0,column=0,sticky='e')
-            tk.Button(f_bot,text='계산',command=get).grid(row=0,column=1,sticky='e')
+            tk.Button(f_bot,text='초기화',command=self.__del_all).grid(row=0,column=0,sticky='e')
+            tk.Button(f_bot,text='계산',command=self.__calc).grid(row=0,column=1,sticky='e')
             tk.Button(f_bot,text='닫기',command=self.destroy).grid(row=0,column=2,sticky='e')
             f_bot.grid(row=1,column=1,sticky='e')
             k+=1
-    def __calc(self,grd1,grd2):
+    
+    def __calc(self):
+        try:
+            n=len(current_subjects)
+            nums=get_current_num()
+            total_num=sum(nums)
+            max_grade=0
+            min_grade=0
+            for k in range(n):
+                in1=self.__grade1[k].get()
+                in2=self.__grade2[k].get()
+                grd1=int(in1)
+                if 0<grd1>9:
+                    raise ValueError
+                if in2:
+                    grd2=int(in2)
+                    max_grade+=min(grd1,grd2)*nums[k]
+                    min_grade+=max(grd1,grd2)*nums[k]
+                else:
+                    max_grade+=grd1*nums[k]
+                    min_grade+=grd1*nums[k]
+        except ValueError:
+            msgbox.showerror('Error','잘못된 입력')
+        else:
+            msgbox.showinfo(
+                '결과',
+                '최고: %s\n최저: %s' %(
+                    round(max_grade/total_num,4),
+                    round(min_grade/total_num,4)
+                )
+            )
+    
+    def __del_all(self):
+        for k in range(len(current_subjects)):
+            self.__grade1[k].set('')
+            self.__grade2[k].set('')
+    
+    '''
+    #not used, but remain for future
+    def __calc_full(self,grd1,grd2):
         #파싱
         if len(current_subjects)==len(grd1):
             length=len(current_subjects)
@@ -800,6 +806,7 @@ class Grade_calc(tk.Toplevel):
         else:
             msgbox.showerror('Error','개수 오류')
             return None,None
+    '''
 
 
 #성적 입력
@@ -943,24 +950,13 @@ class Cut_calc(tk.Toplevel):
     def __init__(self):
         result=['','','','','','','','','']
         cuts=(4,11,23,40,60,77,89,96,100)
-        def get():
-            try:
-                a=int(ent.get())
-            except ValueError:
-                msgbox.showerror('Error','인원수 오류')
-            else:
-                result=[]
-                for k in cuts:
-                    result.append(round(a*k/100))
-                for k in range(9):
-                    tk.Label(f_mid,text=str(result[k])+'명').grid(row=k+1,column=2)
         super().__init__(main)
         self.resizable(False,False)
         self.title('등급인원계산')
         f_self,f_mid,f_bot=tk.Frame(self),tk.Frame(self),tk.Frame(self)
         tk.Label(f_self,text='인원').grid(row=0,column=0)
         ent=tk.Entry(f_self)
-        ent.bind('<Return>',get)
+        ent.bind('<Return>',self.__get)
         ent.grid(row=0,column=1)
         str_self=('등급','누적비율','누적인원수')
         for k in range(3):
@@ -970,10 +966,23 @@ class Cut_calc(tk.Toplevel):
             tk.Label(f_mid,text=str(cuts[k])+'%').grid(row=k+1,column=1)
             tk.Label(f_mid,text='').grid(row=k+1,column=2)
         tk.Button(f_bot,text='닫기',command=self.destroy).grid(row=0,column=0)
-        tk.Button(f_bot,text='계산',command=get).grid(row=0,column=1)
+        tk.Button(f_bot,text='계산',command=self.__get).grid(row=0,column=1)
         f_self.grid(row=0,column=0)
         f_mid.grid(row=1,column=0)
         f_bot.grid(row=2,column=0)
+    
+    
+    def __get(self):
+        try:
+            a=int(ent.get())
+        except ValueError:
+            msgbox.showerror('Error','인원수 오류')
+        else:
+            result=[]
+            for k in cuts:
+                result.append(round(a*k/100))
+            for k in range(9):
+                tk.Label(f_mid,text=str(result[k])+'명').grid(row=k+1,column=2)
 
 
 #안내 Root Class
@@ -996,6 +1005,7 @@ class Notice(tk.Toplevel):
                 text+=line+'\n'
         return text[:-1]
 
+
 #도움말
 class Help(Notice):
     def __init__(self):
@@ -1004,6 +1014,8 @@ class Help(Notice):
 '''
         txt=super().form(text)
         super().__init__('도움말','help',txt)
+
+
 #라이선스
 class License(Notice):
     def __init__(self):
@@ -1012,6 +1024,8 @@ class License(Notice):
 '''
         txt=super().form(text)
         super().__init__('License','license',txt)
+
+
 #정보
 class Info(Notice):
     def __init__(self):
