@@ -16,7 +16,7 @@ CUTS=(4,11,23,40,60,77,89,96,100)
 #초기화
 
 #전역 변수 생성
-current_exam='111'; file_name=''; saved=True
+current_exam='111'; last_file=''; saved=True
 result_semester,result_exam={},{}
 for a in range(1,4):
     for b in range(1,3):
@@ -27,7 +27,7 @@ current_num={}
 current_wrong={}
 current_result={}
 
-'''전역함수(콜백 제외)'''
+'''전역함수'''
 
 #점수 계산
 def get_score(subject=None):
@@ -102,6 +102,74 @@ def get_current_num(*,name=False,dictionary=False):
                 return tmp
 
 
+#읽기
+def load(name=None):
+    def loader():
+        global result_semester,result_exam,saved,last_file
+        if name:
+            prog=Progbar('Load','Loading...')
+            try:
+                global current_num,current_wrong,current_result
+                with open(name,'r',encoding='utf-8') as file:
+                    result_semester,result_exam=json.load(file)
+                if current_exam[2]=='3': #학기말
+                    current_num,current_result=result_semester[current_exam[:2]]
+                else: #중간고사or기말고사
+                    current_num=result_semester[current_exam[:2]][0]
+                    current_wrong,current_result=result_exam[current_exam]
+                main.update_btn()
+            except IOError:
+                tmp=msgbox.askretrycancel('Error','읽기 에러')
+                if tmp:
+                    load(name)
+            except json.JSONDecodeError as e:
+                msgbox.showerror('Error','파일 형식 오류')
+            except ValueError as e:
+                msgbox.showerror('Error','파일 형식 오류')
+            else:
+                saved=True
+                last_file=name
+            finally:
+                prog.destroy()
+    if not name:
+        name=askopen()
+    if saved:
+        loader()
+    else:
+        var=msgbox.askyesnocancel('Info','저장 안됨\n저장?')
+        if var:
+            save()
+            loader()
+        elif var==False:
+            loader()
+
+
+#쓰기
+def save(last=False,*,name=None):
+    global result_semester,result_exam,last_file,saved
+    if not name:
+        name=asksave()
+    if name:
+        prog=Progbar('Save','Saving...')
+        if current_exam[2]=='3': #학기말
+            result_semester[current_exam[:2]]=[current_num,current_result]
+        else: #중간고사or기말고사
+            result_semester[current_exam[:2]][0]=current_num
+            result_exam[current_exam]=[current_wrong,current_result]
+        try:
+            with open(name,'w',encoding='utf-8') as file:
+                json.dump((result_semester,result_exam),file,indent=4,ensure_ascii=False)
+        except IOError:
+            sel=msgbox.askretrycancel('Error','쓰기 에러')
+            if sel: 
+               save(name=name)
+        else:
+            last_file=name
+            saved=True
+        finally:
+            prog.destroy()
+
+
 '''창 클래스들'''
 #Main Window class
 class Main(tk.Tk):
@@ -120,8 +188,8 @@ class Main(tk.Tk):
         menu_info=tk.Menu(menu_bar,tearoff=0)
         #파일
         menu_file.add_command(label='불러오기',command=load)
-        menu_file.add_command(label='저장',command=save_last)
-        #menu_file.add_command(label='다른 이름으로 저장',command=save)
+        menu_file.add_command(label='저장',command=lambda: save(True))
+        menu_file.add_command(label='다른 이름으로 저장',command=save)
         menu_file.add_separator()
         menu_file.add_command(label='종료',command=self.quit)
         #도구
@@ -160,7 +228,7 @@ class Main(tk.Tk):
         self.__btn[0][0].grid(row=0,column=0,sticky='NSEW')
         self.__btn[0].append(tk.Button(frame1,text='가채점 입력',command=Grade_ing))
         self.__btn[0][1].grid(row=1,column=0,sticky='NSEW')
-        self.__btn[0].append(tk.Button(frame1,text='가채점 결과\n삭제/초기화',command=Grad_res))
+        self.__btn[0].append(tk.Button(frame1,text='가채점 결과\n삭제/초기화',command=Grad_result))
         self.__btn[0][2].grid(row=2,column=0,sticky='NSEW')
         self.__btn[1].append(tk.Button(frame2,text='등급계산',command=Grade_calc))
         self.__btn[1][0].grid(row=0,column=0,sticky='NSEW')
@@ -180,6 +248,13 @@ class Main(tk.Tk):
         load('save.json')
         #창 배치
         self.config(menu=menu_bar)
+        
+        #insert test code here
+        '''
+        a=()
+        a.destroy()
+        '''
+        
         #메인루프
         self.mainloop()
     
@@ -187,7 +262,7 @@ class Main(tk.Tk):
         if ASK_ON_CLOSE and not saved:
             res=msgbox.askyesnocancel('저장','저장?')
             if res==True:
-                save(file_name)
+                save(True)
                 self.destroy()
             elif res==False:
                 self.destroy()
@@ -256,31 +331,28 @@ class Main(tk.Tk):
 
 
 #진행 바(연속형)
-class Progbar:
+class Progbar(tk.Toplevel):
     def __init__(self,title,txt,leng=200,time=5):
-        self.__top=tk.Toplevel(main)
-        self.__top.title(title)
-        tk.Label(self.__top,text=txt).pack()
-        prog=Progressbar(self.__top,mode='indeterminate',length=leng)
+        super().__init__(main)
+        self.title(title)
+        tk.Label(self,text=txt).pack()
+        prog=Progressbar(self,mode='indeterminate',length=leng)
         prog.pack()
         prog.start(interval=time)
-    
-    def __del__(self):
-        self.__top.destroy()
 
 
 #과목 입력
-class Input_subject:
+class Input_subject(tk.Toplevel):
     def __init__(self):
         #초기화
         self.__inbox,self.__invar=[],[]
-        self.__top=tk.Toplevel(main)
-        self.__top.resizable(False,False)
-        self.__top.title('과목 입력')
-        self.__mid,self.__footer=tk.Frame(self.__top),tk.Frame(self.__top)
+        super().__init__(main)
+        self.resizable(False,False)
+        self.title('과목 입력')
+        self.__mid,self.__footer=tk.Frame(self),tk.Frame(self)
         #버튼 생성
-        tk.Button(self.__top,text='+추가',command=self.__add_subject).grid(row=1,column=0,sticky='w',padx=5)
-        tk.Button(self.__footer,text='취소',command=self.__top.destroy).grid(row=0,column=0,sticky='e')
+        tk.Button(self,text='+추가',command=self.__add_subject).grid(row=1,column=0,sticky='w',padx=5)
+        tk.Button(self.__footer,text='취소',command=self.destroy).grid(row=0,column=0,sticky='e')
         tk.Button(self.__footer,text='입력',command=self.__set_subject).grid(row=0,column=1,sticky='e')
         #메뉴 생성/배치
         menu_str=('과목명','시수','중간','기말','삭제')
@@ -324,17 +396,16 @@ class Input_subject:
                 if self.__inbox[k]:
                     current_num[self.__invar[k][0].get()]=(int(self.__invar[k][1].get()),self.__invar[k][2].get(),self.__invar[k][3].get())
                     saved=False
-                    print(saved)
         except ValueError:
             msgbox.showerror(title='ERROR',message='잘못된 값 입력')
         else:
             current_subjects=get_current_num(name=True)
-            self.__top.destroy()
+            self.destroy()
             main.update_btn()
 
 
 #가채점 입력
-class Grade_ing:
+class Grade_ing(tk.Toplevel):
     def __init__(self):
         self.__err1,self.__err2={},{}
         self.__subject=tk.StringVar()
@@ -526,7 +597,7 @@ class Grade_ing:
             current_wrong[self.__subject.get()]=(self.__err1,self.__err2)
             saved=False
         def next():
-            Grad_res(self.__subject.get())
+            Grad_detail(self.__subject.get())
         def close():
             top.destroy()
         top=tk.Toplevel(main)
@@ -534,7 +605,6 @@ class Grade_ing:
         top.title('결과')
         if self.__err1 or self.__err2:
             score=100
-            print(self.__err1,self.__err2)
             for err1 in self.__err1:
                 score=score-dec(self.__err1[err1][2])
             for err2 in self.__err2:
@@ -546,9 +616,9 @@ class Grade_ing:
         tk.Button(top,text='닫기',command=close).grid(row=1,column=1,sticky='e',padx=10)
         write()
 
-
+'''
 #가채점결과
-class Grad_res:
+class Grad_res(tk.Toplevel):
     def __init__(self,subject=None):
         if current_wrong:
             if subject:
@@ -560,11 +630,13 @@ class Grad_res:
                 self.__main()
         else:
             msgbox.showerror(title='ERROR',message='가채점 안됨')
-    def __main(self):
-        score=get_score()
+'''
+
+class Grad_result(tk.Toplevel):
+    def __init__(self):
         def btn_make(subject,n):
-            tk.Button(f_mid,text='상세?',command=lambda:
-            self.__detail(subject)).grid(row=n,column=3)
+            tk.Button(f_mid,text='상세?',command=lambda: Grad_detail(subject)).grid(row=n,column=3)
+        
         def del_res(all_subject=False):
             global current_wrong
             var=msgbox.askyesno('삭제?','복원 불가\n삭제?')
@@ -579,68 +651,79 @@ class Grad_res:
                             del current_wrong[current_subjects[k]]
                 top.destroy()
                 if current_wrong:
-                    Grad_res()
-        top=tk.Toplevel(main)
-        top.resizable(False,False)
-        top.title('가채점결과')
-        top_str=('과목명','오답 수','점수','상세','삭제?')
-        f_mid,f_bot=tk.Frame(top),tk.Frame(top)
-        lab,chk=[],[]
-        for k in range(5):
-            tk.Label(f_mid,text=top_str[k]).grid(row=0,column=k)
-        for k in range(len(current_subjects)):
-            tmp_btn=None
-            tk.Label(f_mid,text=current_subjects[k]).grid(row=k+1,column=0)
-            lab.append([])
-            if score[k]:
-                lab[k].append(tk.Label(f_mid,text=score[k][1]))
-                lab[k][0].grid(row=k+1,column=1)
-                lab[k].append(tk.Label(f_mid,text=score[k][0]))
-                lab[k][1].grid(row=k+1,column=2,padx=5)
-                if score[k][0]!='100':
-                    btn_make(current_subjects[k],k+1)
-            else:
-                tk.Label(f_mid,text='채점 전').grid(row=k+1,column=1,columnspan=2,padx=5)
-            chk.append(tk.BooleanVar())
-            tk.Checkbutton(f_mid,variable=chk[k]).grid(row=k+1,column=4)
-        tk.Button(f_bot,text='삭제',command=del_res).pack(side='left')
-        tk.Button(f_bot,text='초기화',command=lambda:del_res(True)).pack(side='left')
-        tk.Button(top,text='닫기',command=top.destroy).grid(row=1,column=1,sticky='e')
-        f_mid.grid(row=0,column=0,columnspan=2)
-        f_bot.grid(row=1,column=0,sticky='w')
-    def __detail(self,subject):
-        wrong=current_wrong[subject]
-        top=tk.Toplevel(main)
-        top.resizable(False,False)
-        if wrong[0]:
-            err_sel=tk.Frame(top,relief='solid',borderwidth=1,padx=5,pady=5)
-            top_sel=('번호','응답','정답','배점')
-            err_num=list(wrong[0].keys())
-            tk.Label(err_sel,text='선\n택\n형\n오\n답').grid(row=0,column=0,rowspan=5)
-            for k in range(4):
-                tk.Label(err_sel,text=top_sel[k]).grid(row=0,column=k+1)
-            for k in range(len(wrong[0])):
-                tk.Label(err_sel,text=err_num[k]).grid(row=k+1,column=1)
-                for j in range(3):
-                    tk.Label(err_sel,text=wrong[0][err_num[k]][j]).grid(row=k+1,column=j+2)
-            err_sel.grid(row=0,column=0,padx=5,pady=5,sticky='w')
-        if wrong[1]:
-            err_comp=tk.Frame(top,relief='solid',borderwidth=1,padx=5,pady=5)
-            top_sel=('번호','득점','배점')
-            err_num=list(wrong[1].keys())
-            tk.Label(err_comp,text='서\n답\n형\n오\n답').grid(row=0,column=0,rowspan=5)
-            for k in range(3):
-                tk.Label(err_comp,text=top_sel[k]).grid(row=0,column=k+1)
-            for k in range(len(wrong[1])):
-                tk.Label(err_comp,text=err_num[k]).grid(row=k+1,column=1)
-                for j in range(2):
-                    tk.Label(err_comp,text=wrong[1][err_num[k]][j]).grid(row=k+1,column=j+2)
-            err_comp.grid(row=1,column=0,padx=5,pady=5,sticky='w')
-        tk.Button(top,text='닫기',command=top.destroy).grid(row=2,column=0,sticky='e')
+                    Grad_result()
+        
+        if current_wrong:
+            super().__init__(main)
+            score=get_score()
+            self.resizable(False,False)
+            self.title('가채점결과')
+            self_str=('과목명','오답 수','점수','상세','삭제?')
+            f_mid,f_bot=tk.Frame(self),tk.Frame(self)
+            lab,chk=[],[]
+            for k in range(5):
+                tk.Label(f_mid,text=self_str[k]).grid(row=0,column=k)
+            for k in range(len(current_subjects)):
+                tmp_btn=None
+                tk.Label(f_mid,text=current_subjects[k]).grid(row=k+1,column=0)
+                lab.append([])
+                if score[k]:
+                    lab[k].append(tk.Label(f_mid,text=score[k][1]))
+                    lab[k][0].grid(row=k+1,column=1)
+                    lab[k].append(tk.Label(f_mid,text=score[k][0]))
+                    lab[k][1].grid(row=k+1,column=2,padx=5)
+                    if score[k][0]!='100':
+                        btn_make(current_subjects[k],k+1)
+                else:
+                    tk.Label(f_mid,text='채점 전').grid(row=k+1,column=1,columnspan=2,padx=5)
+                chk.append(tk.BooleanVar())
+                tk.Checkbutton(f_mid,variable=chk[k]).grid(row=k+1,column=4)
+            tk.Button(f_bot,text='삭제',command=del_res).pack(side='left')
+            tk.Button(f_bot,text='초기화',command=lambda:del_res(True)).pack(side='left')
+            tk.Button(self,text='닫기',command=self.destroy).grid(row=1,column=1,sticky='e')
+            f_mid.grid(row=0,column=0,columnspan=2)
+            f_bot.grid(row=1,column=0,sticky='w')
+        else:
+            msgbox.showerror(title='ERROR',message='가채점 안됨')
 
+
+class Grad_detail(tk.Toplevel):
+    def __init__(self,subject):
+        if subject in current_subjects:
+            super().__init__(main)
+            self.resizable(False,False)
+            wrong=current_wrong[subject]
+            if wrong[0]:
+                err_sel=tk.Frame(self,relief='solid',borderwidth=1,padx=5,pady=5)
+                top1=('번호','응답','정답','배점')
+                err_num=list(wrong[0].keys())
+                tk.Label(err_sel,text='선\n택\n형\n오\n답').grid(row=0,column=0,rowspan=5)
+                for k in range(4):
+                    tk.Label(err_sel,text=top1[k]).grid(row=0,column=k+1)
+                for k in range(len(wrong[0])):
+                    tk.Label(err_sel,text=err_num[k]).grid(row=k+1,column=1)
+                    for j in range(3):
+                        tk.Label(err_sel,text=wrong[0][err_num[k]][j]).grid(row=k+1,column=j+2)
+                err_sel.grid(row=0,column=0,padx=5,pady=5,sticky='w')
+            if wrong[1]:
+                err_comp=tk.Frame(self,relief='solid',borderwidth=1,padx=5,pady=5)
+                top2=('번호','득점','배점')
+                err_num=list(wrong[1].keys())
+                tk.Label(err_comp,text='서\n답\n형\n오\n답').grid(row=0,column=0,rowspan=5)
+                for k in range(3):
+                    tk.Label(err_comp,text=top2[k]).grid(row=0,column=k+1)
+                for k in range(len(wrong[1])):
+                    tk.Label(err_comp,text=err_num[k]).grid(row=k+1,column=1)
+                    for j in range(2):
+                        tk.Label(err_comp,text=wrong[1][err_num[k]][j]).grid(row=k+1,column=j+2)
+                err_comp.grid(row=1,column=0,padx=5,pady=5,sticky='w')
+            tk.Button(self,text='닫기',command=self.destroy).grid(row=2,column=0,sticky='e')
+
+        else:
+            msgbox.showerror('Error','없는 과목')
 
 #(예상)등급계산
-class Grade_calc:
+class Grade_calc(tk.Toplevel):
     def __init__(self):
         def get():
             grd1,grd2=[],[]
@@ -663,13 +746,13 @@ class Grade_calc:
         if len(current_subjects)==0:
             msgbox.showerror('Error','과목 입력 안됨')
         else:
-            top=tk.Toplevel(main)
-            top.resizable(False,False)
-            top.title('예상등급계산')
-            f_mid,f_bot=tk.Frame(top),tk.Frame(top)
-            str_top=('과목명','시수','등급1','등급2')
+            super().__init__(main)
+            self.resizable(False,False)
+            self.title('예상등급계산')
+            f_mid,f_bot=tk.Frame(self),tk.Frame(self)
+            str_self=('과목명','시수','등급1','등급2')
             for a in range(4):
-                tk.Label(f_mid,text=str_top[a]).grid(row=0,column=a)
+                tk.Label(f_mid,text=str_self[a]).grid(row=0,column=a)
             grade1,grade2=[],[]
             k=0
             for subject in current_subjects:
@@ -681,10 +764,10 @@ class Grade_calc:
                 tk.Entry(f_mid,width=7,textvariable=grade2[k]).grid(row=k+1,column=3)
                 k+=1
             f_mid.grid(row=0,column=0,columnspan=2)
-            tk.Button(top,text='극간계산',command=Cut_calc).grid(row=1,column=0,sticky='w')
+            tk.Button(self,text='극간계산',command=Cut_calc).grid(row=1,column=0,sticky='w')
             tk.Button(f_bot,text='초기화',command=del_all).grid(row=0,column=0,sticky='e')
             tk.Button(f_bot,text='계산',command=get).grid(row=0,column=1,sticky='e')
-            tk.Button(f_bot,text='닫기',command=top.destroy).grid(row=0,column=2,sticky='e')
+            tk.Button(f_bot,text='닫기',command=self.destroy).grid(row=0,column=2,sticky='e')
             f_bot.grid(row=1,column=1,sticky='e')
             k+=1
     def __calc(self,grd1,grd2):
@@ -711,7 +794,6 @@ class Grade_calc:
                 x=0; k=0
                 for subject in current_subjects:
                     x+=a[k]*current_num[subject][0]
-                    print(a[k]*current_num[subject][0])
                     k+=1
                 tmp.append(round(x/sum(get_current_num()),4))
             return max(tmp),min(tmp)
@@ -721,7 +803,7 @@ class Grade_calc:
 
 
 #성적 입력
-class Exam_input:
+class Exam_input(tk.Toplevel):
     def __init__(self):
         global current_result
         def btn_make(n):
@@ -761,18 +843,18 @@ class Exam_input:
                             current_result[current_subjects[k]]=r
                             saved=False
                             k+=1
-                    top.destroy()
+                    self.destroy()
                     Exam_res()
         if current_subjects:
-            top=tk.Toplevel(main)
-            top.resizable(False,False)
-            top.title('성적 입력')
-            f_mid,f_bot1,f_bot2=tk.Frame(top),tk.Frame(top),tk.Frame(top)
+            super().__init__(main)
+            self.resizable(False,False)
+            self.title('성적 입력')
+            f_mid,f_bot1,f_bot2=tk.Frame(self),tk.Frame(self),tk.Frame(self)
             length=len(current_subjects)
-            top_str=('과목명','시수','원점수','석차','인원수')
+            self_str=('과목명','시수','원점수','석차','인원수')
             btn,ent=[],[]
             for k in range(5):
-                tk.Label(f_mid,text=top_str[k]).grid(row=0,column=k)
+                tk.Label(f_mid,text=self_str[k]).grid(row=0,column=k)
             k=0
             for subject in current_subjects:
                 tk.Label(f_mid,text=subject).grid(row=k+1,column=0)
@@ -789,8 +871,8 @@ class Exam_input:
                     tk.Entry(f_mid,textvariable=ent[-1][j],width=7).grid(row=k+1,column=j+2)
                 btn_make(k)
                 k+=1
-            tk.Button(top,text='초기화',command=del_all).grid(row=1,column=0,sticky='w')
-            tk.Button(f_bot2,text='취소',command=top.destroy).grid(row=0,column=0)
+            tk.Button(self,text='초기화',command=del_all).grid(row=1,column=0,sticky='w')
+            tk.Button(f_bot2,text='취소',command=self.destroy).grid(row=0,column=0)
             tk.Button(f_bot2,text='입력',command=end).grid(row=0,column=1)
             f_mid.grid(row=0,column=0,columnspan=2)
             f_bot2.grid(row=1,column=1,sticky='e')
@@ -799,7 +881,7 @@ class Exam_input:
 
 
 #시혐 결과
-class Exam_res:
+class Exam_res(tk.Toplevel):
     def __init__(self):
         def grade(rank,person):
             percent=rank/person*100
@@ -822,13 +904,13 @@ class Exam_res:
                 n+=num[k]
             return round(result/n,4)
         if current_result:
-            top=tk.Toplevel(main)
-            top.resizable(False,False)
-            top.title('시험 결과')
-            f_mid=tk.Frame(top)
-            top_str=('과목','시수','점수','석차','등급','백분위')
+            super().__init__(main)
+            self.resizable(False,False)
+            self.title('시험 결과')
+            f_mid=tk.Frame(self)
+            self_str=('과목','시수','점수','석차','등급','백분위')
             for k in range(6):
-                tk.Label(f_mid,text=top_str[k]).grid(row=0,column=k,padx=5)
+                tk.Label(f_mid,text=self_str[k]).grid(row=0,column=k,padx=5)
             grades,var=[],True
             k=0
             for subject in current_subjects:
@@ -848,25 +930,16 @@ class Exam_res:
                 k+=1
             f_mid.grid(row=0,column=0)
             if var:
-                tk.Label(top,text='등급: '+str(calc(get_current_num(),grades))).grid(row=1,column=0)
-            tk.Button(top,text='닫기',command=top.destroy).grid(row=2,column=0,sticky='e')
+                tk.Label(self,text='등급: '+str(calc(get_current_num(),grades))).grid(row=1,column=0)
+            tk.Button(self,text='닫기',command=self.destroy).grid(row=2,column=0,sticky='e')
         elif current_subjects:
             msgbox.showerror('Error','성적 입력 안됨')
         else:
             msgbox.showerror('Error','과목 입력 안됨')
-#성적 추이
-class Change:
-    def __init__(self):
-        if current_result:
-            top=tk.Toplevel(main)
-            top.resizable(False,False)
-            top.title('성적 추이')
-        elif current_subjects:
-            msgbox.showerror('Error','성적 입력 안됨')
-        else:
-            msgbox.showerror('Error','과목 입력 안됨')
+
+
 #등급인원계산
-class Cut_calc:
+class Cut_calc(tk.Toplevel):
     def __init__(self):
         result=['','','','','','','','','']
         cuts=(4,11,23,40,60,77,89,96,100)
@@ -881,39 +954,41 @@ class Cut_calc:
                     result.append(round(a*k/100))
                 for k in range(9):
                     tk.Label(f_mid,text=str(result[k])+'명').grid(row=k+1,column=2)
-        top=tk.Toplevel(main)
-        top.resizable(False,False)
-        top.title('등급인원계산')
-        f_top,f_mid,f_bot=tk.Frame(top),tk.Frame(top),tk.Frame(top)
-        tk.Label(f_top,text='인원').grid(row=0,column=0)
-        ent=tk.Entry(f_top)
+        super().__init__(main)
+        self.resizable(False,False)
+        self.title('등급인원계산')
+        f_self,f_mid,f_bot=tk.Frame(self),tk.Frame(self),tk.Frame(self)
+        tk.Label(f_self,text='인원').grid(row=0,column=0)
+        ent=tk.Entry(f_self)
         ent.bind('<Return>',get)
         ent.grid(row=0,column=1)
-        str_top=('등급','누적비율','누적인원수')
+        str_self=('등급','누적비율','누적인원수')
         for k in range(3):
-            tk.Label(f_mid,text=str_top[k]).grid(row=0,column=k)
+            tk.Label(f_mid,text=str_self[k]).grid(row=0,column=k)
         for k in range(9):
             tk.Label(f_mid,text=str(k+1)+'등급').grid(row=k+1,column=0)
             tk.Label(f_mid,text=str(cuts[k])+'%').grid(row=k+1,column=1)
             tk.Label(f_mid,text='').grid(row=k+1,column=2)
-        tk.Button(f_bot,text='닫기',command=top.destroy).grid(row=0,column=0)
+        tk.Button(f_bot,text='닫기',command=self.destroy).grid(row=0,column=0)
         tk.Button(f_bot,text='계산',command=get).grid(row=0,column=1)
-        f_top.grid(row=0,column=0)
+        f_self.grid(row=0,column=0)
         f_mid.grid(row=1,column=0)
         f_bot.grid(row=2,column=0)
+
+
 #안내 Root Class
-class Notice:
+class Notice(tk.Toplevel):
     def __init__(self,name,fileName,string):
         try:
             with open(fileName+'.txt','r') as file:
                 txt=file.readlines()
         except:
             txt=string
-        self.__top=tk.Toplevel(main)
-        self.__top.resizable(False,False)
-        self.__top.title(name)
-        tk.Label(self.__top,text=txt).pack()
-        tk.Button(self.__top,text='닫기',command=self.__top.destroy).pack()
+        super().__init__(main)
+        self.resizable(False,False)
+        self.title(name)
+        tk.Label(self,text=txt).pack()
+        tk.Button(self,text='닫기',command=self.destroy).pack()
     def form(self,string):
         text=''
         for line in string.splitlines():
@@ -947,88 +1022,6 @@ made by HYS
         txt=super().form(text)
         super().__init__('프로그램 정보','info',txt)
 
-'''콜백 함수'''
-#읽기
-def load(name=None):
-    def worker():
-        global result_semester,result_exam,saved,file_name
-        if name:
-            prog=Progbar('Load','Loading...')
-            try:
-                global current_num,current_wrong,current_result
-                with open(name,'r',encoding='utf-8') as file:
-                    result_semester,result_exam=json.load(file)
-                if current_exam[2]=='3': #학기말
-                    current_num,current_result=result_semester[current_exam[:2]]
-                else: #중간고사or기말고사
-                    current_num=result_semester[current_exam[:2]][0]
-                    current_wrong,current_result=result_exam[current_exam]
-                main.update_btn()
-            except IOError:
-                tmp=msgbox.askretrycancel('Error','읽기 에러')
-                if tmp:
-                    load(name)
-            except json.JSONDecodeError as e:
-                msgbox.showerror('Error','파일 형식 오류')
-                print(e)
-            except ValueError as e:
-                msgbox.showerror('Error','파일 형식 오류')
-                print(e)
-            else:
-                saved=True
-                file_name=name
-            finally:
-                del(prog)
-        else:
-            tmp=msgbox.askretrycancel('Error','파일 지정 오류')
-            if tmp:
-                load()
-    if not name:
-        name=askopen()
-    elif saved:
-        worker()
-    else:
-        var=msgbox.askyesnocancel('Info','저장 안됨\n저장?')
-        print(var)
-        '''
-        if var:
-            worker()
-        '''
 
-
-#쓰기
-def save(name=None):
-    global result_semester,result_exam,file_name,saved
-    print(name,file_name)
-    if not name:
-        name=asksave()
-    if name:
-        prog=Progbar('Save','Saving...')
-        if current_exam[2]=='3': #학기말
-            result_semester[current_exam[:2]]=[current_num,current_result]
-        else: #중간고사or기말고사
-            result_semester[current_exam[:2]][0]=current_num
-            result_exam[current_exam]=[current_wrong,current_result]
-        try:
-            with open(name,'w',encoding='utf-8') as file:
-                json.dump((result_semester,result_exam),file,indent=4,ensure_ascii=False)
-        except IOError:
-            sel=msgbox.askretrycancel('Error','쓰기 에러')
-            if sel: 
-               save(name)
-        else:
-            file_name=name
-            saved=True
-        finally:
-            del(prog)
-    else:
-        tmp=msgbox.askretrycancel('Error','파일 지정 오류')
-        if tmp:
-            load()
-
-
-def save_last():
-    save(file_name)
-
-
-Main()
+if __name__=='__main__':
+    Main()
