@@ -147,6 +147,8 @@ def load(name=None):
 #쓰기
 def save(last=False,*,name=None):
     global result_semester,result_exam,last_file,saved
+    if last:
+        name=last_file
     if not name:
         name=asksave()
     if name:
@@ -405,14 +407,15 @@ class Input_subject(tk.Toplevel):
 
 
 #가채점 입력
-class Grade_ing(tk.Toplevel):
+class Grade_ing:
     def __init__(self):
         self.__err1,self.__err2={},{}
         self.__subject=tk.StringVar()
         self.__select()
     def __select(self):
         def next():
-            top.destroy(); self.__grading()
+            top.destroy()
+            self.__grading()
         try:
             self.__subject.set(list(current_subjects)[0])
         except IndexError:
