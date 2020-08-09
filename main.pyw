@@ -952,40 +952,41 @@ class Exam_res(tk.Toplevel):
 class Cut_calc(tk.Toplevel):
     def __init__(self):
         result=['','','','','','','','','']
-        cuts=(4,11,23,40,60,77,89,96,100)
         super().__init__(main)
         self.resizable(False,False)
         self.title('등급인원계산')
-        f_self,f_mid,f_bot=tk.Frame(self),tk.Frame(self),tk.Frame(self)
+        f_self=tk.Frame(self)
+        self.__f_mid=tk.Frame(self)
+        f_bot=tk.Frame(self)
         tk.Label(f_self,text='인원').grid(row=0,column=0)
-        ent=tk.Entry(f_self)
-        ent.bind('<Return>',self.__get)
-        ent.grid(row=0,column=1)
+        self.__ent=tk.Entry(f_self)
+        self.__ent.bind('<Return>',self.__get)
+        self.__ent.grid(row=0,column=1)
         str_self=('등급','누적비율','누적인원수')
         for k in range(3):
-            tk.Label(f_mid,text=str_self[k]).grid(row=0,column=k)
+            tk.Label(self.__f_mid,text=str_self[k]).grid(row=0,column=k)
         for k in range(9):
-            tk.Label(f_mid,text=str(k+1)+'등급').grid(row=k+1,column=0)
-            tk.Label(f_mid,text=str(cuts[k])+'%').grid(row=k+1,column=1)
-            tk.Label(f_mid,text='').grid(row=k+1,column=2)
+            tk.Label(self.__f_mid,text=str(k+1)+'등급').grid(row=k+1,column=0)
+            tk.Label(self.__f_mid,text=str(CUTS[k])+'%').grid(row=k+1,column=1)
+            tk.Label(self.__f_mid,text='').grid(row=k+1,column=2)
         tk.Button(f_bot,text='닫기',command=self.destroy).grid(row=0,column=0)
         tk.Button(f_bot,text='계산',command=self.__get).grid(row=0,column=1)
         f_self.grid(row=0,column=0)
-        f_mid.grid(row=1,column=0)
+        self.__f_mid.grid(row=1,column=0)
         f_bot.grid(row=2,column=0)
     
     
     def __get(self):
         try:
-            a=int(ent.get())
+            a=int(self.__ent.get())
         except ValueError:
             msgbox.showerror('Error','인원수 오류')
         else:
             result=[]
-            for k in cuts:
+            for k in CUTS:
                 result.append(round(a*k/100))
             for k in range(9):
-                tk.Label(f_mid,text=str(result[k])+'명').grid(row=k+1,column=2)
+                tk.Label(self.__f_mid,text=str(result[k])+'명').grid(row=k+1,column=2)
 
 
 #안내 Root Class
