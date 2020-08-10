@@ -13,128 +13,116 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLineEdit" name="lnGet">
-   <property name="geometry">
-    <rect>
-     <x>155</x>
-     <y>32</y>
-     <width>95</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="inputMask">
-    <string>D.d</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbGet">
-   <property name="geometry">
-    <rect>
-     <x>155</x>
-     <y>10</y>
-     <width>95</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>배점</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="lnPoint">
-   <property name="geometry">
-    <rect>
-     <x>49</x>
-     <y>32</y>
-     <width>95</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="inputMask">
-    <string>D.d</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnNext">
-   <property name="geometry">
-    <rect>
-     <x>157</x>
-     <y>64</y>
-     <width>93</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>다음</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbNum">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>30</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>번호</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnBack">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>64</y>
-     <width>93</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>이전</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbNo">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>36</y>
-     <width>31</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>99</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lbPoint">
-   <property name="geometry">
-    <rect>
-     <x>49</x>
-     <y>10</y>
-     <width>91</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>배점</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="lbNum">
+     <property name="text">
+      <string>번호</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLabel" name="lbPoint">
+     <property name="text">
+      <string>배점</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="lbGet">
+     <property name="text">
+      <string>배점</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lbNo">
+     <property name="text">
+      <string>99</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="lnPoint">
+     <property name="inputMask">
+      <string>D.d</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLineEdit" name="lnGet">
+     <property name="inputMask">
+      <string>D.d</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="3">
+    <widget class="QWidget" name="widBot" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="btnBack">
+        <property name="text">
+         <string>이전</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="spH">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnNext">
+        <property name="text">
+         <string>다음</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

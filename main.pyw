@@ -53,7 +53,6 @@ def get_score(subject=None):
     if subject:
         return calc(subject)
     else:
-        length=len(current_subjects)
         result=[]
         for subject in current_subjects:
             result.append(calc(subject))
@@ -277,7 +276,7 @@ class Main(tk.Tk):
     def __set_exam(self):
         global current_num,current_wrong,\
                 current_result,current_exam,\
-                current_subjects
+                current_subjects,current_subject_cnt
         def saving(): #시험 결과 저장
             global result_semester,result_exam
             if current_exam[2]=='3':
@@ -304,6 +303,7 @@ class Main(tk.Tk):
         main.update_btn()
         #get current subject
         current_subjects=get_current_num(name=True)
+        current_subject_cnt=len(current_subjects)
     
     #버튼 상태 업데이트
     def update_btn(self):
@@ -391,7 +391,7 @@ class Input_subject(tk.Toplevel):
             self.__inbox[n][a].grid_forget()
         self.__inbox[n]=None
     def __set_subject(self):
-        global current_num,current_subjects,saved
+        global current_num,saved,current_subjects,current_subject_cnt
         current_num={}; current_subjects=[]
         try:
             for k in range(len(self.__inbox)):
@@ -402,6 +402,7 @@ class Input_subject(tk.Toplevel):
             msgbox.showerror(title='ERROR',message='잘못된 값 입력')
         else:
             current_subjects=get_current_num(name=True)
+            current_subject_cnt=len(current_subjects)
             self.destroy()
             main.update_btn()
 
@@ -630,11 +631,11 @@ class Grad_result(tk.Toplevel):
             var=msgbox.askyesno('삭제?','복원 불가\n삭제?')
             if var:
                 if all_subject:
-                    for k in range(len(current_subjects)):
+                    for k in range(current_subject_cnt):
                         if current_subjects[k] in current_wrong.keys():
                             del current_wrong[current_subjects[k]]
                 else:
-                    for k in range(len(current_subjects)):
+                    for k in range(current_subject_cnt):
                         if chk[k].get() and (current_subjects[k] in current_wrong.keys()):
                             del current_wrong[current_subjects[k]]
                 top.destroy()
@@ -651,7 +652,7 @@ class Grad_result(tk.Toplevel):
             lab,chk=[],[]
             for k in range(5):
                 tk.Label(f_mid,text=self_str[k]).grid(row=0,column=k)
-            for k in range(len(current_subjects)):
+            for k in range(current_subject_cnt):
                 tmp_btn=None
                 tk.Label(f_mid,text=current_subjects[k]).grid(row=k+1,column=0)
                 lab.append([])
@@ -713,7 +714,7 @@ class Grad_detail(tk.Toplevel):
 #(예상)등급계산
 class Grade_calc(tk.Toplevel):
     def __init__(self):
-        if len(current_subjects)==0:
+        if current_subject_cnt==0:
             msgbox.showerror('Error','과목 입력 안됨')
         else:
             super().__init__(main)
@@ -743,12 +744,11 @@ class Grade_calc(tk.Toplevel):
     
     def __calc(self):
         try:
-            n=len(current_subjects)
             nums=get_current_num()
             total_num=sum(nums)
             max_grade=0
             min_grade=0
-            for k in range(n):
+            for k in range(current_subject_cnt):
                 in1=self.__grade1[k].get()
                 in2=self.__grade2[k].get()
                 grd1=int(in1)
@@ -773,7 +773,7 @@ class Grade_calc(tk.Toplevel):
             )
     
     def __del_all(self):
-        for k in range(len(current_subjects)):
+        for k in range(current_subject_cnt):
             self.__grade1[k].set('')
             self.__grade2[k].set('')
     
@@ -781,13 +781,12 @@ class Grade_calc(tk.Toplevel):
     #not used, but remain for future
     def __calc_full(self,grd1,grd2):
         #파싱
-        if len(current_subjects)==len(grd1):
-            length=len(current_subjects)
+        if current_subject_cnt==len(grd1):
             res,tmp=[],[]
             res.append([grd1[0]])
             if grd2[0]:
                 res.append([grd2[0]])
-            for k in range(1,length):
+            for k in range(1,current_subject_cnt):
                 if not grd1[k]:
                     break
                 tmp=deepcopy(res)
@@ -820,74 +819,78 @@ class Exam_input(tk.Toplevel):
             tk.Button(f_mid,text='X',command=lambda: del_subject(n)).grid(row=n+1,column=5,padx=3)
         def del_subject(n):
             for k in range(3):
-                ent[n][k].set('')
+                self.__ent[n][k].set('')
         def del_all():
-            for k in range(length):
+            for k in range(current_subject_cnt):
                 del_subject(k)
-        def end():
-            global saved
-            var_b=False; res=[]
-            try:
-                for k in range(length):
-                    a,b,c=ent[k][0].get(),ent[k][1].get(),ent[k][2].get()
-                    if not a:
-                        a,var_b=None,True
-                    if b:
-                        b=int(b)
-                    else:
-                        b,var_b=None,True
-                    if c:
-                        c=int(c)
-                    else:
-                        c,var_b=None,True
-                    res.append((a,b,c))
-            except ValueError:
-                msgbox.showerror('Error','입력 값 오류')
-            else:
-                if var_b:
-                    tmp=msgbox.askyesno('Info','빈 칸 존재\n성적입력?')
-                if (not var_b) or tmp:
-                    k=0
-                    for r in res:
-                        if r[0] and r[1] and r[2]:
-                            current_result[current_subjects[k]]=r
-                            saved=False
-                            k+=1
-                    self.destroy()
-                    Exam_res()
         if current_subjects:
             super().__init__(main)
             self.resizable(False,False)
             self.title('성적 입력')
-            f_mid,f_bot1,f_bot2=tk.Frame(self),tk.Frame(self),tk.Frame(self)
-            length=len(current_subjects)
+            f_mid=tk.Frame(self)
             self_str=('과목명','시수','원점수','석차','인원수')
-            btn,ent=[],[]
+            self.__ent=[]
             for k in range(5):
                 tk.Label(f_mid,text=self_str[k]).grid(row=0,column=k)
             k=0
             for subject in current_subjects:
                 tk.Label(f_mid,text=subject).grid(row=k+1,column=0)
                 tk.Label(f_mid,text=current_num[subject][0]).grid(row=k+1,column=1)
-                ent.append([])
-                if subject in current_result.keys():
-                    tmp=current_result[subject]
-                else:
-                    tmp=None
+                self.__ent.append([])
                 for j in range(3):
-                    ent[-1].append(tk.StringVar())
-                    if tmp:
-                        ent[-1][j].set(tmp[j])
-                    tk.Entry(f_mid,textvariable=ent[-1][j],width=7).grid(row=k+1,column=j+2)
+                    self.__ent[-1].append(tk.StringVar())
+                    if subject in current_result.keys():
+                        self.__ent[-1][j].set(current_result[subject][j])
+                    tk.Entry(f_mid,textvariable=self.__ent[-1][j],width=7).grid(row=k+1,column=j+2)
                 btn_make(k)
                 k+=1
+            #bottom buttons
+            f_bot=tk.Frame(self)
             tk.Button(self,text='초기화',command=del_all).grid(row=1,column=0,sticky='w')
-            tk.Button(f_bot2,text='취소',command=self.destroy).grid(row=0,column=0)
-            tk.Button(f_bot2,text='입력',command=end).grid(row=0,column=1)
+            tk.Button(f_bot,text='취소',command=self.destroy).grid(row=0,column=0)
+            tk.Button(f_bot,text='입력',command=self.__end).grid(row=0,column=1)
+            #grid frames
             f_mid.grid(row=0,column=0,columnspan=2)
-            f_bot2.grid(row=1,column=1,sticky='e')
+            f_bot.grid(row=1,column=1,sticky='e')
         else:
             msgbox.showerror('Error','과목 입력 안됨')
+    
+    def __end(self):
+        global saved
+        all_entered=True; results=[]
+        try:
+            for k in range(current_subject_cnt):
+                score=self.__ent[k][0].get()
+                grade=self.__ent[k][1].get()
+                count=self.__ent[k][2].get()
+                if not score:
+                    score=None
+                    all_entered=False
+                if grade:
+                    grade=int(grade)
+                else:
+                    grade=None
+                    all_entered=False
+                if count:
+                    count=int(count)
+                else:
+                    count=None
+                    all_entered=False
+                results.append((score,grade,count))
+        except ValueError:
+            msgbox.showerror('Error','입력 값 오류')
+        else:
+            if not all_entered:
+                proceed_blank=msgbox.askyesno('Info','빈 칸 존재\n성적입력?')
+            if all_entered or proceed_blank:
+                k=0
+                for result in results:
+                    if all(result):
+                        current_result[current_subjects[k]]=result
+                        saved=False
+                    k+=1
+                self.destroy()
+                Exam_res()
 
 
 #시혐 결과
@@ -1042,4 +1045,6 @@ made by HYS
 
 
 if __name__=='__main__':
+    import ctypes
+    myappid = 'hys.grademanage'
     Main()
