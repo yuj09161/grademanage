@@ -14,9 +14,9 @@
    <string>등급컷 계산</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="glMain">
     <item row="0" column="0">
-     <widget class="QLabel" name="lbCount">
+     <widget class="QLabel" name="lbTitleCount">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -48,7 +48,7 @@
      </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QLabel" name="lbGrade">
+     <widget class="QLabel" name="lbTitleGrade">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -64,7 +64,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLabel" name="lbRatio">
+     <widget class="QLabel" name="lbTitleRatio">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -338,7 +338,7 @@
      </widget>
     </item>
     <item row="7" column="2">
-     <widget class="QLabel" name="lbCut">
+     <widget class="QLabel" name="lbCut6">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -481,7 +481,7 @@
     </item>
     <item row="11" column="0" colspan="3">
      <widget class="QWidget" name="widBot" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="hlBot">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -530,6 +530,11 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>lnPerson</tabstop>
+  <tabstop>btnClose</tabstop>
+  <tabstop>btnCalc</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

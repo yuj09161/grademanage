@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>GradeInput</class>
- <widget class="QMainWindow" name="GradeInput">
+ <class>ExamInput</class>
+ <widget class="QMainWindow" name="ExamInput">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>341</width>
+    <width>389</width>
     <height>107</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>(최종)성적입력</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="glMain">
     <item row="0" column="0">
      <widget class="QLabel" name="lbTitleSubject">
       <property name="sizePolicy">
@@ -32,7 +32,7 @@
      </widget>
     </item>
     <item row="1" column="2">
-     <widget class="QLineEdit" name="lnGrd1">
+     <widget class="QLineEdit" name="lnScore">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -54,7 +54,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLabel" name="lbNum">
+     <widget class="QLabel" name="lbGrade">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -70,7 +70,7 @@
      </widget>
     </item>
     <item row="0" column="2" alignment="Qt::AlignHCenter">
-     <widget class="QLabel" name="lbScore">
+     <widget class="QLabel" name="lbTitleScore">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -102,7 +102,7 @@
      </widget>
     </item>
     <item row="1" column="3">
-     <widget class="QLineEdit" name="lnGrd2">
+     <widget class="QLineEdit" name="lnRank">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -124,7 +124,7 @@
      </widget>
     </item>
     <item row="1" column="4">
-     <widget class="QLineEdit" name="lnGrd2_2">
+     <widget class="QLineEdit" name="lnPerson">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -162,7 +162,7 @@
      </widget>
     </item>
     <item row="0" column="4" alignment="Qt::AlignHCenter">
-     <widget class="QLabel" name="lbPerson">
+     <widget class="QLabel" name="lbTitlePerson">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -178,7 +178,7 @@
      </widget>
     </item>
     <item row="0" column="3" alignment="Qt::AlignHCenter">
-     <widget class="QLabel" name="lbRank">
+     <widget class="QLabel" name="lbTitleRank">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -193,13 +193,19 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="5">
-     <widget class="QPushButton" name="pushButton">
+    <item row="1" column="5" alignment="Qt::AlignHCenter">
+     <widget class="QPushButton" name="btnDel">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>28</width>
+        <height>16777215</height>
+       </size>
       </property>
       <property name="text">
        <string>X</string>
@@ -207,9 +213,15 @@
      </widget>
     </item>
     <item row="0" column="5">
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="lbTitleDel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="text">
-       <string> 삭제</string>
+       <string>삭제</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -293,9 +305,13 @@
   </widget>
  </widget>
  <tabstops>
+  <tabstop>lnScore</tabstop>
+  <tabstop>lnRank</tabstop>
+  <tabstop>lnPerson</tabstop>
+  <tabstop>btnDel</tabstop>
   <tabstop>btnAdd</tabstop>
-  <tabstop>btnSet</tabstop>
   <tabstop>btnCancel</tabstop>
+  <tabstop>btnSet</tabstop>
  </tabstops>
  <resources/>
  <connections/>

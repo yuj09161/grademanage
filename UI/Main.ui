@@ -14,9 +14,9 @@
    <string>성적관리</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="glMain">
     <item row="1" column="1">
-     <widget class="QGroupBox" name="gbManage">
+     <widget class="QGroupBox" name="widManage">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -26,34 +26,8 @@
       <property name="title">
        <string>성적관리</string>
       </property>
-      <layout class="QGridLayout" name="glManage">
-       <item row="3" column="0">
-        <widget class="QPushButton" name="btnManage">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>성적추이</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPushButton" name="btnInput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>성적입력</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
+      <layout class="QVBoxLayout" name="vlManage">
+       <item>
         <widget class="QPushButton" name="btnCalc">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -66,7 +40,20 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item>
+        <widget class="QPushButton" name="btnInput">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>성적입력</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="btnRes">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -79,11 +66,24 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="btnManage">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>성적추이</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QGroupBox" name="gbGrade">
+     <widget class="QGroupBox" name="widGrade">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -93,8 +93,8 @@
       <property name="title">
        <string>가채점</string>
       </property>
-      <layout class="QGridLayout" name="glGrade">
-       <item row="0" column="0">
+      <layout class="QVBoxLayout" name="vlGrade">
+       <item>
         <widget class="QPushButton" name="btnSubject">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -107,7 +107,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item>
         <widget class="QPushButton" name="btnGrading">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -120,7 +120,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item>
         <widget class="QPushButton" name="btnGradingRes">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -137,7 +137,7 @@
      </widget>
     </item>
     <item row="0" column="0" colspan="2">
-     <widget class="QGroupBox" name="gbYear">
+     <widget class="QGroupBox" name="widYear">
       <property name="title">
        <string>학년도</string>
       </property>
@@ -241,6 +241,19 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>comboYear</tabstop>
+  <tabstop>comboSemester</tabstop>
+  <tabstop>comboExam</tabstop>
+  <tabstop>btnSet</tabstop>
+  <tabstop>btnSubject</tabstop>
+  <tabstop>btnGrading</tabstop>
+  <tabstop>btnGradingRes</tabstop>
+  <tabstop>btnCalc</tabstop>
+  <tabstop>btnInput</tabstop>
+  <tabstop>btnRes</tabstop>
+  <tabstop>btnManage</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

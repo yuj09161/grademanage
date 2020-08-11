@@ -14,7 +14,7 @@
    <string>가채점입력</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="glMain">
     <item row="0" column="0" rowspan="2">
      <widget class="QLabel" name="lbSubject">
       <property name="sizePolicy">
@@ -491,7 +491,7 @@
     </item>
     <item row="6" column="0" colspan="4">
      <widget class="QWidget" name="widBot" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QHBoxLayout" name="hlBot">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -505,7 +505,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QPushButton" name="btnBack_2">
+        <widget class="QPushButton" name="btnBack">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -518,7 +518,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="sp1_2">
+        <spacer name="sp1">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -531,7 +531,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="btnRe_2">
+        <widget class="QPushButton" name="btnRe">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -544,7 +544,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="sp2_2">
+        <spacer name="sp2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -557,7 +557,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="btnNext_2">
+        <widget class="QPushButton" name="btnNext">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>

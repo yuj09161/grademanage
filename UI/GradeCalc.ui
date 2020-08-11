@@ -14,9 +14,9 @@
    <string>예상등급계산</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="glMain">
     <item row="1" column="3">
-     <widget class="QLineEdit" name="lnGrd2">
+     <widget class="QLineEdit" name="lnGrade2">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -38,7 +38,7 @@
      </widget>
     </item>
     <item row="0" column="2" alignment="Qt::AlignHCenter">
-     <widget class="QLabel" name="lbMid">
+     <widget class="QLabel" name="lbTitleGrade1">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -54,7 +54,7 @@
      </widget>
     </item>
     <item row="1" column="2">
-     <widget class="QLineEdit" name="lnGrd1">
+     <widget class="QLineEdit" name="lnGrade1">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -76,7 +76,7 @@
      </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QLabel" name="lbSubject_2">
+     <widget class="QLabel" name="lbSubject">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -92,7 +92,7 @@
      </widget>
     </item>
     <item row="0" column="0">
-     <widget class="QLabel" name="lbSubject">
+     <widget class="QLabel" name="lbTitleSubject">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -108,7 +108,7 @@
      </widget>
     </item>
     <item row="0" column="3" alignment="Qt::AlignHCenter">
-     <widget class="QLabel" name="lbEnd">
+     <widget class="QLabel" name="lbTitleGrade2">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -125,7 +125,7 @@
     </item>
     <item row="2" column="0" colspan="4">
      <widget class="QWidget" name="widBot" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="hlBot">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -197,7 +197,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLabel" name="lbNum_2">
+     <widget class="QLabel" name="lbNum">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -213,7 +213,7 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLabel" name="lbNum">
+     <widget class="QLabel" name="lbTitleNum">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -232,9 +232,11 @@
   </widget>
  </widget>
  <tabstops>
+  <tabstop>lnGrade1</tabstop>
+  <tabstop>lnGrade2</tabstop>
   <tabstop>btnAdd</tabstop>
-  <tabstop>btnSet</tabstop>
   <tabstop>btnCancel</tabstop>
+  <tabstop>btnSet</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -65,6 +65,11 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>comboSubject</tabstop>
+  <tabstop>btnBack</tabstop>
+  <tabstop>btnNext</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

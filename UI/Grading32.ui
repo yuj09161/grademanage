@@ -14,9 +14,9 @@
    <string>서답형 배점</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="glMain">
     <item row="0" column="0">
-     <widget class="QLabel" name="lbNum">
+     <widget class="QLabel" name="lbTitleNo">
       <property name="text">
        <string>번호</string>
       </property>
@@ -26,7 +26,7 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLabel" name="lbPoint">
+     <widget class="QLabel" name="lbTitlePoint">
       <property name="text">
        <string>배점</string>
       </property>
@@ -36,7 +36,7 @@
      </widget>
     </item>
     <item row="0" column="2">
-     <widget class="QLabel" name="lbGet">
+     <widget class="QLabel" name="lbTitleGet">
       <property name="text">
        <string>배점</string>
       </property>
@@ -77,7 +77,7 @@
     </item>
     <item row="2" column="0" colspan="3">
      <widget class="QWidget" name="widBot" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="hlBot">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -126,6 +126,12 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>lnPoint</tabstop>
+  <tabstop>lnGet</tabstop>
+  <tabstop>btnBack</tabstop>
+  <tabstop>btnNext</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

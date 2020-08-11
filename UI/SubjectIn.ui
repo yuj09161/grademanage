@@ -14,9 +14,9 @@
    <string>과목입력</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="glMain">
     <item row="0" column="0">
-     <widget class="QLabel" name="lbSubject">
+     <widget class="QLabel" name="lbTitleSubject">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -32,7 +32,7 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLabel" name="lbNum">
+     <widget class="QLabel" name="lbTitleNum">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -48,7 +48,7 @@
      </widget>
     </item>
     <item row="0" column="2">
-     <widget class="QLabel" name="lbMid">
+     <widget class="QLabel" name="lbTitleMid">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -64,7 +64,7 @@
      </widget>
     </item>
     <item row="0" column="3">
-     <widget class="QLabel" name="lbEnd">
+     <widget class="QLabel" name="lbTitleEnd">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -80,7 +80,7 @@
      </widget>
     </item>
     <item row="0" column="4">
-     <widget class="QLabel" name="lbDel">
+     <widget class="QLabel" name="lbTitleDel">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -103,7 +103,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="lnNum">
       <property name="maximumSize">
        <size>
         <width>45</width>
@@ -116,59 +116,6 @@
       <property name="alignment">
        <set>Qt::AlignCenter</set>
       </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="QWidget" name="widMid" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item alignment="Qt::AlignHCenter">
-        <widget class="QCheckBox" name="chkWid">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="1" column="3">
-     <widget class="QWidget" name="widEnd" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item alignment="Qt::AlignHCenter">
-        <widget class="QCheckBox" name="chkEnd">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </widget>
     </item>
     <item row="1" column="4">
@@ -186,7 +133,7 @@
     </item>
     <item row="2" column="0" colspan="5">
      <widget class="QWidget" name="widBot" native="true">
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="hlBot">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -216,7 +163,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="spH">
+        <spacer name="sp">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -257,17 +204,32 @@
       </layout>
      </widget>
     </item>
+    <item row="1" column="2" alignment="Qt::AlignHCenter">
+     <widget class="QCheckBox" name="chkMid">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="3" alignment="Qt::AlignHCenter">
+     <widget class="QCheckBox" name="chkEnd">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>
  <tabstops>
   <tabstop>lnSubject</tabstop>
-  <tabstop>chkWid</tabstop>
+  <tabstop>lnNum</tabstop>
+  <tabstop>chkMid</tabstop>
   <tabstop>chkEnd</tabstop>
   <tabstop>btnDel</tabstop>
   <tabstop>btnAdd</tabstop>
-  <tabstop>btnSet</tabstop>
   <tabstop>btnCancel</tabstop>
+  <tabstop>btnSet</tabstop>
  </tabstops>
  <resources/>
  <connections/>
