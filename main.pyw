@@ -840,7 +840,8 @@ class Exam_input(tk.Toplevel):
                 for j in range(3):
                     self.__ent[-1].append(tk.StringVar())
                     if subject in current_result.keys():
-                        self.__ent[-1][j].set(current_result[subject][j])
+                        value=current_result[subject][j]
+                        self.__ent[-1][j].set(value if value else '')
                     tk.Entry(f_mid,textvariable=self.__ent[-1][j],width=7).grid(row=k+1,column=j+2)
                 btn_make(k)
                 k+=1
@@ -888,6 +889,8 @@ class Exam_input(tk.Toplevel):
                     if all(result):
                         current_result[current_subjects[k]]=result
                         saved=False
+                    elif result[0]:
+                        current_result[current_subjects[k]]=(result[0],None,None)
                     k+=1
                 self.destroy()
                 Exam_res()
@@ -896,7 +899,7 @@ class Exam_input(tk.Toplevel):
 #시혐 결과
 class Exam_res(tk.Toplevel):
     def __init__(self):
-        def grade(rank,person):
+        def get_grade(rank,person):
             percent=rank/person*100
             cuts=cut(person)
             grade=0
@@ -924,25 +927,30 @@ class Exam_res(tk.Toplevel):
             self_str=('과목','시수','점수','석차','등급','백분위')
             for k in range(6):
                 tk.Label(f_mid,text=self_str[k]).grid(row=0,column=k,padx=5)
-            grades,var=[],True
+            grades=[]
+            all_rank_inputed=True
             k=0
             for subject in current_subjects:
                 tk.Label(f_mid,text=subject).grid(row=k+1,column=0)
                 tk.Label(f_mid,text=current_num[subject][0]).grid(row=k+1,column=1)
                 if subject in current_result.keys():
-                    tmp=current_result[subject]
-                    res=grade(tmp[1],tmp[2])
-                    tk.Label(f_mid,text=tmp[0]).grid(row=k+1,column=2)
-                    tk.Label(f_mid,text=str(tmp[1])+'/'+str(tmp[2])).grid(row=k+1,column=3)
-                    tk.Label(f_mid,text=res[0]).grid(row=k+1,column=4)
-                    tk.Label(f_mid,text=round(res[1],2)).grid(row=k+1,column=5)
-                    grades.append(res[0])
+                    score,rank,total_person=current_result[subject]
+                    tk.Label(f_mid,text=score).grid(row=k+1,column=2)
+                    if rank and total_person:
+                        grade,percent=get_grade(rank,total_person)
+                        tk.Label(f_mid,text='%d/%d' %(rank,total_person)).grid(row=k+1,column=3) #str(rank)+'/'+str(total_person)
+                        tk.Label(f_mid,text=grade).grid(row=k+1,column=4)
+                        tk.Label(f_mid,text=round(percent,2)).grid(row=k+1,column=5)
+                        grades.append(grade)
+                    else:
+                        tk.Label(f_mid,text='등급 입력 전').grid(row=k+1,column=3,columnspan=3)
+                        all_rank_inputed=False
                 else:
                     tk.Label(f_mid,text='성적 입력 전').grid(row=k+1,column=2,columnspan=4)
-                    var=False
+                    all_rank_inputed=False
                 k+=1
             f_mid.grid(row=0,column=0)
-            if var:
+            if all_rank_inputed:
                 tk.Label(self,text='등급: '+str(calc(get_current_num(),grades))).grid(row=1,column=0)
             tk.Button(self,text='닫기',command=self.destroy).grid(row=2,column=0,sticky='e')
         elif current_subjects:
