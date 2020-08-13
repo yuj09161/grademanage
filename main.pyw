@@ -209,7 +209,7 @@ class Main(tk.Tk):
         frame_top=tk.Frame(self)
         self.__option=(('1학년','2학년','3학년'),('1학기','2학기'),('중간고사','기말고사','학기말'))
         self.__exam=[]
-        order=(2,0,1)
+        order=(2,0,2)
         for a in range(3):
             self.__exam.append(tk.StringVar())
             self.__exam[a].set(self.__option[a][order[a]])
@@ -937,9 +937,9 @@ class Exam_res(tk.Toplevel):
                     tk.Label(f_mid,text='성적 입력 전').grid(row=k+1,column=2,columnspan=4)
                     all_rank_inputed=False
                 k+=1
-            f_mid.grid(row=0,column=0)
+            f_mid.grid(row=0,column=0,columnspan=2)
             if all_rank_inputed:
-                tk.Label(self,text='등급: '+str(self.__calc(get_current_num(),self.__grades))).grid(row=1,column=0)
+                tk.Label(self,text='등급: '+str(self.__calc(get_current_num(),self.__grades))).grid(row=1,column=0,columnspan=2)
             tk.Button(self,text='등급계산',command=self.__to_grading).grid(row=2,column=0,sticky='w')
             tk.Button(self,text='닫기',command=self.destroy).grid(row=2,column=1,sticky='e')
         elif current_subjects:
