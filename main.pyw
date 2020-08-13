@@ -713,7 +713,7 @@ class Grad_detail(tk.Toplevel):
 
 #(예상)등급계산
 class Grade_calc(tk.Toplevel):
-    def __init__(self):
+    def __init__(self,grades=None):
         if current_subject_cnt==0:
             msgbox.showerror('Error','과목 입력 안됨')
         else:
@@ -721,18 +721,22 @@ class Grade_calc(tk.Toplevel):
             self.resizable(False,False)
             self.title('예상등급계산')
             f_mid,f_bot=tk.Frame(self),tk.Frame(self)
-            str_self=('과목명','시수','등급1','등급2')
-            for a in range(4):
+            str_self=('과목명','시수','등급1','등급2','포함?')
+            for a in range(5):
                 tk.Label(f_mid,text=str_self[a]).grid(row=0,column=a)
-            self.__grade1,self.__grade2=[],[]
+            self.__grade1=[]
+            self.__grade2=[]
+            self.__chk=[]
             k=0
             for subject in current_subjects:
                 tk.Label(f_mid,text=subject).grid(row=k+1,column=0)
                 tk.Label(f_mid,text=current_num[subject][0]).grid(row=k+1,column=1)
-                self.__grade1.append(tk.StringVar())
+                self.__grade1.append(tk.StringVar(self,grades[k] if grades and grades[k] else ''))
                 self.__grade2.append(tk.StringVar())
+                self.__chk.append(tk.BooleanVar(self,True))
                 tk.Entry(f_mid,width=7,textvariable=self.__grade1[-1]).grid(row=k+1,column=2)
                 tk.Entry(f_mid,width=7,textvariable=self.__grade2[-1]).grid(row=k+1,column=3)
+                tk.Checkbutton(f_mid,variable=self.__chk[-1]).grid(row=k+1,column=4)
                 k+=1
             f_mid.grid(row=0,column=0,columnspan=2)
             tk.Button(self,text='극간계산',command=Cut_calc).grid(row=1,column=0,sticky='w')
@@ -745,22 +749,25 @@ class Grade_calc(tk.Toplevel):
     def __calc(self):
         try:
             nums=get_current_num()
-            total_num=sum(nums)
+            total_num=0
             max_grade=0
             min_grade=0
             for k in range(current_subject_cnt):
-                in1=self.__grade1[k].get()
-                in2=self.__grade2[k].get()
-                grd1=int(in1)
-                if 0<grd1>9:
-                    raise ValueError
-                if in2:
-                    grd2=int(in2)
-                    max_grade+=min(grd1,grd2)*nums[k]
-                    min_grade+=max(grd1,grd2)*nums[k]
-                else:
-                    max_grade+=grd1*nums[k]
-                    min_grade+=grd1*nums[k]
+                if self.__chk[k].get():
+                    in2=self.__grade2[k].get()
+                    grd1=int(self.__grade1[k].get()) #in1=self.__grade1[k].get()
+                    if 0<grd1>9:
+                        raise ValueError
+                    total_num+=nums[k]
+                    if in2:
+                        grd2=int(in2)
+                        max_grade+=min(grd1,grd2)*nums[k]
+                        min_grade+=max(grd1,grd2)*nums[k]
+                    else:
+                        max_grade+=grd1*nums[k]
+                        min_grade+=grd1*nums[k]
+            if not total_num:
+                raise ValueError
         except ValueError:
             msgbox.showerror('Error','잘못된 입력')
         else:
@@ -777,8 +784,8 @@ class Grade_calc(tk.Toplevel):
             self.__grade1[k].set('')
             self.__grade2[k].set('')
     
-    '''
     #not used, but remain for future
+    '''
     def __calc_full(self,grd1,grd2):
         #파싱
         if current_subject_cnt==len(grd1):
@@ -899,26 +906,6 @@ class Exam_input(tk.Toplevel):
 #시혐 결과
 class Exam_res(tk.Toplevel):
     def __init__(self):
-        def get_grade(rank,person):
-            percent=rank/person*100
-            cuts=cut(person)
-            grade=0
-            for k in range(9):
-                if rank<=cuts[k]:
-                    grade=k+1
-                    break
-            '''
-            if not grade:
-                grade=9
-            '''
-            return grade,percent
-        def calc(num,grd):
-            result=0
-            n=0
-            for k in range(len(num)):
-                result+=num[k]*grd[k]
-                n+=num[k]
-            return round(result/n,4)
         if current_result:
             super().__init__(main)
             self.resizable(False,False)
@@ -927,7 +914,7 @@ class Exam_res(tk.Toplevel):
             self_str=('과목','시수','점수','석차','등급','백분위')
             for k in range(6):
                 tk.Label(f_mid,text=self_str[k]).grid(row=0,column=k,padx=5)
-            grades=[]
+            self.__grades=[]
             all_rank_inputed=True
             k=0
             for subject in current_subjects:
@@ -937,26 +924,54 @@ class Exam_res(tk.Toplevel):
                     score,rank,total_person=current_result[subject]
                     tk.Label(f_mid,text=score).grid(row=k+1,column=2)
                     if rank and total_person:
-                        grade,percent=get_grade(rank,total_person)
-                        tk.Label(f_mid,text='%d/%d' %(rank,total_person)).grid(row=k+1,column=3) #str(rank)+'/'+str(total_person)
+                        grade,percent=self.__get_grade(rank,total_person)
+                        tk.Label(f_mid,text='%d/%d' %(rank,total_person)).grid(row=k+1,column=3)
                         tk.Label(f_mid,text=grade).grid(row=k+1,column=4)
                         tk.Label(f_mid,text=round(percent,2)).grid(row=k+1,column=5)
-                        grades.append(grade)
+                        self.__grades.append(grade)
                     else:
                         tk.Label(f_mid,text='등급 입력 전').grid(row=k+1,column=3,columnspan=3)
                         all_rank_inputed=False
+                        self.__grades.append(None)
                 else:
                     tk.Label(f_mid,text='성적 입력 전').grid(row=k+1,column=2,columnspan=4)
                     all_rank_inputed=False
                 k+=1
             f_mid.grid(row=0,column=0)
             if all_rank_inputed:
-                tk.Label(self,text='등급: '+str(calc(get_current_num(),grades))).grid(row=1,column=0)
-            tk.Button(self,text='닫기',command=self.destroy).grid(row=2,column=0,sticky='e')
+                tk.Label(self,text='등급: '+str(self.__calc(get_current_num(),self.__grades))).grid(row=1,column=0)
+            tk.Button(self,text='등급계산',command=self.__to_grading).grid(row=2,column=0,sticky='w')
+            tk.Button(self,text='닫기',command=self.destroy).grid(row=2,column=1,sticky='e')
         elif current_subjects:
             msgbox.showerror('Error','성적 입력 안됨')
         else:
             msgbox.showerror('Error','과목 입력 안됨')
+    
+    def __get_grade(self,rank,person):
+        percent=rank/person*100
+        cuts=cut(person)
+        grade=0
+        for k in range(9):
+            if rank<=cuts[k]:
+                grade=k+1
+                break
+        '''
+        if not grade:
+            grade=9
+        '''
+        return grade,percent
+    
+    def __calc(self,num,grd):
+        result=0
+        n=0
+        for k in range(len(num)):
+            result+=num[k]*grd[k]
+            n+=num[k]
+        return round(result/n,4)
+    
+    def __to_grading(self):
+        self.destroy()
+        Grade_calc(self.__grades)
 
 
 #등급인원계산
