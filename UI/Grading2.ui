@@ -30,7 +30,7 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLabel" name="lb15">
+     <widget class="QLabel" name="lb11">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -46,7 +46,7 @@
      </widget>
     </item>
     <item row="0" column="2">
-     <widget class="QLabel" name="lb610">
+     <widget class="QLabel" name="lb12">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -62,7 +62,7 @@
      </widget>
     </item>
     <item row="0" column="3">
-     <widget class="QLabel" name="lb1115">
+     <widget class="QLabel" name="lb13">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -78,7 +78,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLabel" name="lb1620">
+     <widget class="QLabel" name="lb21">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -94,7 +94,7 @@
      </widget>
     </item>
     <item row="1" column="2">
-     <widget class="QLabel" name="lb2125">
+     <widget class="QLabel" name="lb22">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -110,7 +110,7 @@
      </widget>
     </item>
     <item row="1" column="3">
-     <widget class="QLabel" name="lb2630">
+     <widget class="QLabel" name="lb23">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -140,7 +140,7 @@
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QLineEdit" name="lnAns15">
+     <widget class="QLineEdit" name="lnAns11">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -168,7 +168,7 @@
      </widget>
     </item>
     <item row="2" column="2">
-     <widget class="QLineEdit" name="lnAns610">
+     <widget class="QLineEdit" name="lnAns12">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -196,7 +196,7 @@
      </widget>
     </item>
     <item row="2" column="3">
-     <widget class="QLineEdit" name="lnAns1115">
+     <widget class="QLineEdit" name="lnAns13">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -224,7 +224,7 @@
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QLineEdit" name="lnAns1620">
+     <widget class="QLineEdit" name="lnAns21">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -252,7 +252,7 @@
      </widget>
     </item>
     <item row="3" column="2">
-     <widget class="QLineEdit" name="lnAns2125">
+     <widget class="QLineEdit" name="lnAns22">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -280,7 +280,7 @@
      </widget>
     </item>
     <item row="3" column="3">
-     <widget class="QLineEdit" name="lnAns2630">
+     <widget class="QLineEdit" name="lnAns23">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -322,7 +322,7 @@
      </widget>
     </item>
     <item row="4" column="1">
-     <widget class="QLineEdit" name="lnCor15">
+     <widget class="QLineEdit" name="lnCor11">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -350,7 +350,7 @@
      </widget>
     </item>
     <item row="4" column="2">
-     <widget class="QLineEdit" name="lnCor610">
+     <widget class="QLineEdit" name="lnCor12">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -378,7 +378,7 @@
      </widget>
     </item>
     <item row="4" column="3">
-     <widget class="QLineEdit" name="lnCor1115">
+     <widget class="QLineEdit" name="lnCor13">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -406,7 +406,7 @@
      </widget>
     </item>
     <item row="5" column="1">
-     <widget class="QLineEdit" name="lnCor1620">
+     <widget class="QLineEdit" name="lnCor21">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -434,7 +434,7 @@
      </widget>
     </item>
     <item row="5" column="2">
-     <widget class="QLineEdit" name="lnCor2125">
+     <widget class="QLineEdit" name="lnCor22">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -462,7 +462,7 @@
      </widget>
     </item>
     <item row="5" column="3">
-     <widget class="QLineEdit" name="lnCor2630">
+     <widget class="QLineEdit" name="lnCor23">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>

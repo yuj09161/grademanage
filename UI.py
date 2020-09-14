@@ -782,13 +782,13 @@ class Ui_GradDetail(object):
         self.btnClose.setText(QCoreApplication.translate("GradDetail", u"\ub2eb\uae30", None))
     # retranslateUi
 
-class Ui_GradRes(object):
-    def setupUI(self, GradRes):
-        if not GradRes.objectName():
-            GradRes.setObjectName(u"GradRes")
-        GradRes.resize(218, 107)
+class Ui_GradResult(object):
+    def setupUI(self, GradResult):
+        if not GradResult.objectName():
+            GradResult.setObjectName(u"GradResult")
+        GradResult.resize(218, 107)
         
-        self.centralwidget = QWidget(GradRes)
+        self.centralwidget = QWidget(GradResult)
         self.centralwidget.setObjectName(u"centralwidget")
         self.glMain = QGridLayout(self.centralwidget)
         self.glMain.setObjectName(u"glMain")
@@ -861,25 +861,25 @@ class Ui_GradRes(object):
         self.hlBot.addWidget(self.btnClose)
         self.glMain.addWidget(self.widget, 2, 0, 1, 4)
 
-        GradRes.setCentralWidget(self.centralwidget)
+        GradResult.setCentralWidget(self.centralwidget)
         QWidget.setTabOrder(self.btnDetail, self.btnClose)
 
-        self.retranslateUi(GradRes)
+        self.retranslateUi(GradResult)
 
-        QMetaObject.connectSlotsByName(GradRes)
+        QMetaObject.connectSlotsByName(GradResult)
     # setupUI
 
-    def retranslateUi(self, GradRes):
-        GradRes.setWindowTitle(QCoreApplication.translate("GradRes", u"\uac00\ucc44\uc810\uacb0\uacfc", None))
-        self.btnDetail.setText(QCoreApplication.translate("GradRes", u"\ubcf4\uae30", None))
-        self.lbTitleDetail.setText(QCoreApplication.translate("GradRes", u"\uc0c1\uc138", None))
-        self.lbWrong.setText(QCoreApplication.translate("GradRes", u"\uc624\ub2f5 \uc218", None))
-        self.lbScore.setText(QCoreApplication.translate("GradRes", u"35", None))
-        self.lbSubject.setText(QCoreApplication.translate("GradRes", u"\uacfc\ubaa9\uba85", None))
-        self.lbTitleSubject.setText(QCoreApplication.translate("GradRes", u"\uacfc\ubaa9\uba85", None))
-        self.lbTitleGrade.setText(QCoreApplication.translate("GradRes", u"\uc810\uc218", None))
-        self.lbTitleWrong.setText(QCoreApplication.translate("GradRes", u"\uc624\ub2f5 \uc218", None))
-        self.btnClose.setText(QCoreApplication.translate("GradRes", u"\ub2eb\uae30", None))
+    def retranslateUi(self, GradResult):
+        GradResult.setWindowTitle(QCoreApplication.translate("GradResult", u"\uac00\ucc44\uc810\uacb0\uacfc", None))
+        self.btnDetail.setText(QCoreApplication.translate("GradResult", u"\ubcf4\uae30", None))
+        self.lbTitleDetail.setText(QCoreApplication.translate("GradResult", u"\uc0c1\uc138", None))
+        self.lbWrong.setText(QCoreApplication.translate("GradResult", u"\uc624\ub2f5 \uc218", None))
+        self.lbScore.setText(QCoreApplication.translate("GradResult", u"35", None))
+        self.lbSubject.setText(QCoreApplication.translate("GradResult", u"\uacfc\ubaa9\uba85", None))
+        self.lbTitleSubject.setText(QCoreApplication.translate("GradResult", u"\uacfc\ubaa9\uba85", None))
+        self.lbTitleGrade.setText(QCoreApplication.translate("GradResult", u"\uc810\uc218", None))
+        self.lbTitleWrong.setText(QCoreApplication.translate("GradResult", u"\uc624\ub2f5 \uc218", None))
+        self.btnClose.setText(QCoreApplication.translate("GradResult", u"\ub2eb\uae30", None))
     # retranslateUi
 
 class Ui_Grading1(object):
@@ -1327,12 +1327,11 @@ class Ui_Main(object):
         if not Main.objectName():
             Main.setObjectName(u"Main")
         Main.resize(442, 300)
+        
         self.save = QAction(Main)
         self.save.setObjectName(u"save")
         self.exit = QAction(Main)
         self.exit.setObjectName(u"exit")
-        self.actiontest = QAction(Main)
-        self.actiontest.setObjectName(u"actiontest")
         self.load = QAction(Main)
         self.load.setObjectName(u"load")
         self.cut_calc = QAction(Main)
@@ -1341,16 +1340,21 @@ class Ui_Main(object):
         self.license.setObjectName(u"license")
         self.about = QAction(Main)
         self.about.setObjectName(u"about")
+        
         self.centralwidget = QWidget(Main)
         self.centralwidget.setObjectName(u"centralwidget")
+        
         self.glMain = QGridLayout(self.centralwidget)
         self.glMain.setObjectName(u"glMain")
+        
         self.widManage = QGroupBox(self.centralwidget)
         self.widManage.setObjectName(u"widManage")
         sizePolicy_EP.setHeightForWidth(self.widManage.sizePolicy().hasHeightForWidth())
         self.widManage.setSizePolicy(sizePolicy_EP)
+        
         self.vlManage = QVBoxLayout(self.widManage)
         self.vlManage.setObjectName(u"vlManage")
+        
         self.btnCalc = QPushButton(self.widManage)
         self.btnCalc.setObjectName(u"btnCalc")
         sizePolicy_EE.setHeightForWidth(self.btnCalc.sizePolicy().hasHeightForWidth())
@@ -1380,8 +1384,10 @@ class Ui_Main(object):
         self.widGrade.setObjectName(u"widGrade")
         sizePolicy_EP.setHeightForWidth(self.widGrade.sizePolicy().hasHeightForWidth())
         self.widGrade.setSizePolicy(sizePolicy_EP)
+        
         self.vlGrade = QVBoxLayout(self.widGrade)
         self.vlGrade.setObjectName(u"vlGrade")
+        
         self.btnSubject = QPushButton(self.widGrade)
         self.btnSubject.setObjectName(u"btnSubject")
         sizePolicy_EE.setHeightForWidth(self.btnSubject.sizePolicy().hasHeightForWidth())
@@ -1405,6 +1411,7 @@ class Ui_Main(object):
         self.widYear.setObjectName(u"widYear")
         self.hlYear = QHBoxLayout(self.widYear)
         self.hlYear.setObjectName(u"hlYear")
+        
         self.comboYear = QComboBox(self.widYear)
         self.comboYear.setObjectName(u"comboYear")
         self.hlYear.addWidget(self.comboYear)
@@ -1416,6 +1423,14 @@ class Ui_Main(object):
         self.comboExam = QComboBox(self.widYear)
         self.comboExam.setObjectName(u"comboExam")
         self.hlYear.addWidget(self.comboExam)
+        
+        self.__option=(('1학년','2학년','3학년'),('1학기','2학기'),('중간고사','기말고사','학기말'))
+        for option in self.__option[0]:
+            self.comboYear.addItem(option)
+        for option in self.__option[1]:
+            self.comboSemester.addItem(option)
+        for option in self.__option[2]:
+            self.comboExam.addItem(option)
 
         self.btnSet = QPushButton(self.widYear)
         self.btnSet.setObjectName(u"btnSet")
@@ -1425,16 +1440,20 @@ class Ui_Main(object):
         self.glMain.addWidget(self.widYear, 0, 0, 1, 2)
 
         Main.setCentralWidget(self.centralwidget)
+        
         self.menubar = QMenuBar(Main)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 442, 26))
+        
         self.file = QMenu(self.menubar)
         self.file.setObjectName(u"file")
         self.tools = QMenu(self.menubar)
         self.tools.setObjectName(u"tools")
         self.info = QMenu(self.menubar)
         self.info.setObjectName(u"info")
+        
         Main.setMenuBar(self.menubar)
+        
         QWidget.setTabOrder(self.comboYear, self.comboSemester)
         QWidget.setTabOrder(self.comboSemester, self.comboExam)
         QWidget.setTabOrder(self.comboExam, self.btnSet)
@@ -1449,11 +1468,14 @@ class Ui_Main(object):
         self.menubar.addAction(self.file.menuAction())
         self.menubar.addAction(self.tools.menuAction())
         self.menubar.addAction(self.info.menuAction())
+        
         self.file.addAction(self.load)
         self.file.addAction(self.save)
         self.file.addSeparator()
         self.file.addAction(self.exit)
+        
         self.tools.addAction(self.cut_calc)
+        
         self.info.addAction(self.license)
         self.info.addSeparator()
         self.info.addAction(self.about)
@@ -1467,7 +1489,6 @@ class Ui_Main(object):
         Main.setWindowTitle(QCoreApplication.translate("Main", u"\uc131\uc801\uad00\ub9ac", None))
         self.save.setText(QCoreApplication.translate("Main", u"\uc800\uc7a5", None))
         self.exit.setText(QCoreApplication.translate("Main", u"\uc885\ub8cc", None))
-        self.actiontest.setText(QCoreApplication.translate("Main", u"test", None))
         self.load.setText(QCoreApplication.translate("Main", u"\ubd88\ub7ec\uc624\uae30", None))
         self.cut_calc.setText(QCoreApplication.translate("Main", u"\ub4f1\uae09\uc778\uc6d0\uacc4\uc0b0", None))
         self.license.setText(QCoreApplication.translate("Main", u"License", None))
