@@ -212,6 +212,7 @@ class Main(QMainWindow,UI.Ui_Main):
         self.btnCalc.clicked.connect(Grade_calc)
         self.btnInput.clicked.connect(Exam_input)
         self.btnRes.clicked.connect(Exam_result)
+        self.btnSet.clicked.connect(self.__set_exam)
         #self.btnManage.clicked.connect()
         self.btnManage.setEnabled(False)
         
@@ -223,6 +224,7 @@ class Main(QMainWindow,UI.Ui_Main):
         #self.license.triggered.connect()
         #self.about.triggered.connect()
     
+
     def closeEvent(self,event):
         print('close')
         if ASK_ON_CLOSE and not saved:
@@ -238,6 +240,7 @@ class Main(QMainWindow,UI.Ui_Main):
             event.accept()
     
     #시험 설정
+
     def __set_exam(self):
         global current_num,current_wrong,current_result,\
                current_exam,current_subjects,current_subject_cnt
@@ -270,6 +273,7 @@ class Main(QMainWindow,UI.Ui_Main):
         current_subject_cnt=len(current_subjects)
     
     #버튼 상태 업데이트
+
     def update_btn(self):
         self.__changeBtn.setStyleSheet('color:black')
         if current_num:
@@ -313,18 +317,13 @@ class Subject_In(QMainWindow,UI.Ui_SubjectIn):
         super().__init__()
         self.setupUI(self)
         #초기화
-        self.__inbox,self.__invar=[],[]
-        #메뉴 생성/배치
-        menu_str=('과목명','시수','중간','기말','삭제')
-        for k in range(5):
-            pass
-        #메뉴,버튼 그룹 배치
-        self.__mid.grid(row=0,column=0,columnspan=2)
-        self.__footer.grid(row=1,column=1,rowspan=1,columnspan=1,sticky='e',padx=5)
+        self.__inbox=[]
+        self.__invar=[]
         #기존 값 불러오기
         if current_num:
             for subject in current_num:
                 self.__add_subject(subject,current_num[subject])
+
     def __add_subject(self,subject=None,value=None):
         n=len(self.__inbox)
         if subject:
@@ -342,10 +341,12 @@ class Subject_In(QMainWindow,UI.Ui_SubjectIn):
             if self.__inbox[a]:
                 for b in range(5):
                     self.__inbox[a][b].grid(row=a+1,column=b)
+
     def __del_subject(self,n):
         for a in range(5):
             self.__inbox[n][a].grid_forget()
         self.__inbox[n]=None
+
     def __set_subject(self):
         global current_num,saved,current_subjects,current_subject_cnt
         current_num={}; current_subjects=[]
@@ -370,6 +371,7 @@ class Grade_ing:
         self.__err1,self.__err2={},{}
 
         self.__select()
+
     def __select(self):
         def next():
             top.destroy()
@@ -389,6 +391,7 @@ class Grade_ing:
         btn0.grid(row=0,column=0); btn1.grid(row=0,column=1)
         frame_top.grid(row=0,column=0)
         frame_bottom.grid(row=1,column=0)
+
     def __grading(self):
         def get_input(): #입력값 불러오기, 오류 검사
             ans,cor=[],[]
@@ -477,6 +480,7 @@ class Grade_ing:
 
 
         f_mid.grid(row=1,column=0,columnspan=3)
+
     def __err_sel(self):
         def priv():
             top.destroy()
@@ -511,6 +515,7 @@ class Grade_ing:
         else:
             str_btn='채점'
 
+
     def __err_comp(self):
         def priv():
             top.destroy()
@@ -543,6 +548,7 @@ class Grade_ing:
             score_in[k].grid(row=k+1,column=1)
             score_in2[k].grid(row=k+1,column=2)
         mid.grid(row=0,column=0,columnspan=2)
+
 
     def __result(self):
         def write():
@@ -685,6 +691,7 @@ class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
             f_bot.grid(row=1,column=1,sticky='e')
             k+=1
     
+
     def __calc(self):
         try:
             nums=get_current_num()
@@ -718,6 +725,7 @@ class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
                 )
             )
     
+
     def __del_all(self):
         for k in range(current_subject_cnt):
             self.__grade1[k].set('')
@@ -725,6 +733,7 @@ class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
     
     #not used, but remain for future
     '''
+
     def __calc_full(self,grd1,grd2):
         #파싱
         if current_subject_cnt==len(grd1):
@@ -800,6 +809,7 @@ class Exam_input(QMainWindow,UI.Ui_ExamInput):
         else:
             QMessageBox.critical('Error','과목 입력 안됨')
     
+
     def __end(self):
         global saved
         all_entered=True; results=[]
@@ -881,6 +891,7 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
         else:
             QMessageBox.critical('Error','과목 입력 안됨')
     
+
     def __get_grade(self,rank,person):
         percent=rank/person*100
         cuts=cut(person)
@@ -895,6 +906,7 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
         '''
         return grade,percent
     
+
     def __calc(self,num,grd):
         result=0
         n=0
@@ -903,6 +915,7 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
             n+=num[k]
         return round(result/n,4)
     
+
     def __to_grading(self):
         self.destroy()
         Grade_calc(self.__grades)
@@ -933,6 +946,7 @@ class Cut_calc(QMainWindow,UI.Ui_CutCalc):
         f_bot.grid(row=2,column=0)
     
     
+
     def __get(self):
         try:
             a=int(self.__ent.get())
@@ -955,6 +969,7 @@ class Notice(QMainWindow,UI.Ui_Notice):
             txt=string
         super().__init__()
         self.setupUI(self)
+
 
     def form(self,string):
         text=''
