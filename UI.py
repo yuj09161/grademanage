@@ -300,8 +300,6 @@ class Ui_CutCalc(object):
         self.glMain.addWidget(self.widBot, 11, 0, 1, 3)
 
         CutCalc.setCentralWidget(self.centralwidget)
-        QWidget.setTabOrder(self.lnPerson, self.btnClose)
-        QWidget.setTabOrder(self.btnClose, self.btnCalc)
 
         self.retranslateUi(CutCalc)
 
@@ -348,50 +346,12 @@ class Ui_ExamInput(object):
         self.lbTitleSubject.setAlignment(Qt.AlignCenter)
         self.glMain.addWidget(self.lbTitleSubject, 0, 0, 1, 1)
 
-        self.lnScore = QLineEdit(self.centralwidget)
-        self.lnScore.setObjectName(u"lnScore")
-        sizePolicy_FF.setHeightForWidth(self.lnScore.sizePolicy().hasHeightForWidth())
-        self.lnScore.setSizePolicy(sizePolicy_FF)
-        self.lnScore.setMaximumSize(QSize(60, 16777215))
-        self.lnScore.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lnScore, 1, 2, 1, 1)
-
-        self.lbGrade = QLabel(self.centralwidget)
-        self.lbGrade.setObjectName(u"lbGrade")
-        sizePolicy_IP.setHeightForWidth(self.lbGrade.sizePolicy().hasHeightForWidth())
-        self.lbGrade.setSizePolicy(sizePolicy_IP)
-        self.lbGrade.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbGrade, 1, 1, 1, 1)
-
         self.lbTitleScore = QLabel(self.centralwidget)
         self.lbTitleScore.setObjectName(u"lbTitleScore")
         sizePolicy_FP.setHeightForWidth(self.lbTitleScore.sizePolicy().hasHeightForWidth())
         self.lbTitleScore.setSizePolicy(sizePolicy_FP)
         self.lbTitleScore.setAlignment(Qt.AlignCenter)
         self.glMain.addWidget(self.lbTitleScore, 0, 2, 1, 1, Qt.AlignHCenter)
-
-        self.lbSubject = QLabel(self.centralwidget)
-        self.lbSubject.setObjectName(u"lbSubject")
-        sizePolicy_IP.setHeightForWidth(self.lbSubject.sizePolicy().hasHeightForWidth())
-        self.lbSubject.setSizePolicy(sizePolicy_IP)
-        self.lbSubject.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbSubject, 1, 0, 1, 1)
-
-        self.lnRank = QLineEdit(self.centralwidget)
-        self.lnRank.setObjectName(u"lnRank")
-        sizePolicy_FF.setHeightForWidth(self.lnRank.sizePolicy().hasHeightForWidth())
-        self.lnRank.setSizePolicy(sizePolicy_FF)
-        self.lnRank.setMaximumSize(QSize(60, 16777215))
-        self.lnRank.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lnRank, 1, 3, 1, 1)
-
-        self.lnPerson = QLineEdit(self.centralwidget)
-        self.lnPerson.setObjectName(u"lnPerson")
-        sizePolicy_FF.setHeightForWidth(self.lnPerson.sizePolicy().hasHeightForWidth())
-        self.lnPerson.setSizePolicy(sizePolicy_FF)
-        self.lnPerson.setMaximumSize(QSize(60, 16777215))
-        self.lnPerson.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lnPerson, 1, 4, 1, 1)
 
         self.lbTitleNum = QLabel(self.centralwidget)
         self.lbTitleNum.setObjectName(u"lbTitleNum")
@@ -413,13 +373,6 @@ class Ui_ExamInput(object):
         self.lbTitleRank.setSizePolicy(sizePolicy_FP)
         self.lbTitleRank.setAlignment(Qt.AlignCenter)
         self.glMain.addWidget(self.lbTitleRank, 0, 3, 1, 1, Qt.AlignHCenter)
-
-        self.btnDel = QPushButton(self.centralwidget)
-        self.btnDel.setObjectName(u"btnDel")
-        sizePolicy_FF.setHeightForWidth(self.btnDel.sizePolicy().hasHeightForWidth())
-        self.btnDel.setSizePolicy(sizePolicy_FF)
-        self.btnDel.setMaximumSize(QSize(28, 16777215))
-        self.glMain.addWidget(self.btnDel, 1, 5, 1, 1, Qt.AlignHCenter)
 
         self.lbTitleDel = QLabel(self.centralwidget)
         self.lbTitleDel.setObjectName(u"lbTitleDel")
@@ -459,12 +412,6 @@ class Ui_ExamInput(object):
         self.glMain.addWidget(self.widBot, 2, 0, 1, 6)
 
         ExamInput.setCentralWidget(self.centralwidget)
-        QWidget.setTabOrder(self.lnScore, self.lnRank)
-        QWidget.setTabOrder(self.lnRank, self.lnPerson)
-        QWidget.setTabOrder(self.lnPerson, self.btnDel)
-        QWidget.setTabOrder(self.btnDel, self.btnAdd)
-        QWidget.setTabOrder(self.btnAdd, self.btnCancel)
-        QWidget.setTabOrder(self.btnCancel, self.btnSet)
 
         self.retranslateUi(ExamInput)
 
@@ -474,21 +421,70 @@ class Ui_ExamInput(object):
     def retranslateUi(self, ExamInput):
         ExamInput.setWindowTitle(QCoreApplication.translate("ExamInput", u"(\ucd5c\uc885)\uc131\uc801\uc785\ub825", None))
         self.lbTitleSubject.setText(QCoreApplication.translate("ExamInput", u"\uacfc\ubaa9\uba85", None))
-        self.lnScore.setInputMask(QCoreApplication.translate("ExamInput", u"Ddd", None))
-        self.lbGrade.setText(QCoreApplication.translate("ExamInput", u"1", None))
         self.lbTitleScore.setText(QCoreApplication.translate("ExamInput", u"\uc6d0\uc810\uc218", None))
-        self.lbSubject.setText(QCoreApplication.translate("ExamInput", u"\uac00\ub098\ub2e4", None))
-        self.lnRank.setInputMask(QCoreApplication.translate("ExamInput", u"Ddd", None))
-        self.lnPerson.setInputMask(QCoreApplication.translate("ExamInput", u"Ddd", None))
         self.lbTitleNum.setText(QCoreApplication.translate("ExamInput", u"\ub2e8\uc704\uc218", None))
         self.lbTitlePerson.setText(QCoreApplication.translate("ExamInput", u"\uc218\uac15\uc778\uc6d0", None))
         self.lbTitleRank.setText(QCoreApplication.translate("ExamInput", u"\uc11d\ucc28", None))
-        self.btnDel.setText(QCoreApplication.translate("ExamInput", u"X", None))
         self.lbTitleDel.setText(QCoreApplication.translate("ExamInput", u"\uc0ad\uc81c", None))
         self.btnAdd.setText(QCoreApplication.translate("ExamInput", u"\ucd08\uae30\ud654", None))
         self.btnCancel.setText(QCoreApplication.translate("ExamInput", u"\ucde8\uc18c", None))
         self.btnSet.setText(QCoreApplication.translate("ExamInput", u"\uc785\ub825", None))
     # retranslateUi
+    
+    def addWidgets(self):
+        lbSubject = QLabel(self.centralwidget)
+        lbSubject.setObjectName(u"lbSubject")
+        sizePolicy_IP.setHeightForWidth(lbSubject.sizePolicy().hasHeightForWidth())
+        lbSubject.setSizePolicy(sizePolicy_IP)
+        lbSubject.setAlignment(Qt.AlignCenter)
+        self.glMain.addWidget(lbSubject, 1, 0, 1, 1)
+
+        lbGrade = QLabel(self.centralwidget)
+        lbGrade.setObjectName(u"lbGrade")
+        sizePolicy_IP.setHeightForWidth(lbGrade.sizePolicy().hasHeightForWidth())
+        lbGrade.setSizePolicy(sizePolicy_IP)
+        lbGrade.setAlignment(Qt.AlignCenter)
+        self.glMain.addWidget(lbGrade, 1, 1, 1, 1)
+
+        lnScore = QLineEdit(self.centralwidget)
+        lnScore.setObjectName(u"lnScore")
+        sizePolicy_FF.setHeightForWidth(lnScore.sizePolicy().hasHeightForWidth())
+        lnScore.setSizePolicy(sizePolicy_FF)
+        lnScore.setMaximumSize(QSize(60, 16777215))
+        lnScore.setAlignment(Qt.AlignCenter)
+        self.glMain.addWidget(lnScore, 1, 2, 1, 1)
+
+        lnRank = QLineEdit(self.centralwidget)
+        lnRank.setObjectName(u"lnRank")
+        sizePolicy_FF.setHeightForWidth(lnRank.sizePolicy().hasHeightForWidth())
+        lnRank.setSizePolicy(sizePolicy_FF)
+        lnRank.setMaximumSize(QSize(60, 16777215))
+        lnRank.setAlignment(Qt.AlignCenter)
+        self.glMain.addWidget(lnRank, 1, 3, 1, 1)
+
+        lnPerson = QLineEdit(self.centralwidget)
+        lnPerson.setObjectName(u"lnPerson")
+        sizePolicy_FF.setHeightForWidth(lnPerson.sizePolicy().hasHeightForWidth())
+        lnPerson.setSizePolicy(sizePolicy_FF)
+        lnPerson.setMaximumSize(QSize(60, 16777215))
+        lnPerson.setAlignment(Qt.AlignCenter)
+        self.glMain.addWidget(lnPerson, 1, 4, 1, 1)
+
+        btnDel = QPushButton(self.centralwidget)
+        btnDel.setObjectName(u"btnDel")
+        sizePolicy_FF.setHeightForWidth(btnDel.sizePolicy().hasHeightForWidth())
+        btnDel.setSizePolicy(sizePolicy_FF)
+        btnDel.setMaximumSize(QSize(28, 16777215))
+        self.glMain.addWidget(btnDel, 1, 5, 1, 1, Qt.AlignHCenter)
+        
+        self.lbSubject.setText(QCoreApplication.translate("ExamInput", u"\uac00\ub098\ub2e4", None))
+        self.lbGrade.setText(QCoreApplication.translate("ExamInput", u"1", None))
+        self.lnRank.setInputMask(QCoreApplication.translate("ExamInput", u"Ddd", None))
+        self.lnPerson.setInputMask(QCoreApplication.translate("ExamInput", u"Ddd", None))
+        self.lnScore.setInputMask(QCoreApplication.translate("ExamInput", u"Ddd", None))
+        self.btnDel.setText(QCoreApplication.translate("ExamInput", u"X", None))
+        
+        return lbSubject,lbGrade,lnScore,lnRank,lnPerson,btnDel
 
 class Ui_ExamResult(object):
     def setupUI(self, ExamResult):
@@ -658,10 +654,6 @@ class Ui_GradeCalc(object):
         self.glMain.addWidget(self.lbTitleNum, 0, 1, 1, 1)
 
         GradeCalc.setCentralWidget(self.centralwidget)
-        QWidget.setTabOrder(self.lnGrade1, self.lnGrade2)
-        QWidget.setTabOrder(self.lnGrade2, self.btnAdd)
-        QWidget.setTabOrder(self.btnAdd, self.btnCancel)
-        QWidget.setTabOrder(self.btnCancel, self.btnSet)
 
         self.retranslateUi(GradeCalc)
 
@@ -793,76 +785,55 @@ class Ui_GradResult(object):
         self.glMain = QGridLayout(self.centralwidget)
         self.glMain.setObjectName(u"glMain")
         
-        self.btnDetail = QPushButton(self.centralwidget)
-        self.btnDetail.setObjectName(u"btnDetail")
-        self.btnDetail.setMaximumSize(QSize(50, 16777215))
-        self.glMain.addWidget(self.btnDetail, 1, 3, 1, 1)
+        self.widCent=QWidget(GradResult)
+        self.glCent=QGridLayout(self.widCent)
 
-        self.lbTitleDetail = QLabel(self.centralwidget)
-        self.lbTitleDetail.setObjectName(u"lbTitleDetail")
-        sizePolicy_PF.setHeightForWidth(self.lbTitleDetail.sizePolicy().hasHeightForWidth())
-        self.lbTitleDetail.setSizePolicy(sizePolicy_PF)
-        self.lbTitleDetail.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleDetail, 0, 3, 1, 1)
-
-        self.lbWrong = QLabel(self.centralwidget)
-        self.lbWrong.setObjectName(u"lbWrong")
-        sizePolicy_PF.setHeightForWidth(self.lbWrong.sizePolicy().hasHeightForWidth())
-        self.lbWrong.setSizePolicy(sizePolicy_PF)
-        self.lbWrong.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbWrong, 1, 1, 1, 1)
-
-        self.lbScore = QLabel(self.centralwidget)
-        self.lbScore.setObjectName(u"lbScore")
-        sizePolicy_PF.setHeightForWidth(self.lbScore.sizePolicy().hasHeightForWidth())
-        self.lbScore.setSizePolicy(sizePolicy_PF)
-        self.lbScore.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbScore, 1, 2, 1, 1)
-
-        self.lbSubject = QLabel(self.centralwidget)
-        self.lbSubject.setObjectName(u"lbSubject")
-        sizePolicy_PF.setHeightForWidth(self.lbSubject.sizePolicy().hasHeightForWidth())
-        self.lbSubject.setSizePolicy(sizePolicy_PF)
-        self.lbSubject.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbSubject, 1, 0, 1, 1)
-
-        self.lbTitleSubject = QLabel(self.centralwidget)
+        self.lbTitleSubject = QLabel(self.widCent)
         self.lbTitleSubject.setObjectName(u"lbTitleSubject")
         sizePolicy_PF.setHeightForWidth(self.lbTitleSubject.sizePolicy().hasHeightForWidth())
         self.lbTitleSubject.setSizePolicy(sizePolicy_PF)
         self.lbTitleSubject.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleSubject, 0, 0, 1, 1)
+        self.glCent.addWidget(self.lbTitleSubject, 0, 0, 1, 1)
 
-        self.lbTitleGrade = QLabel(self.centralwidget)
-        self.lbTitleGrade.setObjectName(u"lbTitleGrade")
-        sizePolicy_PF.setHeightForWidth(self.lbTitleGrade.sizePolicy().hasHeightForWidth())
-        self.lbTitleGrade.setSizePolicy(sizePolicy_PF)
-        self.lbTitleGrade.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleGrade, 0, 2, 1, 1)
-
-        self.lbTitleWrong = QLabel(self.centralwidget)
+        self.lbTitleWrong = QLabel(self.widCent)
         self.lbTitleWrong.setObjectName(u"lbTitleWrong")
         sizePolicy_PF.setHeightForWidth(self.lbTitleWrong.sizePolicy().hasHeightForWidth())
         self.lbTitleWrong.setSizePolicy(sizePolicy_PF)
         self.lbTitleWrong.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleWrong, 0, 1, 1, 1)
+        self.glCent.addWidget(self.lbTitleWrong, 0, 1, 1, 1)
+        
+        self.lbTitleGrade = QLabel(self.widCent)
+        self.lbTitleGrade.setObjectName(u"lbTitleGrade")
+        sizePolicy_PF.setHeightForWidth(self.lbTitleGrade.sizePolicy().hasHeightForWidth())
+        self.lbTitleGrade.setSizePolicy(sizePolicy_PF)
+        self.lbTitleGrade.setAlignment(Qt.AlignCenter)
+        self.glCent.addWidget(self.lbTitleGrade, 0, 2, 1, 1)
 
-        self.widget = QWidget(self.centralwidget)
-        self.widget.setObjectName(u"widget")
-        self.hlBot = QHBoxLayout(self.widget)
+        self.lbTitleDetail = QLabel(self.widCent)
+        self.lbTitleDetail.setObjectName(u"lbTitleDetail")
+        sizePolicy_PF.setHeightForWidth(self.lbTitleDetail.sizePolicy().hasHeightForWidth())
+        self.lbTitleDetail.setSizePolicy(sizePolicy_PF)
+        self.lbTitleDetail.setAlignment(Qt.AlignCenter)
+        self.glCent.addWidget(self.lbTitleDetail, 0, 3, 1, 1)
+        
+        self.glMain.addWidget(self.widCent)
+
+        self.widBot = QWidget(self.centralwidget)
+        self.widBot.setObjectName(u"widBot")
+        
+        self.hlBot = QHBoxLayout(self.widBot)
         self.hlBot.setObjectName(u"hlBot")
         self.hlBot.setContentsMargins(0, 0, 0, 0)
         self.sp = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.hlBot.addItem(self.sp)
 
-        self.btnClose = QPushButton(self.widget)
+        self.btnClose = QPushButton(self.widBot)
         self.btnClose.setObjectName(u"btnClose")
         self.hlBot.addWidget(self.btnClose)
-        self.glMain.addWidget(self.widget, 2, 0, 1, 4)
+        self.glMain.addWidget(self.widBot, 2, 0, 1, 1)
 
         GradResult.setCentralWidget(self.centralwidget)
-        QWidget.setTabOrder(self.btnDetail, self.btnClose)
 
         self.retranslateUi(GradResult)
 
@@ -871,16 +842,56 @@ class Ui_GradResult(object):
 
     def retranslateUi(self, GradResult):
         GradResult.setWindowTitle(QCoreApplication.translate("GradResult", u"\uac00\ucc44\uc810\uacb0\uacfc", None))
-        self.btnDetail.setText(QCoreApplication.translate("GradResult", u"\ubcf4\uae30", None))
         self.lbTitleDetail.setText(QCoreApplication.translate("GradResult", u"\uc0c1\uc138", None))
-        self.lbWrong.setText(QCoreApplication.translate("GradResult", u"\uc624\ub2f5 \uc218", None))
-        self.lbScore.setText(QCoreApplication.translate("GradResult", u"35", None))
-        self.lbSubject.setText(QCoreApplication.translate("GradResult", u"\uacfc\ubaa9\uba85", None))
         self.lbTitleSubject.setText(QCoreApplication.translate("GradResult", u"\uacfc\ubaa9\uba85", None))
         self.lbTitleGrade.setText(QCoreApplication.translate("GradResult", u"\uc810\uc218", None))
         self.lbTitleWrong.setText(QCoreApplication.translate("GradResult", u"\uc624\ub2f5 \uc218", None))
         self.btnClose.setText(QCoreApplication.translate("GradResult", u"\ub2eb\uae30", None))
     # retranslateUi
+    
+    def addWidgets(self,n,subject,score,err_cnt):
+        lbSubject = QLabel(self.widCent)
+        lbSubject.setObjectName(u"lbSubject")
+        sizePolicy_PF.setHeightForWidth(lbSubject.sizePolicy().hasHeightForWidth())
+        lbSubject.setSizePolicy(sizePolicy_PF)
+        lbSubject.setAlignment(Qt.AlignCenter)
+        lbSubject.setText(QCoreApplication.translate("GradResult", subject, None))
+        self.glCent.addWidget(lbSubject, n+1, 0, 1, 1)
+
+        if score==None:
+            lbNoResult = QLabel(self.widCent)
+            lbNoResult.setObjectName(u"lbNoResult")
+            sizePolicy_PF.setHeightForWidth(lbNoResult.sizePolicy().hasHeightForWidth())
+            lbNoResult.setSizePolicy(sizePolicy_PF)
+            lbNoResult.setAlignment(Qt.AlignCenter)
+            lbNoResult.setText(QCoreApplication.translate("GradResult", u"\uac00\ucc44\uc810 \uc804", None))
+            self.glCent.addWidget(lbNoResult, n+1, 1, 1, 3)
+        else:
+            lbWrong = QLabel(self.widCent)
+            lbWrong.setObjectName(u"lbWrong")
+            sizePolicy_PF.setHeightForWidth(lbWrong.sizePolicy().hasHeightForWidth())
+            lbWrong.setSizePolicy(sizePolicy_PF)
+            lbWrong.setAlignment(Qt.AlignCenter)
+            lbWrong.setText(QCoreApplication.translate("GradResult", err_cnt, None))
+            self.glCent.addWidget(lbWrong, n+1, 1, 1, 1)
+
+            lbScore = QLabel(self.widCent)
+            lbScore.setObjectName(u"lbScore")
+            sizePolicy_PF.setHeightForWidth(lbScore.sizePolicy().hasHeightForWidth())
+            lbScore.setSizePolicy(sizePolicy_PF)
+            lbScore.setAlignment(Qt.AlignCenter)
+            lbScore.setText(QCoreApplication.translate("GradResult", str(score), None))
+            self.glCent.addWidget(lbScore, n+1, 2, 1, 1)
+            
+            btnDetail = QPushButton(self.widCent)
+            btnDetail.setObjectName(u"btnDetail")
+            btnDetail.setMaximumSize(QSize(50, 16777215))
+            btnDetail.setText(QCoreApplication.translate("GradResult", u"\ubcf4\uae30", None))
+            self.glCent.addWidget(btnDetail, n+1, 3, 1, 1)
+            
+            return btnDetail
+
+
 
 class Ui_Grading1(object):
     def setupUI(self, Grading1):
@@ -902,8 +913,6 @@ class Ui_Grading1(object):
         self.btnBack.setObjectName(u"btnBack")
         self.btnBack.setGeometry(QRect(10, 43, 93, 28))
         Grading1.setCentralWidget(self.centralwidget)
-        QWidget.setTabOrder(self.comboSubject, self.btnBack)
-        QWidget.setTabOrder(self.btnBack, self.btnNext)
 
         self.retranslateUi(Grading1)
 
@@ -984,8 +993,8 @@ class Ui_Grading2(object):
 
         self.lnAns11 = QLineEdit(self.centralwidget)
         self.lnAns11.setObjectName(u"lnAns11")
-        sizePolicy.setHeightForWidth(self.lnAns11.sizePolicy().hasHeightForWidth())
-        self.lnAns11.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnAns11.sizePolicy().hasHeightForWidth())
+        self.lnAns11.setSizePolicy(sizePolicy_FF)
         self.lnAns11.setMaximumSize(QSize(100, 24))
         self.lnAns11.setStyleSheet(u"padding:16px")
         self.lnAns11.setMaxLength(9)
@@ -994,8 +1003,8 @@ class Ui_Grading2(object):
 
         self.lnAns12 = QLineEdit(self.centralwidget)
         self.lnAns12.setObjectName(u"lnAns12")
-        sizePolicy.setHeightForWidth(self.lnAns12.sizePolicy().hasHeightForWidth())
-        self.lnAns12.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnAns12.sizePolicy().hasHeightForWidth())
+        self.lnAns12.setSizePolicy(sizePolicy_FF)
         self.lnAns12.setMaximumSize(QSize(100, 24))
         self.lnAns12.setStyleSheet(u"padding:16px")
         self.lnAns12.setMaxLength(9)
@@ -1004,8 +1013,8 @@ class Ui_Grading2(object):
 
         self.lnAns13 = QLineEdit(self.centralwidget)
         self.lnAns13.setObjectName(u"lnAns13")
-        sizePolicy.setHeightForWidth(self.lnAns13.sizePolicy().hasHeightForWidth())
-        self.lnAns13.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnAns13.sizePolicy().hasHeightForWidth())
+        self.lnAns13.setSizePolicy(sizePolicy_FF)
         self.lnAns13.setMaximumSize(QSize(100, 24))
         self.lnAns13.setStyleSheet(u"padding:16px")
         self.lnAns13.setMaxLength(9)
@@ -1014,8 +1023,8 @@ class Ui_Grading2(object):
 
         self.lnAns21 = QLineEdit(self.centralwidget)
         self.lnAns21.setObjectName(u"lnAns21")
-        sizePolicy.setHeightForWidth(self.lnAns21.sizePolicy().hasHeightForWidth())
-        self.lnAns21.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnAns21.sizePolicy().hasHeightForWidth())
+        self.lnAns21.setSizePolicy(sizePolicy_FF)
         self.lnAns21.setMaximumSize(QSize(100, 24))
         self.lnAns21.setStyleSheet(u"padding:16px")
         self.lnAns21.setMaxLength(9)
@@ -1024,8 +1033,8 @@ class Ui_Grading2(object):
 
         self.lnAns22 = QLineEdit(self.centralwidget)
         self.lnAns22.setObjectName(u"lnAns22")
-        sizePolicy.setHeightForWidth(self.lnAns22.sizePolicy().hasHeightForWidth())
-        self.lnAns22.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnAns22.sizePolicy().hasHeightForWidth())
+        self.lnAns22.setSizePolicy(sizePolicy_FF)
         self.lnAns22.setMaximumSize(QSize(100, 24))
         self.lnAns22.setStyleSheet(u"padding:16px")
         self.lnAns22.setMaxLength(9)
@@ -1034,8 +1043,8 @@ class Ui_Grading2(object):
 
         self.lnAns23 = QLineEdit(self.centralwidget)
         self.lnAns23.setObjectName(u"lnAns23")
-        sizePolicy.setHeightForWidth(self.lnAns23.sizePolicy().hasHeightForWidth())
-        self.lnAns23.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnAns23.sizePolicy().hasHeightForWidth())
+        self.lnAns23.setSizePolicy(sizePolicy_FF)
         self.lnAns23.setMaximumSize(QSize(100, 24))
         self.lnAns23.setStyleSheet(u"padding:16px")
         self.lnAns23.setMaxLength(9)
@@ -1050,8 +1059,8 @@ class Ui_Grading2(object):
 
         self.lnCor11 = QLineEdit(self.centralwidget)
         self.lnCor11.setObjectName(u"lnCor11")
-        sizePolicy.setHeightForWidth(self.lnCor11.sizePolicy().hasHeightForWidth())
-        self.lnCor11.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnCor11.sizePolicy().hasHeightForWidth())
+        self.lnCor11.setSizePolicy(sizePolicy_FF)
         self.lnCor11.setMaximumSize(QSize(100, 24))
         self.lnCor11.setStyleSheet(u"padding:16px")
         self.lnCor11.setMaxLength(9)
@@ -1060,8 +1069,8 @@ class Ui_Grading2(object):
 
         self.lnCor12 = QLineEdit(self.centralwidget)
         self.lnCor12.setObjectName(u"lnCor12")
-        sizePolicy.setHeightForWidth(self.lnCor12.sizePolicy().hasHeightForWidth())
-        self.lnCor12.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnCor12.sizePolicy().hasHeightForWidth())
+        self.lnCor12.setSizePolicy(sizePolicy_FF)
         self.lnCor12.setMaximumSize(QSize(100, 24))
         self.lnCor12.setStyleSheet(u"padding:16px")
         self.lnCor12.setMaxLength(9)
@@ -1070,8 +1079,8 @@ class Ui_Grading2(object):
 
         self.lnCor13 = QLineEdit(self.centralwidget)
         self.lnCor13.setObjectName(u"lnCor13")
-        sizePolicy.setHeightForWidth(self.lnCor13.sizePolicy().hasHeightForWidth())
-        self.lnCor13.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnCor13.sizePolicy().hasHeightForWidth())
+        self.lnCor13.setSizePolicy(sizePolicy_FF)
         self.lnCor13.setMaximumSize(QSize(100, 24))
         self.lnCor13.setStyleSheet(u"padding:16px")
         self.lnCor13.setMaxLength(9)
@@ -1080,8 +1089,8 @@ class Ui_Grading2(object):
 
         self.lnCor21 = QLineEdit(self.centralwidget)
         self.lnCor21.setObjectName(u"lnCor21")
-        sizePolicy.setHeightForWidth(self.lnCor21.sizePolicy().hasHeightForWidth())
-        self.lnCor21.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnCor21.sizePolicy().hasHeightForWidth())
+        self.lnCor21.setSizePolicy(sizePolicy_FF)
         self.lnCor21.setMaximumSize(QSize(100, 24))
         self.lnCor21.setStyleSheet(u"padding:16px")
         self.lnCor21.setMaxLength(9)
@@ -1090,8 +1099,8 @@ class Ui_Grading2(object):
 
         self.lnCor22 = QLineEdit(self.centralwidget)
         self.lnCor22.setObjectName(u"lnCor22")
-        sizePolicy.setHeightForWidth(self.lnCor22.sizePolicy().hasHeightForWidth())
-        self.lnCor22.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnCor22.sizePolicy().hasHeightForWidth())
+        self.lnCor22.setSizePolicy(sizePolicy_FF)
         self.lnCor22.setMaximumSize(QSize(100, 24))
         self.lnCor22.setStyleSheet(u"padding:16px")
         self.lnCor22.setMaxLength(9)
@@ -1100,8 +1109,8 @@ class Ui_Grading2(object):
 
         self.lnCor23 = QLineEdit(self.centralwidget)
         self.lnCor23.setObjectName(u"lnCor23")
-        sizePolicy.setHeightForWidth(self.lnCor23.sizePolicy().hasHeightForWidth())
-        self.lnCor23.setSizePolicy(sizePolicy)
+        sizePolicy_FF.setHeightForWidth(self.lnCor23.sizePolicy().hasHeightForWidth())
+        self.lnCor23.setSizePolicy(sizePolicy_FF)
         self.lnCor23.setMaximumSize(QSize(100, 24))
         self.lnCor23.setStyleSheet(u"padding:16px")
         self.lnCor23.setMaxLength(9)
@@ -1150,26 +1159,26 @@ class Ui_Grading2(object):
     def retranslateUi(self, Grading2):
         Grading2.setWindowTitle(QCoreApplication.translate("Grading2", u"\uac00\ucc44\uc810\uc785\ub825", None))
         self.lbSubject.setText(QCoreApplication.translate("Grading2", u"\uacfc\n\ubaa9", None))
-        self.lb15.setText(QCoreApplication.translate("Grading2", u"1~5", None))
-        self.lb610.setText(QCoreApplication.translate("Grading2", u"6~10", None))
-        self.lb1115.setText(QCoreApplication.translate("Grading2", u"11~15", None))
-        self.lb1620.setText(QCoreApplication.translate("Grading2", u"16~20", None))
-        self.lb2125.setText(QCoreApplication.translate("Grading2", u"21~25", None))
-        self.lb2630.setText(QCoreApplication.translate("Grading2", u"26~30", None))
+        self.lb11.setText(QCoreApplication.translate("Grading2", u"1~5", None))
+        self.lb12.setText(QCoreApplication.translate("Grading2", u"6~10", None))
+        self.lb13.setText(QCoreApplication.translate("Grading2", u"11~15", None))
+        self.lb21.setText(QCoreApplication.translate("Grading2", u"16~20", None))
+        self.lb22.setText(QCoreApplication.translate("Grading2", u"21~25", None))
+        self.lb23.setText(QCoreApplication.translate("Grading2", u"26~30", None))
         self.lbAns.setText(QCoreApplication.translate("Grading2", u"\uc751\n\ub2f5", None))
-        self.lnAns15.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
-        self.lnAns610.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
-        self.lnAns1115.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
-        self.lnAns1620.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
-        self.lnAns2125.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
-        self.lnAns2630.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
+        self.lnAns11.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
+        self.lnAns12.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
+        self.lnAns13.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
+        self.lnAns21.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
+        self.lnAns22.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
+        self.lnAns23.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
         self.lbCor.setText(QCoreApplication.translate("Grading2", u"\uc815\n\ub2f5", None))
-        self.lnCor15.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
-        self.lnCor610.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
-        self.lnCor1115.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
-        self.lnCor1620.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
-        self.lnCor2125.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
-        self.lnCor2630.setInputMask(QCoreApplication.translate("Grading2", u"D D D D D", None))
+        self.lnCor11.setInputMask(QCoreApplication.translate("Grading2", u"9 9 9 9 9", None))
+        self.lnCor12.setInputMask(QCoreApplication.translate("Grading2", u"9 9 9 9 9", None))
+        self.lnCor13.setInputMask(QCoreApplication.translate("Grading2", u"9 9 9 9 9", None))
+        self.lnCor21.setInputMask(QCoreApplication.translate("Grading2", u"9 9 9 9 9", None))
+        self.lnCor22.setInputMask(QCoreApplication.translate("Grading2", u"9 9 9 9 9", None))
+        self.lnCor23.setInputMask(QCoreApplication.translate("Grading2", u"9 9 9 9 9", None))
         self.btnBack.setText(QCoreApplication.translate("Grading2", u"\uc774\uc804", None))
         self.btnRe.setText(QCoreApplication.translate("Grading2", u"\ub2e4\uc2dc", None))
         self.btnNext.setText(QCoreApplication.translate("Grading2", u"\ub2e4\uc74c", None))
@@ -1182,27 +1191,24 @@ class Ui_Grading31(object):
         Grading31.resize(215, 103)
         self.centralwidget = QWidget(Grading31)
         self.centralwidget.setObjectName(u"centralwidget")
+        
         self.glMain = QGridLayout(self.centralwidget)
         self.glMain.setObjectName(u"glMain")
-        self.lbNum = QLabel(self.centralwidget)
+        
+        self.widCent=QWidget(Grading31)
+        self.glCent=QGridLayout(self.widCent)
+        
+        self.lbNum = QLabel(self.widCent)
         self.lbNum.setObjectName(u"lbNum")
         self.lbNum.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbNum, 0, 0, 1, 1)
+        self.glCent.addWidget(self.lbNum, 0, 0, 1, 1)
 
-        self.lbPoint = QLabel(self.centralwidget)
+        self.lbPoint = QLabel(self.widCent)
         self.lbPoint.setObjectName(u"lbPoint")
         self.lbPoint.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbPoint, 0, 1, 1, 1)
-
-        self.lbNo = QLabel(self.centralwidget)
-        self.lbNo.setObjectName(u"lbNo")
-        self.lbNo.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbNo, 1, 0, 1, 1)
-
-        self.lineEdit = QLineEdit(self.centralwidget)
-        self.lineEdit.setObjectName(u"lineEdit")
-        self.lineEdit.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        self.glMain.addWidget(self.lineEdit, 1, 1, 1, 1)
+        self.glCent.addWidget(self.lbPoint, 0, 1, 1, 1)
+        
+        self.glMain.addWidget(self.widCent,0,0,1,1)
 
         self.widBot = QWidget(self.centralwidget)
         self.widBot.setObjectName(u"widBot")
@@ -1221,11 +1227,9 @@ class Ui_Grading31(object):
         self.btnNext = QPushButton(self.widBot)
         self.btnNext.setObjectName(u"btnNext")
         self.hlBot.addWidget(self.btnNext)
-        self.glMain.addWidget(self.widBot, 2, 0, 1, 2)
+        self.glMain.addWidget(self.widBot, 1, 0, 1, 1)
 
         Grading31.setCentralWidget(self.centralwidget)
-        QWidget.setTabOrder(self.lineEdit, self.btnBack)
-        QWidget.setTabOrder(self.btnBack, self.btnNext)
 
         self.retranslateUi(Grading31)
 
@@ -1236,11 +1240,24 @@ class Ui_Grading31(object):
         Grading31.setWindowTitle(QCoreApplication.translate("Grading31", u"\uc120\ud0dd\ud615 \ubc30\uc810", None))
         self.lbNum.setText(QCoreApplication.translate("Grading31", u"\ubc88\ud638", None))
         self.lbPoint.setText(QCoreApplication.translate("Grading31", u"\ubc30\uc810", None))
-        self.lbNo.setText(QCoreApplication.translate("Grading31", u"111", None))
-        self.lineEdit.setInputMask(QCoreApplication.translate("Grading31", u"D.d", None))
         self.btnBack.setText(QCoreApplication.translate("Grading31", u"\uc774\uc804", None))
         self.btnNext.setText(QCoreApplication.translate("Grading31", u"\ub2e4\uc74c", None))
     # retranslateUi
+    
+    def addWidgets(self,n,number):
+        lbNo = QLabel(self.centralwidget)
+        lbNo.setObjectName(u"lbNo")
+        lbNo.setAlignment(Qt.AlignCenter)
+        self.glCent.addWidget(lbNo, n+1, 0, 1, 1)
+        lbNo.setText(QCoreApplication.translate("Grading31", str(number), None))
+        
+        lnScore = QLineEdit(self.centralwidget)
+        lnScore.setObjectName(u"lineEdit")
+        lnScore.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.glCent.addWidget(lnScore, n+1, 1, 1, 1)
+        lnScore.setInputMask(QCoreApplication.translate("Grading31", u"9.d", None))
+        
+        return lnScore
 
 class Ui_Grading32(object):
     def setupUI(self, Grading32):
@@ -1249,37 +1266,29 @@ class Ui_Grading32(object):
         Grading32.resize(260, 104)
         self.centralwidget = QWidget(Grading32)
         self.centralwidget.setObjectName(u"centralwidget")
+        
         self.glMain = QGridLayout(self.centralwidget)
         self.glMain.setObjectName(u"glMain")
-        self.lbTitleNo = QLabel(self.centralwidget)
+        
+        self.widCent=QWidget(Grading32)
+        self.glCent=QGridLayout(self.widCent)
+        
+        self.lbTitleNo = QLabel(self.widCent)
         self.lbTitleNo.setObjectName(u"lbTitleNo")
         self.lbTitleNo.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleNo, 0, 0, 1, 1)
+        self.glCent.addWidget(self.lbTitleNo, 0, 0, 1, 1)
 
-        self.lbTitlePoint = QLabel(self.centralwidget)
+        self.lbTitlePoint = QLabel(self.widCent)
         self.lbTitlePoint.setObjectName(u"lbTitlePoint")
         self.lbTitlePoint.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitlePoint, 0, 1, 1, 1)
+        self.glCent.addWidget(self.lbTitlePoint, 0, 1, 1, 1)
 
-        self.lbTitleGet = QLabel(self.centralwidget)
+        self.lbTitleGet = QLabel(self.widCent)
         self.lbTitleGet.setObjectName(u"lbTitleGet")
         self.lbTitleGet.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleGet, 0, 2, 1, 1)
-
-        self.lbNo = QLabel(self.centralwidget)
-        self.lbNo.setObjectName(u"lbNo")
-        self.lbNo.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbNo, 1, 0, 1, 1)
-
-        self.lnPoint = QLineEdit(self.centralwidget)
-        self.lnPoint.setObjectName(u"lnPoint")
-        self.lnPoint.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        self.glMain.addWidget(self.lnPoint, 1, 1, 1, 1)
-
-        self.lnGet = QLineEdit(self.centralwidget)
-        self.lnGet.setObjectName(u"lnGet")
-        self.lnGet.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-        self.glMain.addWidget(self.lnGet, 1, 2, 1, 1)
+        self.glCent.addWidget(self.lbTitleGet, 0, 2, 1, 1)
+        
+        self.glMain.addWidget(self.widCent,0,0,1,1)
 
         self.widBot = QWidget(self.centralwidget)
         self.widBot.setObjectName(u"widBot")
@@ -1298,12 +1307,9 @@ class Ui_Grading32(object):
         self.btnNext = QPushButton(self.widBot)
         self.btnNext.setObjectName(u"btnNext")
         self.hlBot.addWidget(self.btnNext)
-        self.glMain.addWidget(self.widBot, 2, 0, 1, 3)
+        self.glMain.addWidget(self.widBot, 1, 0, 1, 1)
 
         Grading32.setCentralWidget(self.centralwidget)
-        QWidget.setTabOrder(self.lnPoint, self.lnGet)
-        QWidget.setTabOrder(self.lnGet, self.btnBack)
-        QWidget.setTabOrder(self.btnBack, self.btnNext)
 
         self.retranslateUi(Grading32)
 
@@ -1313,17 +1319,35 @@ class Ui_Grading32(object):
     def retranslateUi(self, Grading32):
         Grading32.setWindowTitle(QCoreApplication.translate("Grading32", u"\uc11c\ub2f5\ud615 \ubc30\uc810", None))
         self.lbTitleNo.setText(QCoreApplication.translate("Grading32", u"\ubc88\ud638", None))
-        self.lbTitlePoint.setText(QCoreApplication.translate("Grading32", u"\ubc30\uc810", None))
+        self.lbTitlePoint.setText(QCoreApplication.translate("Grading32", u"\ub4dd\uc810", None))
         self.lbTitleGet.setText(QCoreApplication.translate("Grading32", u"\ubc30\uc810", None))
-        self.lbNo.setText(QCoreApplication.translate("Grading32", u"99", None))
-        self.lnPoint.setInputMask(QCoreApplication.translate("Grading32", u"D.d", None))
-        self.lnGet.setInputMask(QCoreApplication.translate("Grading32", u"D.d", None))
         self.btnBack.setText(QCoreApplication.translate("Grading32", u"\uc774\uc804", None))
         self.btnNext.setText(QCoreApplication.translate("Grading32", u"\ub2e4\uc74c", None))
     # retranslateUi
+    
+    def addWidgets(self,n,number):
+        lbNo = QLabel(self.centralwidget)
+        lbNo.setObjectName(u"lbNo")
+        lbNo.setAlignment(Qt.AlignCenter)
+        lbNo.setText(QCoreApplication.translate("Grading32", str(number), None))
+        self.glCent.addWidget(lbNo, n+1, 0, 1, 1)
+
+        lnPoint = QLineEdit(self.centralwidget)
+        lnPoint.setObjectName(u"lnPoint")
+        lnPoint.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        lnPoint.setInputMask(QCoreApplication.translate("Grading32", u"9.d", None))
+        self.glCent.addWidget(lnPoint, n+1, 1, 1, 1)
+
+        lnGet = QLineEdit(self.centralwidget)
+        lnGet.setObjectName(u"lnGet")
+        lnGet.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        lnGet.setInputMask(QCoreApplication.translate("Grading32", u"9.d", None))
+        self.glCent.addWidget(lnGet, n+1, 2, 1, 1)
+        
+        return lnPoint,lnGet
 
 class Ui_Main(object):
-    def setupUI(self, Main):
+    def setupUI(self, Main, order):
         if not Main.objectName():
             Main.setObjectName(u"Main")
         Main.resize(442, 300)
@@ -1427,10 +1451,13 @@ class Ui_Main(object):
         self.__option=(('1학년','2학년','3학년'),('1학기','2학기'),('중간고사','기말고사','학기말'))
         for option in self.__option[0]:
             self.comboYear.addItem(option)
+            self.comboYear.setCurrentIndex(order[0])
         for option in self.__option[1]:
             self.comboSemester.addItem(option)
+            self.comboSemester.setCurrentIndex(order[1])
         for option in self.__option[2]:
             self.comboExam.addItem(option)
+            self.comboExam.setCurrentIndex(order[2])
 
         self.btnSet = QPushButton(self.widYear)
         self.btnSet.setObjectName(u"btnSet")
@@ -1454,16 +1481,6 @@ class Ui_Main(object):
         
         Main.setMenuBar(self.menubar)
         
-        QWidget.setTabOrder(self.comboYear, self.comboSemester)
-        QWidget.setTabOrder(self.comboSemester, self.comboExam)
-        QWidget.setTabOrder(self.comboExam, self.btnSet)
-        QWidget.setTabOrder(self.btnSet, self.btnSubject)
-        QWidget.setTabOrder(self.btnSubject, self.btnGrading)
-        QWidget.setTabOrder(self.btnGrading, self.btnGradingRes)
-        QWidget.setTabOrder(self.btnGradingRes, self.btnCalc)
-        QWidget.setTabOrder(self.btnCalc, self.btnInput)
-        QWidget.setTabOrder(self.btnInput, self.btnRes)
-        QWidget.setTabOrder(self.btnRes, self.btnManage)
 
         self.menubar.addAction(self.file.menuAction())
         self.menubar.addAction(self.tools.menuAction())
@@ -1509,66 +1526,57 @@ class Ui_Main(object):
         self.info.setTitle(QCoreApplication.translate("Main", u"\uc815\ubcf4", None))
     # retranslateUi
 
+
 class Ui_SubjectIn(object):
     def setupUI(self, SubjectIn):
         if not SubjectIn.objectName():
             SubjectIn.setObjectName(u"SubjectIn")
         SubjectIn.resize(345, 110)
+        
         self.centralwidget = QWidget(SubjectIn)
         self.centralwidget.setObjectName(u"centralwidget")
         self.glMain = QGridLayout(self.centralwidget)
         self.glMain.setObjectName(u"glMain")
-        self.lbTitleSubject = QLabel(self.centralwidget)
+        
+        self.widCent=QWidget(SubjectIn)
+        self.glCent=QGridLayout(self.widCent)
+        
+        self.lbTitleSubject = QLabel(self.widCent)
         self.lbTitleSubject.setObjectName(u"lbTitleSubject")
         sizePolicy_IP.setHeightForWidth(self.lbTitleSubject.sizePolicy().hasHeightForWidth())
         self.lbTitleSubject.setSizePolicy(sizePolicy_IP)
         self.lbTitleSubject.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleSubject, 0, 0, 1, 1)
+        self.glCent.addWidget(self.lbTitleSubject, 0, 0, 1, 1)
 
-        self.lbTitleNum = QLabel(self.centralwidget)
+        self.lbTitleNum = QLabel(self.widCent)
         self.lbTitleNum.setObjectName(u"lbTitleNum")
         sizePolicy_IP.setHeightForWidth(self.lbTitleNum.sizePolicy().hasHeightForWidth())
         self.lbTitleNum.setSizePolicy(sizePolicy_IP)
         self.lbTitleNum.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleNum, 0, 1, 1, 1)
+        self.glCent.addWidget(self.lbTitleNum, 0, 1, 1, 1)
 
-        self.lbTitleMid = QLabel(self.centralwidget)
+        self.lbTitleMid = QLabel(self.widCent)
         self.lbTitleMid.setObjectName(u"lbTitleMid")
         sizePolicy_FP.setHeightForWidth(self.lbTitleMid.sizePolicy().hasHeightForWidth())
         self.lbTitleMid.setSizePolicy(sizePolicy_FP)
         self.lbTitleMid.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleMid, 0, 2, 1, 1)
+        self.glCent.addWidget(self.lbTitleMid, 0, 2, 1, 1)
 
-        self.lbTitleEnd = QLabel(self.centralwidget)
+        self.lbTitleEnd = QLabel(self.widCent)
         self.lbTitleEnd.setObjectName(u"lbTitleEnd")
         sizePolicy_FP.setHeightForWidth(self.lbTitleEnd.sizePolicy().hasHeightForWidth())
         self.lbTitleEnd.setSizePolicy(sizePolicy_FP)
         self.lbTitleEnd.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleEnd, 0, 3, 1, 1)
+        self.glCent.addWidget(self.lbTitleEnd, 0, 3, 1, 1)
 
-        self.lbTitleDel = QLabel(self.centralwidget)
+        self.lbTitleDel = QLabel(self.widCent)
         self.lbTitleDel.setObjectName(u"lbTitleDel")
         sizePolicy_FP.setHeightForWidth(self.lbTitleDel.sizePolicy().hasHeightForWidth())
         self.lbTitleDel.setSizePolicy(sizePolicy_FP)
         self.lbTitleDel.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleDel, 0, 4, 1, 1)
-
-        self.lnSubject = QLineEdit(self.centralwidget)
-        self.lnSubject.setObjectName(u"lnSubject")
-        self.lnSubject.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lnSubject, 1, 0, 1, 1)
-
-        self.lnNum = QLineEdit(self.centralwidget)
-        self.lnNum.setObjectName(u"lnNum")
-        self.lnNum.setMaximumSize(QSize(45, 16777215))
-        self.lnNum.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lnNum, 1, 1, 1, 1)
-
-        self.btnDel = QPushButton(self.centralwidget)
-        self.btnDel.setObjectName(u"btnDel")
-        sizePolicy_IF.setHeightForWidth(self.btnDel.sizePolicy().hasHeightForWidth())
-        self.btnDel.setSizePolicy(sizePolicy_IF)
-        self.glMain.addWidget(self.btnDel, 1, 4, 1, 1)
+        self.glCent.addWidget(self.lbTitleDel, 0, 4, 1, 1)
+        
+        self.glMain.addWidget(self.widCent,1,0,1,1)
 
         self.widBot = QWidget(self.centralwidget)
         self.widBot.setObjectName(u"widBot")
@@ -1597,24 +1605,11 @@ class Ui_SubjectIn(object):
         sizePolicy_FF.setHeightForWidth(self.btnSet.sizePolicy().hasHeightForWidth())
         self.btnSet.setSizePolicy(sizePolicy_FF)
         self.hlBot.addWidget(self.btnSet)
-        self.glMain.addWidget(self.widBot, 2, 0, 1, 5)
-
-        self.chkMid = QCheckBox(self.centralwidget)
-        self.chkMid.setObjectName(u"chkMid")
-        self.glMain.addWidget(self.chkMid, 1, 2, 1, 1, Qt.AlignHCenter)
-
-        self.chkEnd = QCheckBox(self.centralwidget)
-        self.chkEnd.setObjectName(u"chkEnd")
-        self.glMain.addWidget(self.chkEnd, 1, 3, 1, 1, Qt.AlignHCenter)
+        self.glMain.addWidget(self.widBot, 2, 0, 1, 1)
 
         SubjectIn.setCentralWidget(self.centralwidget)
-        QWidget.setTabOrder(self.lnSubject, self.lnNum)
-        QWidget.setTabOrder(self.lnNum, self.chkMid)
-        QWidget.setTabOrder(self.chkMid, self.chkEnd)
-        QWidget.setTabOrder(self.chkEnd, self.btnDel)
-        QWidget.setTabOrder(self.btnDel, self.btnAdd)
-        QWidget.setTabOrder(self.btnAdd, self.btnCancel)
-        QWidget.setTabOrder(self.btnCancel, self.btnSet)
+        '''
+        '''
 
         self.retranslateUi(SubjectIn)
 
@@ -1628,12 +1623,49 @@ class Ui_SubjectIn(object):
         self.lbTitleMid.setText(QCoreApplication.translate("SubjectIn", u"\uc911\uac04", None))
         self.lbTitleEnd.setText(QCoreApplication.translate("SubjectIn", u"\uae30\ub9d0", None))
         self.lbTitleDel.setText(QCoreApplication.translate("SubjectIn", u"\uc0ad\uc81c", None))
-        self.lnNum.setInputMask(QCoreApplication.translate("SubjectIn", u"D", None))
-        self.btnDel.setText(QCoreApplication.translate("SubjectIn", u"X", None))
         self.btnAdd.setText(QCoreApplication.translate("SubjectIn", u"\ucd94\uac00", None))
         self.btnCancel.setText(QCoreApplication.translate("SubjectIn", u"\ucde8\uc18c", None))
         self.btnSet.setText(QCoreApplication.translate("SubjectIn", u"\uc785\ub825", None))
-        self.chkMid.setText("")
-        self.chkEnd.setText("")
     # retranslateUi
+    
+    def addWidgets(self,n,subject,values):
+        assert type(subject) is str
+        assert type(values) is tuple or type(values) is list 
+        assert len(values)==3
+        
+        lnSubject = QLineEdit(self.widCent)
+        lnSubject.setObjectName(u"lnSubject")
+        lnSubject.setAlignment(Qt.AlignCenter)
+        lnSubject.setText(subject)
+        self.glCent.addWidget(lnSubject, n+1, 0, 1, 1)
 
+        lnNum = QLineEdit(self.widCent)
+        lnNum.setObjectName(u"lnNum")
+        lnNum.setMaximumSize(QSize(45, 16777215))
+        lnNum.setAlignment(Qt.AlignCenter)
+        if values[0]:
+            lnNum.setText(str(values[0]))
+        self.glCent.addWidget(lnNum, n+1, 1, 1, 1)
+
+        chkMid = QCheckBox(self.widCent)
+        chkMid.setObjectName(u"chkMid")
+        chkMid.setChecked(values[1])
+        self.glCent.addWidget(chkMid, n+1, 2, 1, 1, Qt.AlignHCenter)
+
+        chkEnd = QCheckBox(self.widCent)
+        chkEnd.setObjectName(u"chkEnd")
+        chkEnd.setChecked(values[2])
+        self.glCent.addWidget(chkEnd, n+1, 3, 1, 1, Qt.AlignHCenter)
+
+        btnDel = QPushButton(self.widCent)
+        btnDel.setObjectName(u"btnDel")
+        sizePolicy_IF.setHeightForWidth(btnDel.sizePolicy().hasHeightForWidth())
+        btnDel.setSizePolicy(sizePolicy_IF)
+        self.glCent.addWidget(btnDel, n+1, 4, 1, 1)
+        
+        lnNum.setInputMask(QCoreApplication.translate("SubjectIn", u"D", None))
+        chkMid.setText("")
+        chkEnd.setText("")
+        btnDel.setText(QCoreApplication.translate("SubjectIn", u"X", None))
+        
+        return [lnSubject,lnNum,chkMid,chkEnd,btnDel]
