@@ -675,6 +675,7 @@ class Ui_GradeCalc(object):
         self.lbTitleNum.setText(QCoreApplication.translate("GradeCalc", u"\ub2e8\uc704\uc218", None))
     # retranslateUi
 
+
 class Ui_GradDetail(object):
     def setupUI(self, GradDetail):
         if not GradDetail.objectName():
@@ -685,67 +686,6 @@ class Ui_GradDetail(object):
         
         self.glMain = QGridLayout(self.centralwidget)
         self.glMain.setObjectName(u"glMain")
-        
-        self.widSupply = QWidget(self.centralwidget)
-        self.widSupply.setObjectName(u"widSupply")
-        self.glSupply = QGridLayout(self.widSupply)
-        self.glSupply.setObjectName(u"glSupply")
-        
-        self.lbTitle2Get = QLabel(self.widSupply)
-        self.lbTitle2Get.setObjectName(u"lbTitle2Get")
-        self.lbTitle2Get.setAlignment(Qt.AlignCenter)
-        self.glSupply.addWidget(self.lbTitle2Get, 0, 2, 1, 1)
-
-        self.lbTitle2Num = QLabel(self.widSupply)
-        self.lbTitle2Num.setObjectName(u"lbTitle2Num")
-        self.lbTitle2Num.setAlignment(Qt.AlignCenter)
-        self.glSupply.addWidget(self.lbTitle2Num, 0, 1, 1, 1)
-
-        self.lbTitle2Score = QLabel(self.widSupply)
-        self.lbTitle2Score.setObjectName(u"lbTitle2Score")
-        self.lbTitle2Score.setAlignment(Qt.AlignCenter)
-        self.glSupply.addWidget(self.lbTitle2Score, 0, 3, 1, 1)
-
-        self.lbTitleSupply = QLabel(self.widSupply)
-        self.lbTitleSupply.setObjectName(u"lbTitleSupply")
-        sizePolicy_FF.setHeightForWidth(self.lbTitleSupply.sizePolicy().hasHeightForWidth())
-        self.lbTitleSupply.setSizePolicy(sizePolicy_FF)
-        self.glSupply.addWidget(self.lbTitleSupply, 0, 0, 1, 1)
-
-
-        self.glMain.addWidget(self.widSupply, 1, 1, 1, 2)
-
-        self.widSel = QWidget(self.centralwidget)
-        self.widSel.setObjectName(u"widSel")
-        self.glSel = QGridLayout(self.widSel)
-        self.glSel.setObjectName(u"glSel")
-        
-        self.lbTitle1Num = QLabel(self.widSel)
-        self.lbTitle1Num.setObjectName(u"lbTitle1Num")
-        self.lbTitle1Num.setAlignment(Qt.AlignCenter)
-        self.glSel.addWidget(self.lbTitle1Num, 0, 1, 1, 1)
-
-        self.lbTitle1Ans = QLabel(self.widSel)
-        self.lbTitle1Ans.setObjectName(u"lbTitle1Ans")
-        self.lbTitle1Ans.setAlignment(Qt.AlignCenter)
-        self.glSel.addWidget(self.lbTitle1Ans, 0, 2, 1, 1)
-
-        self.lbTitle1Cor = QLabel(self.widSel)
-        self.lbTitle1Cor.setObjectName(u"lbTitle1Cor")
-        self.lbTitle1Cor.setAlignment(Qt.AlignCenter)
-        self.glSel.addWidget(self.lbTitle1Cor, 0, 3, 1, 1)
-
-        self.lbTitle1Score = QLabel(self.widSel)
-        self.lbTitle1Score.setObjectName(u"lbTitle1Score")
-        self.lbTitle1Score.setAlignment(Qt.AlignCenter)
-        self.glSel.addWidget(self.lbTitle1Score, 0, 4, 1, 1)
-
-        self.lbTitle1Sel = QLabel(self.widSel)
-        self.lbTitle1Sel.setObjectName(u"lbTitle1Sel")
-        sizePolicy_FF.setHeightForWidth(self.lbTitle1Sel.sizePolicy().hasHeightForWidth())
-        self.lbTitle1Sel.setSizePolicy(sizePolicy_FF)
-        self.glSel.addWidget(self.lbTitle1Sel, 0, 0, 1, 1)
-        self.glMain.addWidget(self.widSel, 0, 1, 1, 2)
 
         self.btnClose = QPushButton(self.centralwidget)
         self.btnClose.setObjectName(u"btnClose")
@@ -762,17 +702,147 @@ class Ui_GradDetail(object):
 
     def retranslateUi(self, GradDetail):
         GradDetail.setWindowTitle(QCoreApplication.translate("GradDetail", u"\uc0c1\uc138", None))
-        self.lbTitle2Get.setText(QCoreApplication.translate("GradDetail", u"\ub4dd\uc810", None))
-        self.lbTitle2Num.setText(QCoreApplication.translate("GradDetail", u"\ubc88\ud638", None))
-        self.lbTitle2Score.setText(QCoreApplication.translate("GradDetail", u"\ubc30\uc810", None))
-        self.lbTitleSupply.setText(QCoreApplication.translate("GradDetail", u"\uc11c\n\ub2f5\n\ud615\n\uc624\n\ub2f5", None))
-        self.lbTitle1Num.setText(QCoreApplication.translate("GradDetail", u"\ubc88\ud638", None))
-        self.lbTitle1Ans.setText(QCoreApplication.translate("GradDetail", u"\uc751\ub2f5", None))
-        self.lbTitle1Cor.setText(QCoreApplication.translate("GradDetail", u"\uc815\ub2f5", None))
-        self.lbTitle1Score.setText(QCoreApplication.translate("GradDetail", u"\ubc30\uc810", None))
-        self.lbTitle1Sel.setText(QCoreApplication.translate("GradDetail", u"\uc120\n\ud0dd\n\ud615\n\uc624\n\ub2f5", None))
         self.btnClose.setText(QCoreApplication.translate("GradDetail", u"\ub2eb\uae30", None))
     # retranslateUi
+
+    def addSel(self,err):
+        lbTitle1Sel = QLabel(self.centralwidget)
+        lbTitle1Sel.setObjectName(u"lbTitle1Sel")
+        sizePolicy_FF.setHeightForWidth(lbTitle1Sel.sizePolicy().hasHeightForWidth())
+        lbTitle1Sel.setSizePolicy(sizePolicy_FF)
+        lbTitle1Sel.setText(QCoreApplication.translate("GradDetail", u"\uc120\n\ud0dd\n\ud615\n\uc624\n\ub2f5", None))
+        self.glMain.addWidget(lbTitle1Sel, 0, 0, 1, 1)
+        
+        self.widSel = QWidget(self.centralwidget)
+        self.widSel.setObjectName(u"widSel")
+        self.glSel = QGridLayout(self.widSel)
+        self.glSel.setObjectName(u"glSel")
+
+        lbTitle1Num = QLabel(self.widSel)
+        lbTitle1Num.setObjectName(u"lbTitle1Num")
+        lbTitle1Num.setAlignment(Qt.AlignCenter)
+        lbTitle1Num.setText(QCoreApplication.translate("GradDetail", u"\ubc88\ud638", None))
+        self.glSel.addWidget(lbTitle1Num, 0, 1, 1, 1)
+
+        lbTitle1Ans = QLabel(self.widSel)
+        lbTitle1Ans.setObjectName(u"lbTitle1Ans")
+        lbTitle1Ans.setAlignment(Qt.AlignCenter)
+        lbTitle1Ans.setText(QCoreApplication.translate("GradDetail", u"\uc751\ub2f5", None))
+        self.glSel.addWidget(lbTitle1Ans, 0, 2, 1, 1)
+
+        lbTitle1Cor = QLabel(self.widSel)
+        lbTitle1Cor.setObjectName(u"lbTitle1Cor")
+        lbTitle1Cor.setAlignment(Qt.AlignCenter)
+        lbTitle1Cor.setText(QCoreApplication.translate("GradDetail", u"\uc815\ub2f5", None))
+        self.glSel.addWidget(lbTitle1Cor, 0, 3, 1, 1)
+
+        lbTitle1Score = QLabel(self.widSel)
+        lbTitle1Score.setObjectName(u"lbTitle1Score")
+        lbTitle1Score.setAlignment(Qt.AlignCenter)
+        lbTitle1Score.setText(QCoreApplication.translate("GradDetail", u"\ubc30\uc810", None))
+        self.glSel.addWidget(lbTitle1Score, 0, 4, 1, 1)
+
+        list_lbNum   = []
+        list_lbAns   = []
+        list_lbCor   = []
+        list_lbScore = []
+        for k,num in enumerate(err):
+            lbNum = QLabel(self.widSel)
+            lbNum.setObjectName(u"lbNum")
+            lbNum.setAlignment(Qt.AlignCenter)
+            lbNum.setText(QCoreApplication.translate("GradDetail", num, None))
+            self.glSel.addWidget(lbNum, k+1, 1, 1, 1)
+
+            lbAns = QLabel(self.widSel)
+            lbAns.setObjectName(u"lbAns")
+            lbAns.setAlignment(Qt.AlignCenter)
+            lbAns.setText(QCoreApplication.translate("GradDetail", str(err[num][0]), None))
+            self.glSel.addWidget(lbAns, k+1, 2, 1, 1)
+
+            lbCor = QLabel(self.widSel)
+            lbCor.setObjectName(u"lbCor")
+            lbCor.setAlignment(Qt.AlignCenter)
+            lbCor.setText(QCoreApplication.translate("GradDetail", str(err[num][1]), None))
+            self.glSel.addWidget(lbCor, k+1, 3, 1, 1)
+
+            lbScore = QLabel(self.widSel)
+            lbScore.setObjectName(u"lbScore")
+            lbScore.setAlignment(Qt.AlignCenter)
+            lbScore.setText(QCoreApplication.translate("GradDetail", err[num][2], None))
+            self.glSel.addWidget(lbScore, k+1, 4, 1, 1)
+            
+            list_lbNum.append(lbNum)
+            list_lbAns.append(lbAns)
+            list_lbCor.append(lbCor)
+            list_lbScore.append(lbScore)
+            
+            self.glMain.addWidget(self.widSel, 0, 1, 1, 2)
+        
+        #return list_lbNum,list_lbAns,list_lbCor,list_lbScore
+    
+    def addSupply(self,err):
+        lbTitle2Supply = QLabel(self.centralwidget)
+        lbTitle2Supply.setObjectName(u"lbTitle2Supply")
+        sizePolicy_FF.setHeightForWidth(lbTitle2Supply.sizePolicy().hasHeightForWidth())
+        lbTitle2Supply.setSizePolicy(sizePolicy_FF)
+        lbTitle2Supply.setText(QCoreApplication.translate("GradDetail", u"\uc11c\n\ub2f5\n\ud615\n\uc624\n\ub2f5", None))
+        self.glMain.addWidget(lbTitle2Supply, 1, 0, 1, 1)
+
+        self.widSupply = QWidget(self.centralwidget)
+        self.widSupply.setObjectName(u"widSupply")
+        self.glSupply = QGridLayout(self.widSupply)
+        self.glSupply.setObjectName(u"glSupply")
+
+        lbTitle2Num = QLabel(self.widSupply)
+        lbTitle2Num.setObjectName(u"lbTitle2Num")
+        lbTitle2Num.setAlignment(Qt.AlignCenter)
+        lbTitle2Num.setText(QCoreApplication.translate("GradDetail", u"\ubc88\ud638", None))
+        self.glSupply.addWidget(lbTitle2Num, 0, 1, 1, 1)
+        
+        lbTitle2Get = QLabel(self.widSupply)
+        lbTitle2Get.setObjectName(u"lbTitle2Get")
+        lbTitle2Get.setAlignment(Qt.AlignCenter)
+        lbTitle2Get.setText(QCoreApplication.translate("GradDetail", u"\ub4dd\uc810", None))
+        self.glSupply.addWidget(lbTitle2Get, 0, 2, 1, 1)
+
+        lbTitle2Score = QLabel(self.widSupply)
+        lbTitle2Score.setObjectName(u"lbTitle2Score")
+        lbTitle2Score.setAlignment(Qt.AlignCenter)
+        lbTitle2Score.setText(QCoreApplication.translate("GradDetail", u"\ubc30\uc810", None))
+        self.glSupply.addWidget(lbTitle2Score, 0, 3, 1, 1)
+
+        list_lbNum   = []
+        list_lbGet   = []
+        list_lbScore = []
+        for k,num in enumerate(err):
+            lbNum = QLabel(self.widSel)
+            lbNum.setObjectName(u"lbNum")
+            lbNum.setAlignment(Qt.AlignCenter)
+            lbNum.setText(QCoreApplication.translate("GradDetail", num, None))
+            self.glSupply.addWidget(lbNum, k+1, 1, 1, 1)
+
+            lbGet = QLabel(self.widSel)
+            lbGet.setObjectName(u"lbGet")
+            lbGet.setAlignment(Qt.AlignCenter)
+            lbGet.setText(QCoreApplication.translate("GradDetail", err[num][0], None))
+            self.glSupply.addWidget(lbGet, k+1, 2, 1, 1)
+
+            lbScore = QLabel(self.widSel)
+            lbScore.setObjectName(u"lbScore")
+            lbScore.setAlignment(Qt.AlignCenter)
+            lbScore.setText(QCoreApplication.translate("GradDetail", err[num][1], None))
+            self.glSupply.addWidget(lbScore, k+1, 3, 1, 1)
+            
+            list_lbNum.append(lbNum)
+            list_lbGet.append(lbGet)
+            list_lbScore.append(lbScore)
+            
+            self.glMain.addWidget(self.widSupply, 0, 1, 1, 2)
+        
+        #return list_lbNum,list_lbGet,list_lbScore
+        
+        self.glMain.addWidget(self.widSupply, 1, 1, 1, 2)
+
 
 class Ui_GradResult(object):
     def setupUI(self, GradResult):
@@ -815,6 +885,13 @@ class Ui_GradResult(object):
         self.lbTitleDetail.setSizePolicy(sizePolicy_PF)
         self.lbTitleDetail.setAlignment(Qt.AlignCenter)
         self.glCent.addWidget(self.lbTitleDetail, 0, 3, 1, 1)
+
+        self.lbTitleDel = QLabel(self.widCent)
+        self.lbTitleDel.setObjectName(u"lbTitleDel")
+        sizePolicy_PF.setHeightForWidth(self.lbTitleDel.sizePolicy().hasHeightForWidth())
+        self.lbTitleDel.setSizePolicy(sizePolicy_PF)
+        self.lbTitleDel.setAlignment(Qt.AlignCenter)
+        self.glCent.addWidget(self.lbTitleDel, 0, 4, 1, 1)
         
         self.glMain.addWidget(self.widCent)
 
@@ -846,10 +923,11 @@ class Ui_GradResult(object):
         self.lbTitleSubject.setText(QCoreApplication.translate("GradResult", u"\uacfc\ubaa9\uba85", None))
         self.lbTitleGrade.setText(QCoreApplication.translate("GradResult", u"\uc810\uc218", None))
         self.lbTitleWrong.setText(QCoreApplication.translate("GradResult", u"\uc624\ub2f5 \uc218", None))
+        self.lbTitleDel.setText(QCoreApplication.translate("GradResult", u"\uc0ad\uc81c", None))
         self.btnClose.setText(QCoreApplication.translate("GradResult", u"\ub2eb\uae30", None))
     # retranslateUi
     
-    def addWidgets(self,n,subject,score,err_cnt):
+    def addWidgets(self,n,subject,score,err_cnt,add_detail=True):
         lbSubject = QLabel(self.widCent)
         lbSubject.setObjectName(u"lbSubject")
         sizePolicy_PF.setHeightForWidth(lbSubject.sizePolicy().hasHeightForWidth())
@@ -858,21 +936,34 @@ class Ui_GradResult(object):
         lbSubject.setText(QCoreApplication.translate("GradResult", subject, None))
         self.glCent.addWidget(lbSubject, n+1, 0, 1, 1)
 
-        if score==None:
-            lbNoResult = QLabel(self.widCent)
-            lbNoResult.setObjectName(u"lbNoResult")
-            sizePolicy_PF.setHeightForWidth(lbNoResult.sizePolicy().hasHeightForWidth())
-            lbNoResult.setSizePolicy(sizePolicy_PF)
-            lbNoResult.setAlignment(Qt.AlignCenter)
-            lbNoResult.setText(QCoreApplication.translate("GradResult", u"\uac00\ucc44\uc810 \uc804", None))
-            self.glCent.addWidget(lbNoResult, n+1, 1, 1, 3)
+        chkDel=QCheckBox(self.widCent)
+        self.glCent.addWidget(chkDel,n+1,4,1,1,Qt.AlignHCenter)
+
+        if score==100:
+            lbWrong = QLabel(self.widCent)
+            lbWrong.setObjectName(u"lbWrong")
+            sizePolicy_PF.setHeightForWidth(lbWrong.sizePolicy().hasHeightForWidth())
+            lbWrong.setSizePolicy(sizePolicy_PF)
+            lbWrong.setAlignment(Qt.AlignCenter)
+            lbWrong.setText(QCoreApplication.translate("GradResult", '0', None))
+            self.glCent.addWidget(lbWrong, n+1, 1, 1, 1)
+
+            lbScore = QLabel(self.widCent)
+            lbScore.setObjectName(u"lbScore")
+            sizePolicy_PF.setHeightForWidth(lbScore.sizePolicy().hasHeightForWidth())
+            lbScore.setSizePolicy(sizePolicy_PF)
+            lbScore.setAlignment(Qt.AlignCenter)
+            lbScore.setText(QCoreApplication.translate("GradResult", '100', None))
+            self.glCent.addWidget(lbScore, n+1, 2, 1, 1)
+            
+            btnDetail=None
         else:
             lbWrong = QLabel(self.widCent)
             lbWrong.setObjectName(u"lbWrong")
             sizePolicy_PF.setHeightForWidth(lbWrong.sizePolicy().hasHeightForWidth())
             lbWrong.setSizePolicy(sizePolicy_PF)
             lbWrong.setAlignment(Qt.AlignCenter)
-            lbWrong.setText(QCoreApplication.translate("GradResult", err_cnt, None))
+            lbWrong.setText(QCoreApplication.translate("GradResult", str(err_cnt), None))
             self.glCent.addWidget(lbWrong, n+1, 1, 1, 1)
 
             lbScore = QLabel(self.widCent)
@@ -889,7 +980,7 @@ class Ui_GradResult(object):
             btnDetail.setText(QCoreApplication.translate("GradResult", u"\ubcf4\uae30", None))
             self.glCent.addWidget(btnDetail, n+1, 3, 1, 1)
             
-            return btnDetail
+        return (chkDel,btnDetail)
 
 
 

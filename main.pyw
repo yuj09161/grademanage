@@ -52,7 +52,7 @@ def get_score(subject=None):
                 err_cnt+=len(wrong_exp)
                 for j in range(len(wrong_exp)):
                     score-=dec(wrong_exp[j][1])-dec(wrong_exp[j][0])
-            return str(score),str(err_cnt)
+            return score,err_cnt
         else:
             return None
     if subject:
@@ -129,9 +129,8 @@ def load(name=None,*,parent=None):
                 else: #중간고사or기말고사
                     current_num=result_semester[current_exam[:2]][0]
                     current_wrong,current_result=result_exam[current_exam]
-                main.update_btn()
             except IOError as e:
-                tmp=QMessageBox.warning(
+                tmp=QMessageBox.critical(
                     parent,
                     'Load Error',
                     f'데이터 불러오기 오류 발생\nTraceBack:\n{e}\n재시도?',
@@ -154,11 +153,16 @@ def load(name=None,*,parent=None):
     if saved:
         loader()
     else:
-        var=QMessageBox.question(parent,'Info','저장 안됨\n저장?')
-        if var:
+        response=QMessageBox.question(
+            parent,
+            'Info',
+            '저장 안됨\n저장?',
+            QMessageBox.Save|QMessageBox.Discard|QMessageBox.Cancel
+        )
+        if response==QMessageBox.Save:
             save()
             loader()
-        elif var==False:
+        elif response==QMessageBox.Discard:
             loader()
 
 
@@ -218,8 +222,8 @@ class TranslatableMessageBox(QMessageBox):
 #Main Window class
 class Main(QMainWindow,UI.Ui_Main):
     def __init__(self,parent=None):
-        def load_and_setexam():
-            load()
+        def load_and_setexam(name=None):
+            load(name)
             self.__set_exam(save=True)
         
         super().__init__(parent)
@@ -228,7 +232,7 @@ class Main(QMainWindow,UI.Ui_Main):
         order=(0,0,0)
         
         self.setupUI(self,order)
-        self.__set_exam()
+        load_and_setexam('save.json')
         
         #Define Variables
         self.__win=[]
@@ -260,12 +264,17 @@ class Main(QMainWindow,UI.Ui_Main):
 
     def closeEvent(self,event):
         if ASK_ON_CLOSE and not saved:
-            res=QMessageBox.question(self,'저장','저장?')
-            if res==QMessageBox.Yes:
+            response=QMessageBox.question(
+                parent,
+                'Info',
+                '저장 안됨\n저장?',
+                QMessageBox.Save|QMessageBox.Discard|QMessageBox.Cancel
+            )
+            if response==QMessageBox.Save:
                 save(True)
                 event.accept()
                 sys.exit(0)
-            elif res==QMessageBox.No:
+            elif response==QMessageBox.Discard:
                 event.ignore()
         else:
             event.accept()
@@ -423,13 +432,13 @@ class Grading_Controller:
         self.__grd1.show()
     
     def __sig_1(self,response):
-        print(response)
+        print(response,response[0],response[0]==-1)
         if response[0]==-1:
             self.__grd1.deleteLater()
             self.__grd2.deleteLater()
             self.__grd31.deleteLater()
             self.__grd32.deleteLater()
-        if response[0]==0:
+        elif response[0]==0:
             self.__subject=response[1]
             self.__grd2.show(response[1:])
         else:
@@ -705,6 +714,9 @@ class Grading32(QMainWindow,UI.Ui_Grading32):
 
 class Grad_result(QMainWindow,UI.Ui_GradResult):
     def __init__(self,parent):
+        def do_connect(signal,func,*args):
+            signal.connect(lambda: func(*args))
+        
         super().__init__(parent)
         self.setupUI(self)
         
@@ -712,8 +724,21 @@ class Grad_result(QMainWindow,UI.Ui_GradResult):
         
         for k,subject in enumerate(current_subjects):
             if subject in current_wrong:
-                btn=self.addWidgets(k,subject,*get_score(subject))
-                (lambda: btn.clicked.connect(lambda: self.__show_detail(parent,subject)))()
+                score,err_cnt=get_score(subject)
+                is_error=False
+                if (score==100 and err_cnt!=0) or score>100 or score<0:
+                    is_error=True
+                    response=QMessageBox.warning(
+                        self,
+                        'ERROR',
+                        'Data Error:\n점수=100, 오답수!=0',
+                        QMessageBox.Ignore|QMessageBox.Cancel
+                    )
+                if not is_error or response==QMessageBox.Ignore:
+                    chkDel,btn=self.addWidgets(k,subject,score,err_cnt)
+                    if btn:
+                        do_connect(btn.clicked,self.__show_detail,parent,subject)
+                    
             else:
                 self.addWidgets(k,subject,None,None)
         
@@ -721,7 +746,7 @@ class Grad_result(QMainWindow,UI.Ui_GradResult):
     
     def __del_res(self,all_subject=False):
         global current_wrong
-        var=QMessageBox.information(self,'삭제?','복원 불가\n삭제?')
+        var=QMessageBox.question(self,'삭제?','복원 불가\n삭제?')
         if var:
             if all_subject:
                 for k in range(current_subject_cnt):
@@ -743,14 +768,27 @@ class Grad_result(QMainWindow,UI.Ui_GradResult):
 class Grad_detail(QMainWindow,UI.Ui_GradDetail):
     def __init__(self,parent,subject):
         print(subject)
-        
         if subject in current_subjects:
             super().__init__(parent)
-            wrong=current_wrong[subject]
-            if wrong[0]:
-                pass
-            if wrong[1]:
-                pass
+            self.setupUI(self)
+            wrongs=current_wrong[subject]
+            try:
+                if wrongs[0]:
+                    self.addSel(wrongs[0])
+                    self.widSel.resize(self.widSel.width(),self.widSel.sizeHint().height())
+                if wrongs[1]:
+                    self.addSupply(wrongs[1])
+                    self.widSupply.resize(self.widSupply.width(),self.widSupply.sizeHint().height())
+            except Exception as e:
+                msgbox=QMessageBox(self)
+                msgbox.setWindowTitle('ERROR')
+                msgbox.setText('오류 발생')
+                msgbox.setIcon(QMessageBox.Critical)
+                #msgbox.setDetailedText(str(e))
+                msgbox.setDetailedText(str(e.with_traceback(None)))
+                msgbox.exec_()
+            
+            self.btnClose.clicked.connect(self.deleteLater)
         else:
             QMessageBox.critical(self,'Error','없는 과목')
             self.deleteLater()

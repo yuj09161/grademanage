@@ -2,3 +2,5 @@ main_old.pyw
 save.json
 .project
 .pydevproject
+1
+__pycache__/
