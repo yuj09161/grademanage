@@ -796,72 +796,63 @@ class Grad_detail(QMainWindow,UI.Ui_GradDetail):
 #(예상)등급계산
 class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
     def __init__(self,parent,grades=None):
+        def cut_calc():
+            self.__cut_calc.append(Cut_calc(self))
+            self.__cut_calc[-1].show()
+        
+        super().__init__(parent)
         if current_subject_cnt==0:
             QMessageBox.critical(self,'Error','과목 입력 안됨')
         else:
-            super().__init__(parent)
-        self.setupUI(self)
-        if True:
-            str_self=('과목명','시수','등급1','등급2','포함?')
-            for a in range(5):
-                pass
-            self.__grade1=[]
-            self.__grade2=[]
-            self.__chk=[]
-            k=0
-            for subject in current_subjects:
-
-
-
-
-
-                k+=1
-            f_mid.grid(row=0,column=0,columnspan=2)
-
-
-
-            f_bot.grid(row=1,column=1,sticky='e')
-            k+=1
-    
+            self.setupUI(self)
+            
+            self.__cut_calc=[]
+            
+            self.__input=[]
+            for k,subject in enumerate(current_subjects):
+                self.__input.append(self.addWidgets(k,subject,current_num[subject][0]))
+            
+            self.btnCutCalc.clicked.connect(cut_calc)
+            self.btnClear.clicked.connect(self.__del_all)
+            self.btnCalc.clicked.connect(self.__calc)
+            self.btnClose.clicked.connect(self.deleteLater)
 
     def __calc(self):
+        total_num   = 0
+        best_grade  = 0
+        worst_grade = 0
         try:
-            nums=get_current_num()
-            total_num=0
-            max_grade=0
-            min_grade=0
-            for k in range(current_subject_cnt):
-                if self.__chk[k].get():
-                    in2=self.__grade2[k].get()
-                    grd1=int(self.__grade1[k].get()) #in1=self.__grade1[k].get()
-                    if 0<grd1>9:
-                        raise ValueError
-                    total_num+=nums[k]
-                    if in2:
-                        grd2=int(in2)
-                        max_grade+=min(grd1,grd2)*nums[k]
-                        min_grade+=max(grd1,grd2)*nums[k]
+            for (grd_in1,grd_in2,chk),num in zip(self.__input,get_current_num()):
+                if chk.isChecked():
+                    grd1=int(grd_in1.text().replace(' ',''))
+                    assert 0<grd1<9, f'grade must be 0<grade<9, but grade is {grd1}'
+                    tmp=grd_in2.text().replace(' ','')
+                    if tmp:
+                        grd2=int(tmp)
+                        assert 0<grd2<9, f'grade must be 0<grade<9, but grade is {grd2}'
+                        best_grade +=min(grd1,grd2)*num
+                        worst_grade+=max(grd1,grd2)*num
                     else:
-                        max_grade+=grd1*nums[k]
-                        min_grade+=grd1*nums[k]
+                        best_grade +=grd1*num
+                        worst_grade+=grd1*num
+                    total_num+=num
             if not total_num:
                 raise ValueError
-        except ValueError:
+        except (ValueError,AssertionError) as e:
             QMessageBox.critical(self,'Error','잘못된 입력')
+            print(e)
         else:
-            QMessageBox.info(
-                '결과',
-                '최고: %s\n최저: %s' %(
-                    round(max_grade/total_num,4),
-                    round(min_grade/total_num,4)
-                )
+            QMessageBox.information(
+                self,
+                '예상등급',
+                f'최상: {(best_grade/total_num):.4}\n최하: {(worst_grade/total_num):.4}'
             )
     
 
     def __del_all(self):
-        for k in range(current_subject_cnt):
-            self.__grade1[k].set('')
-            self.__grade2[k].set('')
+        for grd_in1,grd_in2,_ in self.__input:
+            grd_in1.setText('')
+            grd_in2.setText('')
     
     #not used, but remain for future
     '''
