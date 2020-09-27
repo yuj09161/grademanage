@@ -7,6 +7,7 @@ import UI
 import os,sys,json
 from decimal import Decimal as dec
 from copy import deepcopy
+import numpy as np
 
 ASK_ON_CLOSE=True
 
@@ -64,46 +65,46 @@ def get_score(subject=None):
         return result
 
 
-def cut(person):
-    cuts=(4,11,23,40,60,77,89,96,100); result=[]
-    for cut in cuts:
-        result.append(round(person*cut*0.01))
-    return result
-
-
 def get_current_num(*,name=False,dictionary=False):
     exam=int(current_exam[2])
-    if name:
-        if exam==3:
-            return tuple(current_num.keys())
-        else:
-            name=[]
-            for subject in current_num:
-                if current_num[subject][exam]:
-                    name.append(subject)
-            return name
+    var=name*4+dictionary*2+(exam==3)#*1
+    if var==5: #true: name, exam==3
+        return tuple(current_num.keys())
+    elif var==4: #true: name
+        name=[]
+        for subject in current_num:
+            if current_num[subject][exam]:
+                name.append(subject)
+        return name
+    elif var==3: #true: dictionary, exam==3
+        tmp={}
+        for subject in current_num:
+            tmp[subject]=current_num[subject][0]
+        return tmp
+    elif var==2: #true: dictonary
+        tmp={}
+        for subject in current_num:
+            if current_num[subject][exam]:
+                tmp[subject]=current_num[subject][0]
+        return tmp
+    elif var==1: #true: exam==3
+        return tuple(value[0] for value in current_num.values())
+    elif var==0: #true: - (default)
+        tmp=[]
+        for value in current_num.values():
+            if value[exam]:
+                tmp.append(value[0])
+        return tmp
     else:
-        if exam==3:
-            if dictionary:
-                tmp={}
-                for subject in current_num:
-                    tmp[subject]=current_num[subject][0]
-                return tmp
-            else:
-                return tuple(value[0] for value in current_num.values())
+        base_err=f'\nArguments:\nname:{name}\ndictionary:{dictionary}\nexam:{exam}'
+        if var==6 or var==7:
+            QMessageBox.warning(None,'Error','Error:\nname & dictonary == true')
+        elif var<0:
+            QMessageBox.critical(None,'Error','Unknown Error: var<0'+base_err)
+        elif var>5:
+            QMessageBox.critical(None,'Error','Unknown Error: var>5'+base_err)
         else:
-            if dictionary:
-                tmp={}
-                for subject in current_num:
-                    if current_num[subject][exam]:
-                        tmp[subject]=current_num[subject][0]
-                return tmp
-            else:
-                tmp=[]
-                for value in current_num.values():
-                    if value[exam]:
-                        tmp.append(value[0])
-                return tmp
+            QMessageBox.critical(None,'Error',f'Unknown Error: var type: {type(var)}\nvalue: {var}'+base_err)
 
 
 def resize_window(window,*wid):
@@ -229,7 +230,7 @@ class Main(QMainWindow,UI.Ui_Main):
         super().__init__(parent)
         
         #pre-define Variables
-        order=(0,0,0)
+        order=(2,0,0)
         
         self.setupUI(self,order)
         load_and_setexam('save.json')
@@ -409,7 +410,7 @@ class Subject_In(QMainWindow,UI.Ui_SubjectIn):
         else:
             current_subjects=get_current_num(name=True)
             current_subject_cnt=len(current_subjects)
-            self.destroy()
+            self.deleteLater()
             main.update_btn()
 
 #가채점 입력
@@ -893,72 +894,63 @@ class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
 #성적 입력
 class Exam_input(QMainWindow,UI.Ui_ExamInput):
     def __init__(self,parent):
-        super().__init__(parent)
-        self.setupUI(self)
         global current_result
-        def btn_make(n):
-            pass
-        def del_subject(n):
-            for k in range(3):
-                self.__ent[n][k].set('')
-        def del_all():
-            for k in range(current_subject_cnt):
-                del_subject(k)
+        def connect(k,btn):
+            btn.clicked.connect(lambda: self.__del_subject(k))
+        
+        super().__init__(parent)
+        self.__parent=parent
         if current_subjects:
-            super().__init__(parent)
-        self.setupUI(self)
-        if True:
-            self_str=('과목명','시수','원점수','석차','인원수')
-            self.__ent=[]
-            for k in range(5):
-                pass
-            k=0
-            for subject in current_subjects:
-
-                self.__ent.append([])
-                for j in range(3):
-
-                    if subject in current_result.keys():
-                        value=current_result[subject][j]
-                        self.__ent[-1][j].set(value if value else '')
-
-                btn_make(k)
-                k+=1
-            #bottom buttons
-
-
-
-            #grid frames
-            f_mid.grid(row=0,column=0,columnspan=2)
-            f_bot.grid(row=1,column=1,sticky='e')
+            subjects=get_current_num(dictionary=True)
+            self.setupUI(self,subjects.keys(),subjects.values())
+            
+            for k,btn in enumerate(self.del_btn):
+                connect(k,btn)
+            self.btnClear.clicked.connect(lambda: self.__del_subject())
+            self.btnCancel.clicked.connect(self.deleteLater)
+            self.btnSet.clicked.connect(self.__end)
         else:
-            QMessageBox.critical(self,'Error','과목 입력 안됨')
+            QMessageBox.warning(self,'Error','과목 입력 안됨')
     
-
+    def __del_subject(self,n=-1):
+        assert type(n) is int, 'type of n must be int'
+        assert -2<n<current_subject_cnt, f'must -1<n<{current_subject_cnt}, n={n}'
+        if n<0:
+            for lbScore,lbRank,lbPerson in self.ent:
+                lbScore.setText('')
+                lbRank.setText('')
+                lbPerson.setText('')
+        else:
+            self.ent[n][0].setText('')
+            self.ent[n][1].setText('')
+            self.ent[n][2].setText('')
+    
     def __end(self):
         global saved
         all_entered=True; results=[]
         try:
             for k in range(current_subject_cnt):
-                score=self.__ent[k][0].get()
-                grade=self.__ent[k][1].get()
-                count=self.__ent[k][2].get()
-                if not score:
-                    score=None
+                '''
+                score_in=self.ent[k][0].text().replace('. ','').replace(' ','')
+                grade_in=self.ent[k][1].text().replace('. ','').replace(' ','')
+                count_in=self.ent[k][2].text().replace('. ','').replace(' ','')
+                '''
+                score_in=self.ent[k][0].text().replace('. ','').replace(' ','')
+                grade_in=self.ent[k][1].text().replace('. ','').replace(' ','')
+                count_in=self.ent[k][2].text().replace('. ','').replace(' ','')
+                
+                if not score_in:
+                    QMessageBox.warning(self,'Error','점수 미입력')
+                elif not (grade_in and count_in):
                     all_entered=False
-                if grade:
-                    grade=int(grade)
-                else:
-                    grade=None
-                    all_entered=False
-                if count:
-                    count=int(count)
-                else:
-                    count=None
-                    all_entered=False
-                results.append((score,grade,count))
+                
+                #float(score_in) #=score
+                grade=int(grade_in)
+                count=int(count_in)
+                
+                results.append((score_in,grade,count))
         except ValueError:
-            QMessageBox.critical(self,'Error','입력 값 오류')
+            QMessageBox.warning(self,'Error','입력 값 오류')
         else:
             if not all_entered:
                 proceed_blank=QMessageBox.information(self,'Info','빈 칸 존재\n성적입력?')
@@ -971,46 +963,51 @@ class Exam_input(QMainWindow,UI.Ui_ExamInput):
                     elif result[0]:
                         current_result[current_subjects[k]]=(result[0],None,None)
                     k+=1
-                self.destroy()
-                Exam_result()
+                self.deleteLater()
+                Exam_result(self.__parent)
 
 #시혐 결과
 class Exam_result(QMainWindow,UI.Ui_ExamResult):
     def __init__(self,parent):
         super().__init__(parent)
-        self.setupUI(self)
         if current_result:
-            super().__init__(parent)
-        self.setupUI(self)
-        if True:
-            self_str=('과목','시수','점수','석차','등급','백분위')
-            for k in range(6):
-                pass
-            self.__grades=[]
+            inputed_subjects=list(current_result.keys())
+            
+            nums     = []
+            scores   = []
+            ranks    = []
+            rank_str = []
+            grades   = []
+            percents = []
+            
             all_rank_inputed=True
-            k=0
-            for subject in current_subjects:
-
-                if subject in current_result.keys():
-                    score,rank,total_person=current_result[subject]
-
-                    if rank and total_person:
-                        grade,percent=self.__get_grade(rank,total_person)
-
-
-                        self.__grades.append(grade)
+                
+            for k,subject in enumerate(current_subjects):
+                if subject in inputed_subjects:
+                    score,rank,person=current_result[subject]
+                    nums.append(current_num[subject][0])
+                    scores.append(score)
+                    ranks.append(rank)
+                    rank_str.append(f'{rank}/{person}')
+                    
+                    if rank and person:
+                        grade,percent=self.__get_grade(rank,person)
+                        percents.append(round(percent,2))
+                        if all_rank_inputed:
+                            grades.append(grade)
                     else:
-
                         all_rank_inputed=False
-                        self.__grades.append(None)
+                        percents.append(None)
                 else:
-
                     all_rank_inputed=False
-                k+=1
-            f_mid.grid(row=0,column=0,columnspan=2)
+                    nums.append(current_num[subject])
+                    scores.append(None)
+            
             if all_rank_inputed:
-                pass
-
+                total_grade=self.__get_total_grade(ranks,grades)
+            
+            self.setupUI(self,current_subjects,nums,scores,grades,rank_str,percents)
+            
         elif current_subjects:
             QMessageBox.critical(self,'Error','성적 입력 안됨')
         else:
@@ -1019,31 +1016,36 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
 
     def __get_grade(self,rank,person):
         percent=rank/person*100
-        cuts=cut(person)
+        cuts=(np.array(CUT_RATIO)*person*0.01).round()
+        return np.searchsorted(cuts,rank)+1,percent
+    
+    '''
         grade=0
         for k in range(9):
             if rank<=cuts[k]:
                 grade=k+1
                 break
-        '''
         if not grade:
             grade=9
-        '''
         return grade,percent
     
+    def get_cuts(person):
+        cuts=(np.array(CUT_RATIO)*person*0.01).round()
+        for k in range(1,person+1):
+            print(f'{k}: {np.searchsorted(cuts,k)+1}',end=' / ')
+        return cuts
+    '''
 
-    def __calc(self,num,grd):
-        result=0
-        n=0
-        for k in range(len(num)):
-            result+=num[k]*grd[k]
-            n+=num[k]
+    def __get_total_grade(self,num,grd):
+        array_num=np.array(num)
+        array_grd=np.array(grd)
+        result=(array_num*array_grd).sum()
+        n=array_num.sum()
         return round(result/n,4)
-    
 
     def __to_grading(self):
-        self.destroy()
         Grade_calc(self.__grades)
+
 
 #등급인원계산
 class Cut_calc(QMainWindow,UI.Ui_CutCalc):
