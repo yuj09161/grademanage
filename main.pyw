@@ -10,7 +10,7 @@ from copy import deepcopy
 
 ASK_ON_CLOSE=True
 
-CUTS=(4,11,23,40,60,77,89,96,100)
+CUT_RATIO=(4,11,23,40,60,77,89,96,100)
 
 #초기화
 
@@ -258,7 +258,7 @@ class Main(QMainWindow,UI.Ui_Main):
         self.save.triggered.connect(save)
         self.load.triggered.connect(load_and_setexam)
         self.exit.triggered.connect(self.close)
-        self.cut_calc.triggered.connect(Cut_calc)
+        self.cut_calc.triggered.connect(lambda: self.__show_window(Cut_calc))
         #self.license.triggered.connect()
         #self.about.triggered.connect()
 
@@ -702,7 +702,7 @@ class Grading32(QMainWindow,UI.Ui_Grading32):
             for subject,wids in zip(self.__err2,self.__score):
                 t1=wids[0].text()
                 t2=wids[1].text()
-                assert dec(t1)<=dec(t2)
+                assert float(t1)<=float(t2)
                 self.__err2[subject]=(t1,t2)
             response=QMessageBox.question(self,'채점 완료?','채점 완료?')
             if response==QMessageBox.Yes:
@@ -742,6 +742,7 @@ class Grad_result(QMainWindow,UI.Ui_GradResult):
             else:
                 self.addWidgets(k,subject,None,None)
         
+        QShortcut(QKeySequence.fromString('Escape'),self).activated.connect(self.deleteLater)
         self.btnClose.clicked.connect(self.deleteLater)
     
     def __del_res(self,all_subject=False):
@@ -788,6 +789,7 @@ class Grad_detail(QMainWindow,UI.Ui_GradDetail):
                 msgbox.setDetailedText(str(e.with_traceback(None)))
                 msgbox.exec_()
             
+            QShortcut(QKeySequence.fromString('Escape'),self).activated.connect(self.deleteLater)
             self.btnClose.clicked.connect(self.deleteLater)
         else:
             QMessageBox.critical(self,'Error','없는 과목')
@@ -811,6 +813,8 @@ class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
             self.__input=[]
             for k,subject in enumerate(current_subjects):
                 self.__input.append(self.addWidgets(k,subject,current_num[subject][0]))
+            
+            QShortcut(QKeySequence.fromString('Escape'),self).activated.connect(self.deleteLater)
             
             self.btnCutCalc.clicked.connect(cut_calc)
             self.btnClear.clicked.connect(self.__del_all)
@@ -847,7 +851,6 @@ class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
                 '예상등급',
                 f'최상: {(best_grade/total_num):.4}\n최하: {(worst_grade/total_num):.4}'
             )
-    
 
     def __del_all(self):
         for grd_in1,grd_in2,_ in self.__input:
@@ -856,7 +859,6 @@ class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
     
     #not used, but remain for future
     '''
-
     def __calc_full(self,grd1,grd2):
         #파싱
         if current_subject_cnt==len(grd1):
@@ -1048,93 +1050,26 @@ class Cut_calc(QMainWindow,UI.Ui_CutCalc):
     def __init__(self,parent):
         super().__init__(parent)
         self.setupUI(self)
-        result=['','','','','','','','','']
-        super().__init__(parent)
-        self.setupUI(self)
+        
+        for k,(ratio,lbGrade,lbRatio) in enumerate(zip(CUT_RATIO,self.lbGrades,self.lbRatios)):
+            lbGrade.setText(str(k))
+            lbRatio.setText(str(ratio))
+        
+        QShortcut(QKeySequence.fromString('Escape'),self).activated.connect(self.deleteLater)
+        QShortcut(QKeySequence.fromString('Enter'),self).activated.connect(self.__set_cuts)
+        self.btnClose.clicked.connect(self.deleteLater)
+        self.btnCalc.clicked.connect(self.__set_cuts)
 
-
-
-        self.__ent.bind('<Return>',self.__get)
-        self.__ent.grid(row=0,column=1)
-        str_self=('등급','누적비율','누적인원수')
-        for k in range(3):
-            pass
-        for k in range(9):
-            pass
-
-
-
-        f_self.grid(row=0,column=0)
-        self.__f_mid.grid(row=1,column=0)
-        f_bot.grid(row=2,column=0)
-    
-    
-
-    def __get(self):
+    def __set_cuts(self):
         try:
-            a=int(self.__ent.get())
+            a=int(self.lnPersonCount.text())
         except ValueError:
             QMessageBox.critical(self,'Error','인원수 오류')
         else:
-            result=[]
-            for k in CUTS:
-                result.append(round(a*k/100))
-            for k in range(9):
-                pass
-"""
-#안내 Root Class
-class Notice(QMainWindow,UI.Ui_Notice):
-    def __init__(self,name,fileName,string):
-        try:
-            with open(fileName+'.txt','r') as file:
-                txt=file.readlines()
-        except:
-            txt=string
-        super().__init__(parent)
-        self.setupUI(self)
+            for ratio,lbCut in zip(CUT_RATIO,self.lbCuts):
+                lbCut.setText(str(round(a*ratio/100)))
 
 
-    def form(self,string):
-        text=''
-        for line in string.splitlines():
-            if line:
-                text+=line+'\n'
-        return text[:-1]
-
-#도움말
-class Help(Notice):
-    def __init__(self,parent):
-        super().__init__(parent)
-        self.setupUI(self)
-        text='''
-
-'''
-        txt=super().form(text)
-        super().__init__(parent)
-
-#라이선스
-class License(Notice):
-    def __init__(self,parent):
-        super().__init__(parent)
-        self.setupUI(self)
-        text='''
-
-'''
-        txt=super().form(text)
-        super().__init__(parent)
-
-#정보
-class Info(Notice):
-    def __init__(self,parent):
-        super().__init__(parent)
-        self.setupUI(self)
-        text='''
-성적계산기
-made by HYS
-'''
-        txt=super().form(text)
-        super().__init__(parent)
-"""
 if __name__=='__main__':
     import ctypes
     myappid = 'hys.grademanage2'

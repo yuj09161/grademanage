@@ -63,12 +63,12 @@ class Ui_CutCalc(object):
         sizePolicy_IP.setHeightForWidth(self.lbTitleCount.sizePolicy().hasHeightForWidth())
         self.glMain.addWidget(self.lbTitleCount, 0, 0, 1, 1)
 
-        self.lnPerson = QLineEdit(self.centralwidget)
-        self.lnPerson.setObjectName(u"lnPerson")
-        sizePolicy_IF.setHeightForWidth(self.lnPerson.sizePolicy().hasHeightForWidth())
-        self.lnPerson.setSizePolicy(sizePolicy_IF)
-        self.lnPerson.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lnPerson, 0, 1, 1, 2)
+        self.lnPersonCount = QLineEdit(self.centralwidget)
+        self.lnPersonCount.setObjectName(u"lnPersonCount")
+        sizePolicy_IF.setHeightForWidth(self.lnPersonCount.sizePolicy().hasHeightForWidth())
+        self.lnPersonCount.setSizePolicy(sizePolicy_IF)
+        self.lnPersonCount.setAlignment(Qt.AlignCenter)
+        self.glMain.addWidget(self.lnPersonCount, 0, 1, 1, 2)
 
         self.lbTitleGrade = QLabel(self.centralwidget)
         self.lbTitleGrade.setObjectName(u"lbTitleGrade")
@@ -279,6 +279,10 @@ class Ui_CutCalc(object):
         self.lbCut9.setSizePolicy(sizePolicy_IP)
         self.lbCut9.setAlignment(Qt.AlignCenter)
         self.glMain.addWidget(self.lbCut9, 10, 2, 1, 1)
+        
+        self.lbGrades = (self.lbGrade1,self.lbGrade2,self.lbGrade3,self.lbGrade4,self.lbGrade5,self.lbGrade6,self.lbGrade7,self.lbGrade8,self.lbGrade9)
+        self.lbRatios = (self.lbRatio1,self.lbRatio2,self.lbRatio3,self.lbRatio4,self.lbRatio5,self.lbRatio6,self.lbRatio7,self.lbRatio8,self.lbRatio9)
+        self.lbCuts   = (self.lbCut1  ,self.lbCut2  ,self.lbCut3  ,self.lbCut4  ,self.lbCut5  ,self.lbCut6  ,self.lbCut7  ,self.lbCut8  ,self.lbCut9  )
 
         self.widBot = QWidget(self.centralwidget)
         self.widBot.setObjectName(u"widBot")
@@ -309,10 +313,11 @@ class Ui_CutCalc(object):
     def retranslateUi(self, CutCalc):
         CutCalc.setWindowTitle(QCoreApplication.translate("CutCalc", u"\ub4f1\uae09\ucef7 \uacc4\uc0b0", None))
         self.lbTitleCount.setText(QCoreApplication.translate("CutCalc", u"\uc778\uc6d0", None))
-        self.lnPerson.setInputMask(QCoreApplication.translate("CutCalc", u"Ddd", None))
+        self.lnPersonCount.setInputMask(QCoreApplication.translate("CutCalc", u"900", None))
         self.lbTitleGrade.setText(QCoreApplication.translate("CutCalc", u"\ub4f1\uae09", None))
         self.lbTitleRatio.setText(QCoreApplication.translate("CutCalc", u"\ube44\uc728", None))
         self.lbCut.setText(QCoreApplication.translate("CutCalc", u"\uc778\uc6d0\uc218", None))
+        '''
         self.lbGrade1.setText(QCoreApplication.translate("CutCalc", u"1", None))
         self.lbRatio1.setText("")
         self.lbGrade2.setText(QCoreApplication.translate("CutCalc", u"2", None))
@@ -324,6 +329,7 @@ class Ui_CutCalc(object):
         self.lbGrade8.setText(QCoreApplication.translate("CutCalc", u"8", None))
         self.lbGrade9.setText(QCoreApplication.translate("CutCalc", u"9", None))
         self.lbRatio9.setText(QCoreApplication.translate("CutCalc", u"100%", None))
+        '''
         self.btnClose.setText(QCoreApplication.translate("CutCalc", u"\ub2eb\uae30", None))
         self.btnCalc.setText(QCoreApplication.translate("CutCalc", u"\uacc4\uc0b0", None))
     # retranslateUi
