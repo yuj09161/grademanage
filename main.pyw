@@ -11,22 +11,22 @@ import numpy as np
 
 ASK_ON_CLOSE=True
 
-CUT_RATIO=(4,11,23,40,60,77,89,96,100)
 
-#초기화
-
-#전역 변수 정의
+#전역 불변 변수 정의
 CURRENT_PATH = os.path.dirname(os.path.abspath('__file__'))+'\\'
 PROGRAM_PATH = os.path.dirname(os.path.abspath(sys.argv[0]))+'\\'
+ESCAPE_SEQ   = QKeySequence.fromString('Escape')
+CUT_RATIO    = (4,11,23,40,60,77,89,96,100)
 
+#전역 변수 정의
 current_exam    = '111'
 last_file       = ''
 saved           = True
-result_semester = {}
-result_exam     = {}
 current_num     = {}
+result_semester = {}
 current_wrong   = {}
 current_result  = {}
+result_exam     = {}
 
 for a in range(1,4):
     for b in range(1,3):
@@ -222,12 +222,12 @@ class TranslatableMessageBox(QMessageBox):
 
 #Main Window class
 class Main(QMainWindow,UI.Ui_Main):
-    def __init__(self,parent=None):
+    def __init__(self):
         def load_and_setexam(name=None):
             load(name)
             self.__set_exam(save=True)
         
-        super().__init__(parent)
+        super().__init__()
         
         #pre-define Variables
         order=(2,0,0)
@@ -266,7 +266,7 @@ class Main(QMainWindow,UI.Ui_Main):
     def closeEvent(self,event):
         if ASK_ON_CLOSE and not saved:
             response=QMessageBox.question(
-                parent,
+                self,
                 'Info',
                 '저장 안됨\n저장?',
                 QMessageBox.Save|QMessageBox.Discard|QMessageBox.Cancel
@@ -276,13 +276,14 @@ class Main(QMainWindow,UI.Ui_Main):
                 event.accept()
                 sys.exit(0)
             elif response==QMessageBox.Discard:
+                event.accept()
+            elif response==QMessageBox.Cancel:
                 event.ignore()
         else:
             event.accept()
             sys.exit(0)
     
     #시험 설정
-
     def __set_exam(self,*,save=False):
         global current_num,current_wrong,current_result,\
                current_exam,current_subjects,current_subject_cnt
@@ -320,7 +321,6 @@ class Main(QMainWindow,UI.Ui_Main):
         current_subject_cnt=len(current_subjects)
     
     #버튼 상태 업데이트
-
     def update_btn(self):
         self.btnSet.setStyleSheet('color:black')
         if current_num:
@@ -368,7 +368,6 @@ class Subject_In(QMainWindow,UI.Ui_SubjectIn):
         super().__init__(parent)
         self.setupUI(self)
         
-        #초기화
         self.__inbox=[]
         
         #기존 값 불러오기
@@ -376,7 +375,7 @@ class Subject_In(QMainWindow,UI.Ui_SubjectIn):
             for subject in current_num:
                 self.__add_subject(subject,current_num[subject])
         
-        self.btnAdd.clicked.connect(self.__add_subject)
+        self.btnAdd.clicked.connect(lambda: self.__add_subject())
         self.btnCancel.clicked.connect(self.deleteLater)
         self.btnSet.clicked.connect(self.__set_subject)
 
@@ -721,7 +720,9 @@ class Grad_result(QMainWindow,UI.Ui_GradResult):
         super().__init__(parent)
         self.setupUI(self)
         
+        self.__parent=parent
         self.__subject_win=[]
+        self.__chk=[]
         
         for k,subject in enumerate(current_subjects):
             if subject in current_wrong:
@@ -739,28 +740,29 @@ class Grad_result(QMainWindow,UI.Ui_GradResult):
                     chkDel,btn=self.addWidgets(k,subject,score,err_cnt)
                     if btn:
                         do_connect(btn.clicked,self.__show_detail,parent,subject)
-                    
+                    self.__chk.append(chkDel)
             else:
                 self.addWidgets(k,subject,None,None)
+                self.__chk.append(None)
         
-        QShortcut(QKeySequence.fromString('Escape'),self).activated.connect(self.deleteLater)
+        QShortcut(ESCAPE_SEQ,self).activated.connect(self.deleteLater)
         self.btnClose.clicked.connect(self.deleteLater)
+        self.btnDel.clicked.connect(self.__del_res)
     
-    def __del_res(self,all_subject=False):
-        global current_wrong
-        var=QMessageBox.question(self,'삭제?','복원 불가\n삭제?')
-        if var:
-            if all_subject:
-                for k in range(current_subject_cnt):
-                    if current_subjects[k] in current_wrong.keys():
-                        del current_wrong[current_subjects[k]]
-            else:
-                for k in range(current_subject_cnt):
-                    if chk[k].get() and (current_subjects[k] in current_wrong.keys()):
-                        del current_wrong[current_subjects[k]]
-            self.setVisible(False)
+    def __del_res(self):
+        global current_wrong,saved
+        respond=QMessageBox.question(self,'삭제?','복원 불가\n삭제?')
+        if respond:
+            saved=False
+            for chk,subject in zip(self.__chk,current_subjects):
+                if chk.isChecked() and subject in current_wrong.keys():
+                    del current_wrong[subject]
+            self.deleteLater()
             if current_wrong:
-                Grad_result()
+                grad_win=Grad_result(self.__parent)
+                grad_win.show()
+            else:
+                self.__parent.update_btn()
     
     def __show_detail(self,parent,subject):
         self.__subject_win.append(Grad_detail(parent,subject))
@@ -777,10 +779,16 @@ class Grad_detail(QMainWindow,UI.Ui_GradDetail):
             try:
                 if wrongs[0]:
                     self.addSel(wrongs[0])
-                    self.widSel.resize(self.widSel.width(),self.widSel.sizeHint().height())
+                    self.widSel.resize(
+                        self.widSel.width(),
+                        self.widSel.sizeHint().height()
+                    )
                 if wrongs[1]:
                     self.addSupply(wrongs[1])
-                    self.widSupply.resize(self.widSupply.width(),self.widSupply.sizeHint().height())
+                    self.widSupply.resize(
+                        self.widSupply.width(),
+                        self.widSupply.sizeHint().height()
+                    )
             except Exception as e:
                 msgbox=QMessageBox(self)
                 msgbox.setWindowTitle('ERROR')
@@ -790,7 +798,7 @@ class Grad_detail(QMainWindow,UI.Ui_GradDetail):
                 msgbox.setDetailedText(str(e.with_traceback(None)))
                 msgbox.exec_()
             
-            QShortcut(QKeySequence.fromString('Escape'),self).activated.connect(self.deleteLater)
+            QShortcut(ESCAPE_SEQ,self).activated.connect(self.deleteLater)
             self.btnClose.clicked.connect(self.deleteLater)
         else:
             QMessageBox.critical(self,'Error','없는 과목')
@@ -815,7 +823,7 @@ class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
             for k,subject in enumerate(current_subjects):
                 self.__input.append(self.addWidgets(k,subject,current_num[subject][0]))
             
-            QShortcut(QKeySequence.fromString('Escape'),self).activated.connect(self.deleteLater)
+            QShortcut(ESCAPE_SEQ,self).activated.connect(self.deleteLater)
             
             self.btnCutCalc.clicked.connect(cut_calc)
             self.btnClear.clicked.connect(self.__del_all)
@@ -904,11 +912,21 @@ class Exam_input(QMainWindow,UI.Ui_ExamInput):
             subjects=get_current_num(dictionary=True)
             self.setupUI(self,subjects.keys(),subjects.values())
             
+            if current_result:
+                for k,subject in enumerate(current_subjects):
+                    if subject in current_result:
+                        score,rank,person=current_result[subject]
+                        self.ent[k][0].setText(score)
+                        self.ent[k][1].setText(str(rank))
+                        self.ent[k][2].setText(str(person))
+            
             for k,btn in enumerate(self.del_btn):
                 connect(k,btn)
             self.btnClear.clicked.connect(lambda: self.__del_subject())
             self.btnCancel.clicked.connect(self.deleteLater)
             self.btnSet.clicked.connect(self.__end)
+            
+            #resize_window(self,self.centralwidget)
         else:
             QMessageBox.warning(self,'Error','과목 입력 안됨')
     
@@ -935,9 +953,9 @@ class Exam_input(QMainWindow,UI.Ui_ExamInput):
                 grade_in=self.ent[k][1].text().replace('. ','').replace(' ','')
                 count_in=self.ent[k][2].text().replace('. ','').replace(' ','')
                 '''
-                score_in=self.ent[k][0].text().replace('. ','').replace(' ','')
-                grade_in=self.ent[k][1].text().replace('. ','').replace(' ','')
-                count_in=self.ent[k][2].text().replace('. ','').replace(' ','')
+                score_in=self.ent[k][0].text()
+                grade_in=self.ent[k][1].text()
+                count_in=self.ent[k][2].text()
                 
                 if not score_in:
                     QMessageBox.warning(self,'Error','점수 미입력')
@@ -955,16 +973,17 @@ class Exam_input(QMainWindow,UI.Ui_ExamInput):
             if not all_entered:
                 proceed_blank=QMessageBox.information(self,'Info','빈 칸 존재\n성적입력?')
             if all_entered or proceed_blank:
+                saved=False
                 k=0
-                for result in results:
+                for subject,result in zip(current_subjects,results):
                     if all(result):
-                        current_result[current_subjects[k]]=result
-                        saved=False
+                        current_result[subject]=result
                     elif result[0]:
-                        current_result[current_subjects[k]]=(result[0],None,None)
+                        current_result[subject]=(result[0],None,None)
                     k+=1
                 self.deleteLater()
-                Exam_result(self.__parent)
+                result_win=Exam_result(self.__parent)
+                result_win.show()
 
 #시혐 결과
 class Exam_result(QMainWindow,UI.Ui_ExamResult):
@@ -1057,7 +1076,7 @@ class Cut_calc(QMainWindow,UI.Ui_CutCalc):
             lbGrade.setText(str(k))
             lbRatio.setText(str(ratio))
         
-        QShortcut(QKeySequence.fromString('Escape'),self).activated.connect(self.deleteLater)
+        QShortcut(ESCAPE_SEQ,self).activated.connect(self.deleteLater)
         QShortcut(QKeySequence.fromString('Enter'),self).activated.connect(self.__set_cuts)
         self.btnClose.clicked.connect(self.deleteLater)
         self.btnCalc.clicked.connect(self.__set_cuts)

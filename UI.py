@@ -341,20 +341,21 @@ class Ui_ExamInput(object):
         
         self.glMain = QGridLayout(self.centralwidget)
         self.glMain.setObjectName(u"glMain")
+        self.glMain.setHorizontalSpacing(15)
         
         self.lbTitleSubject = QLabel(self.centralwidget)
         self.lbTitleSubject.setObjectName(u"lbTitleSubject")
-        sizePolicy_IP.setHeightForWidth(self.lbTitleSubject.sizePolicy().hasHeightForWidth())
-        self.lbTitleSubject.setSizePolicy(sizePolicy_IP)
+        sizePolicy_FP.setHeightForWidth(self.lbTitleSubject.sizePolicy().hasHeightForWidth())
+        self.lbTitleSubject.setSizePolicy(sizePolicy_FP)
         self.lbTitleSubject.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleSubject, 0, 0, 1, 1)
+        self.glMain.addWidget(self.lbTitleSubject, 0, 0, 1, 1, Qt.AlignHCenter)
 
         self.lbTitleNum = QLabel(self.centralwidget)
         self.lbTitleNum.setObjectName(u"lbTitleNum")
-        sizePolicy_IP.setHeightForWidth(self.lbTitleNum.sizePolicy().hasHeightForWidth())
-        self.lbTitleNum.setSizePolicy(sizePolicy_IP)
+        sizePolicy_FP.setHeightForWidth(self.lbTitleNum.sizePolicy().hasHeightForWidth())
+        self.lbTitleNum.setSizePolicy(sizePolicy_FP)
         self.lbTitleNum.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleNum, 0, 1, 1, 1)
+        self.glMain.addWidget(self.lbTitleNum, 0, 1, 1, 1, Qt.AlignHCenter)
 
         self.lbTitleScore = QLabel(self.centralwidget)
         self.lbTitleScore.setObjectName(u"lbTitleScore")
@@ -382,7 +383,7 @@ class Ui_ExamInput(object):
         sizePolicy_FP.setHeightForWidth(self.lbTitleDel.sizePolicy().hasHeightForWidth())
         self.lbTitleDel.setSizePolicy(sizePolicy_FP)
         self.lbTitleDel.setAlignment(Qt.AlignCenter)
-        self.glMain.addWidget(self.lbTitleDel, 0, 5, 1, 1)
+        self.glMain.addWidget(self.lbTitleDel, 0, 5, 1, 1, Qt.AlignHCenter)
 
         validator1=QRegExpValidator(QRegExp(r'(100|[1-9][0-9]?(\.[1-9])?)'))
         validator2=QRegExpValidator(QRegExp(r'[1-9][0-9][0-9]'))
@@ -392,19 +393,20 @@ class Ui_ExamInput(object):
         for k,(subject,num) in enumerate(zip(subjects,nums)):
             lbSubject = QLabel(self.centralwidget)
             lbSubject.setObjectName(u"lbSubject")
-            sizePolicy_IP.setHeightForWidth(lbSubject.sizePolicy().hasHeightForWidth())
-            lbSubject.setSizePolicy(sizePolicy_IP)
+            sizePolicy_FP.setHeightForWidth(lbSubject.sizePolicy().hasHeightForWidth())
+            lbSubject.setSizePolicy(sizePolicy_FP)
+            #lbSubject.resize(lbSubject.height(),lbSubject.sizeHint().width())
             lbSubject.setAlignment(Qt.AlignCenter)
             lbSubject.setText(QCoreApplication.translate("ExamInput", subject, None))
-            self.glMain.addWidget(lbSubject, k+1, 0, 1, 1)
+            self.glMain.addWidget(lbSubject, k+1, 0, 1, 1, Qt.AlignHCenter)
 
             lbNum = QLabel(self.centralwidget)
             lbNum.setObjectName(u"lbNum")
-            sizePolicy_IP.setHeightForWidth(lbNum.sizePolicy().hasHeightForWidth())
-            lbNum.setSizePolicy(sizePolicy_IP)
+            sizePolicy_FP.setHeightForWidth(lbNum.sizePolicy().hasHeightForWidth())
+            lbNum.setSizePolicy(sizePolicy_FP)
             lbNum.setAlignment(Qt.AlignCenter)
             lbNum.setText(QCoreApplication.translate("ExamInput", str(num), None))
-            self.glMain.addWidget(lbNum, k+1, 1, 1, 1)
+            self.glMain.addWidget(lbNum, k+1, 1, 1, 1, Qt.AlignHCenter)
 
             lnScore = QLineEdit(self.centralwidget)
             lnScore.setObjectName(u"lnScore")
@@ -414,7 +416,7 @@ class Ui_ExamInput(object):
             lnScore.setAlignment(Qt.AlignCenter)
             lnScore.setValidator(validator1)
             #lnScore.setInputMask(QCoreApplication.translate("ExamInput", u"D0xd", None))
-            self.glMain.addWidget(lnScore, k+1, 2, 1, 1)
+            self.glMain.addWidget(lnScore, k+1, 2, 1, 1, Qt.AlignHCenter)
 
             lnRank = QLineEdit(self.centralwidget)
             lnRank.setObjectName(u"lnRank")
@@ -424,7 +426,7 @@ class Ui_ExamInput(object):
             lnRank.setAlignment(Qt.AlignCenter)
             #lnRank.setInputMask(QCoreApplication.translate("ExamInput", u"D00", None))
             lnRank.setValidator(validator2)
-            self.glMain.addWidget(lnRank, k+1, 3, 1, 1)
+            self.glMain.addWidget(lnRank, k+1, 3, 1, 1, Qt.AlignHCenter)
 
             lnPerson = QLineEdit(self.centralwidget)
             lnPerson.setObjectName(u"lnPerson")
@@ -434,7 +436,7 @@ class Ui_ExamInput(object):
             lnPerson.setAlignment(Qt.AlignCenter)
             #lnPerson.setInputMask(QCoreApplication.translate("ExamInput", u"D00", None))
             lnPerson.setValidator(validator2)
-            self.glMain.addWidget(lnPerson, k+1, 4, 1, 1)
+            self.glMain.addWidget(lnPerson, k+1, 4, 1, 1, Qt.AlignHCenter)
 
             btnDel = QPushButton(self.centralwidget)
             btnDel.setObjectName(u"btnDel")
@@ -508,6 +510,7 @@ class Ui_ExamResult(object):
         
         self.glMain = QGridLayout(self.centralwidget)
         self.glMain.setObjectName(u"glMain")
+        self.glMain.setSpacing(20)
 
         self.lbTitleSubject = QLabel(self.centralwidget)
         self.lbTitleSubject.setObjectName(u"lbTitleSubject")
@@ -643,7 +646,7 @@ class Ui_GradeCalc(object):
         if not GradeCalc.objectName():
             GradeCalc.setObjectName(u"GradeCalc")
         #GradeCalc.setEnabled(True)
-        GradeCalc.resize(434, 125)
+        #GradeCalc.resize(434, 125)
         
         self.centralwidget = QWidget(GradeCalc)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -746,7 +749,7 @@ class Ui_GradeCalc(object):
     # retranslateUi
 
     def addWidgets(self,k,subject_name,subject_num):
-        validater1=QRegExpValidator(QRegExp(r'[0-9]'))
+        validator1=QRegExpValidator(QRegExp(r'[0-9]'))
         
         lbSubject = QLabel(self.widCent)
         lbSubject.setObjectName(u"lbSubject")
@@ -1102,6 +1105,8 @@ class Ui_GradResult(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.glMain = QGridLayout(self.centralwidget)
         self.glMain.setObjectName(u"glMain")
+        l,_,r,b=self.glMain.getContentsMargins()
+        self.glMain.setContentsMargins(l,0,r,b)
         
         self.widCent=QWidget(GradResult)
         self.glCent=QGridLayout(self.widCent)
@@ -1111,6 +1116,7 @@ class Ui_GradResult(object):
         sizePolicy_PF.setHeightForWidth(self.lbTitleSubject.sizePolicy().hasHeightForWidth())
         self.lbTitleSubject.setSizePolicy(sizePolicy_PF)
         self.lbTitleSubject.setAlignment(Qt.AlignCenter)
+        self.lbTitleSubject.setMinimumSize(self.lbTitleSubject.width(),28)
         self.glCent.addWidget(self.lbTitleSubject, 0, 0, 1, 1)
 
         self.lbTitleWrong = QLabel(self.widCent)
@@ -1149,13 +1155,18 @@ class Ui_GradResult(object):
         self.hlBot = QHBoxLayout(self.widBot)
         self.hlBot.setObjectName(u"hlBot")
         self.hlBot.setContentsMargins(0, 0, 0, 0)
-        self.sp = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
+        self.btnDel = QPushButton(self.widBot)
+        self.btnDel.setObjectName(u"btnDel")
+        self.hlBot.addWidget(self.btnDel)
+        
+        self.sp = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.hlBot.addItem(self.sp)
 
         self.btnClose = QPushButton(self.widBot)
         self.btnClose.setObjectName(u"btnClose")
         self.hlBot.addWidget(self.btnClose)
+        
         self.glMain.addWidget(self.widBot, 2, 0, 1, 1)
 
         GradResult.setCentralWidget(self.centralwidget)
@@ -1172,63 +1183,74 @@ class Ui_GradResult(object):
         self.lbTitleGrade.setText(QCoreApplication.translate("GradResult", u"\uc810\uc218", None))
         self.lbTitleWrong.setText(QCoreApplication.translate("GradResult", u"\uc624\ub2f5 \uc218", None))
         self.lbTitleDel.setText(QCoreApplication.translate("GradResult", u"\uc0ad\uc81c", None))
+        self.btnDel.setText(QCoreApplication.translate("ExamResult", u"삭제", None))
         self.btnClose.setText(QCoreApplication.translate("GradResult", u"\ub2eb\uae30", None))
     # retranslateUi
     
-    def addWidgets(self,n,subject,score,err_cnt,add_detail=True):
+    def addWidgets(self,n,subject,score,err_cnt):
         lbSubject = QLabel(self.widCent)
         lbSubject.setObjectName(u"lbSubject")
         sizePolicy_PF.setHeightForWidth(lbSubject.sizePolicy().hasHeightForWidth())
         lbSubject.setSizePolicy(sizePolicy_PF)
         lbSubject.setAlignment(Qt.AlignCenter)
+        lbSubject.setMinimumSize(lbSubject.width(),28)
         lbSubject.setText(QCoreApplication.translate("GradResult", subject, None))
         self.glCent.addWidget(lbSubject, n+1, 0, 1, 1)
 
-        chkDel=QCheckBox(self.widCent)
-        self.glCent.addWidget(chkDel,n+1,4,1,1,Qt.AlignHCenter)
-
-        if score==100:
-            lbWrong = QLabel(self.widCent)
-            lbWrong.setObjectName(u"lbWrong")
-            sizePolicy_PF.setHeightForWidth(lbWrong.sizePolicy().hasHeightForWidth())
-            lbWrong.setSizePolicy(sizePolicy_PF)
-            lbWrong.setAlignment(Qt.AlignCenter)
-            lbWrong.setText(QCoreApplication.translate("GradResult", '0', None))
-            self.glCent.addWidget(lbWrong, n+1, 1, 1, 1)
-
-            lbScore = QLabel(self.widCent)
-            lbScore.setObjectName(u"lbScore")
-            sizePolicy_PF.setHeightForWidth(lbScore.sizePolicy().hasHeightForWidth())
-            lbScore.setSizePolicy(sizePolicy_PF)
-            lbScore.setAlignment(Qt.AlignCenter)
-            lbScore.setText(QCoreApplication.translate("GradResult", '100', None))
-            self.glCent.addWidget(lbScore, n+1, 2, 1, 1)
-            
-            btnDetail=None
+        if not score:
+            lbNoScore = QLabel(self.widCent)
+            lbNoScore.setObjectName(u"lbNoScore")
+            sizePolicy_PF.setHeightForWidth(lbNoScore.sizePolicy().hasHeightForWidth())
+            lbNoScore.setSizePolicy(sizePolicy_PF)
+            lbNoScore.setAlignment(Qt.AlignCenter)
+            lbNoScore.setText(QCoreApplication.translate("GradResult", '채점 전', None))
+            self.glCent.addWidget(lbNoScore, n+1, 1, 1, 4)
         else:
-            lbWrong = QLabel(self.widCent)
-            lbWrong.setObjectName(u"lbWrong")
-            sizePolicy_PF.setHeightForWidth(lbWrong.sizePolicy().hasHeightForWidth())
-            lbWrong.setSizePolicy(sizePolicy_PF)
-            lbWrong.setAlignment(Qt.AlignCenter)
-            lbWrong.setText(QCoreApplication.translate("GradResult", str(err_cnt), None))
-            self.glCent.addWidget(lbWrong, n+1, 1, 1, 1)
+            chkDel=QCheckBox(self.widCent)
+            self.glCent.addWidget(chkDel,n+1,4,1,1,Qt.AlignHCenter)
+            
+            if score==100:
+                lbWrong = QLabel(self.widCent)
+                lbWrong.setObjectName(u"lbWrong")
+                sizePolicy_PF.setHeightForWidth(lbWrong.sizePolicy().hasHeightForWidth())
+                lbWrong.setSizePolicy(sizePolicy_PF)
+                lbWrong.setAlignment(Qt.AlignCenter)
+                lbWrong.setText(QCoreApplication.translate("GradResult", '0', None))
+                self.glCent.addWidget(lbWrong, n+1, 1, 1, 1)
 
-            lbScore = QLabel(self.widCent)
-            lbScore.setObjectName(u"lbScore")
-            sizePolicy_PF.setHeightForWidth(lbScore.sizePolicy().hasHeightForWidth())
-            lbScore.setSizePolicy(sizePolicy_PF)
-            lbScore.setAlignment(Qt.AlignCenter)
-            lbScore.setText(QCoreApplication.translate("GradResult", str(score), None))
-            self.glCent.addWidget(lbScore, n+1, 2, 1, 1)
+                lbScore = QLabel(self.widCent)
+                lbScore.setObjectName(u"lbScore")
+                sizePolicy_PF.setHeightForWidth(lbScore.sizePolicy().hasHeightForWidth())
+                lbScore.setSizePolicy(sizePolicy_PF)
+                lbScore.setAlignment(Qt.AlignCenter)
+                lbScore.setText(QCoreApplication.translate("GradResult", '100', None))
+                self.glCent.addWidget(lbScore, n+1, 2, 1, 1)
+                
+                btnDetail=None
+            else:
+                lbWrong = QLabel(self.widCent)
+                lbWrong.setObjectName(u"lbWrong")
+                sizePolicy_PF.setHeightForWidth(lbWrong.sizePolicy().hasHeightForWidth())
+                lbWrong.setSizePolicy(sizePolicy_PF)
+                lbWrong.setAlignment(Qt.AlignCenter)
+                lbWrong.setText(QCoreApplication.translate("GradResult", str(err_cnt), None))
+                self.glCent.addWidget(lbWrong, n+1, 1, 1, 1)
+
+                lbScore = QLabel(self.widCent)
+                lbScore.setObjectName(u"lbScore")
+                sizePolicy_PF.setHeightForWidth(lbScore.sizePolicy().hasHeightForWidth())
+                lbScore.setSizePolicy(sizePolicy_PF)
+                lbScore.setAlignment(Qt.AlignCenter)
+                lbScore.setText(QCoreApplication.translate("GradResult", str(score), None))
+                self.glCent.addWidget(lbScore, n+1, 2, 1, 1)
+                
+                btnDetail = QPushButton(self.widCent)
+                btnDetail.setObjectName(u"btnDetail")
+                btnDetail.setMaximumSize(QSize(50, 16777215))
+                btnDetail.setText(QCoreApplication.translate("GradResult", u"\ubcf4\uae30", None))
+                self.glCent.addWidget(btnDetail, n+1, 3, 1, 1)
             
-            btnDetail = QPushButton(self.widCent)
-            btnDetail.setObjectName(u"btnDetail")
-            btnDetail.setMaximumSize(QSize(50, 16777215))
-            btnDetail.setText(QCoreApplication.translate("GradResult", u"\ubcf4\uae30", None))
-            self.glCent.addWidget(btnDetail, n+1, 3, 1, 1)
-            
-        return (chkDel,btnDetail)
+            return (chkDel,btnDetail)
 
 
 
