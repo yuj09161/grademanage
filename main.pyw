@@ -1055,13 +1055,17 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
                         percents.append(None)
                 else:
                     all_rank_inputed=False
-                    nums.append(current_num[subject])
+                    nums.append(current_num[subject][0])
                     scores.append(None)
             
             if all_rank_inputed:
                 total_grade=self.__get_total_grade(ranks,grades)
+            else:
+                total_grade=0
             
-            self.setupUI(self,current_subjects,nums,scores,grades,rank_str,percents)
+            self.setupUI(self,current_subjects,nums,scores,grades,rank_str,percents,total_grade)
+            
+            self.btnClose.clicked.connect(self.deleteLater)
             
         elif current_subjects:
             QMessageBox.critical(self,'Error','성적 입력 안됨')

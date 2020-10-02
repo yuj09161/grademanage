@@ -582,12 +582,12 @@ class Ui_ExamResult(object):
                 self.glMain.addWidget(lbNoScore, k+1, 2, 1, 4)
         
         if total_grade:
-            k+=1
             lbTotalGrade = QLabel(self.centralwidget)
             lbTotalGrade.setObjectName(u"lbTotalGrade")
             lbTotalGrade.setAlignment(Qt.AlignCenter)
             lbTotalGrade.setText(QCoreApplication.translate("ExamResult", f'총합: {total_grade}', None))
-            self.glMain.addWidget(lbTotalGrade, k+2, 5, 1, 1)
+            self.glMain.addWidget(lbTotalGrade, k+2, 0, 1, 6)
+            k+=1
         
         self.widBot = QWidget(self.centralwidget)
         self.widBot.setObjectName(u"widBot")
