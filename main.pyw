@@ -4,7 +4,7 @@ from PySide2.QtGui import QFont, QIcon, QCloseEvent, QKeySequence
 from PySide2.QtWidgets import *
 import UI
 
-import os,sys,json,traceback
+import os,sys,json,traceback,re
 from decimal import Decimal as dec
 from copy import deepcopy
 import numpy as np
@@ -204,22 +204,53 @@ def save(last=False,*,name=None,parent=None):
 
 '''창 클래스들'''
 
-class TranslatableMessageBox(QMessageBox):
-    
-    btnClicked=Signal(QMessageBox.ButtonRole)
-    
-    def __init__(self,parent,title,text,btns):
-        super().__init__(parent,title,text)
-        self.setWindowTitle(title)
-        self.setText(text)
-        for btn in btns:
-            assert type(btn[1])==QMessageBox.ButtonRole, f'{type(btn[1])}'
-            self.addButton(*btn)
+class Info(QMainWindow):
+    def __init__(self,parent,title,info_text,display_qtinfo=False):
+        self.__display_qtinfo=display_qtinfo
         
-        self.buttonClicked.connect(self.__emitter)
+        super().__init__(parent)
+        self.setupUI()
+        
+        self.retranslateUi(title,info_text)
+        self.btnExit.clicked.connect(self.hide)
+        
+        if self.__display_qtinfo:
+            self.btnQt.clicked.connect(lambda: QMessageBox.aboutQt(self))
     
-    def __emitter(self,btn):
-        self.btnClicked.emit(self.buttonRole(btn))
+    def setupUI(self):
+        if not self.objectName():
+            self.setObjectName(u"info")
+        self.setFixedSize(400, 300)
+        self.setWindowFlags(self.windowFlags()^Qt.WindowMinMaxButtonsHint)
+        
+        self.centralwidget = QWidget(self)
+        self.centralwidget.setObjectName(u"centralwidget")
+        
+        self.glCentral = QGridLayout(self.centralwidget)
+        self.glCentral.setObjectName(u"glCentral")
+        
+        self.pteInfo = QPlainTextEdit(self.centralwidget)
+        self.pteInfo.setObjectName(u"pteInfo")
+        self.pteInfo.setReadOnly(True)
+        self.glCentral.addWidget(self.pteInfo, 0, 0, 1, 2)
+
+        if self.__display_qtinfo:
+            self.btnQt = QPushButton(self.centralwidget)
+            self.btnQt.setObjectName(u"btnQt")
+            self.glCentral.addWidget(self.btnQt, 1, 0, 1, 1, Qt.AlignLeft)
+
+        self.btnExit = QPushButton(self.centralwidget)
+        self.btnExit.setObjectName(u"btnExit")
+        self.glCentral.addWidget(self.btnExit, 1, 1, 1, 1, Qt.AlignRight)
+
+        self.setCentralWidget(self.centralwidget)
+    
+    def retranslateUi(self,title,info_text):
+        self.setWindowTitle(QCoreApplication.translate("info", title, None))
+        self.pteInfo.setPlainText(re.sub('\n +','\n',re.sub('\n{2,} *','\n\n',info_text)))
+        self.btnExit.setText(QCoreApplication.translate("info", u"\ub2eb\uae30", None))
+        if self.__display_qtinfo:
+            self.btnQt.setText(QCoreApplication.translate("info", u"About Qt", None))
 
 #Main Window class
 class Main(QMainWindow,UI.Ui_Main):
@@ -235,6 +266,8 @@ class Main(QMainWindow,UI.Ui_Main):
         
         #Define Variables
         self.__win=[]
+        self.__opensource_notice_win = None
+        self.__license_win           = None
         
         #Connect Slots (QComboBox)
         btn_change=lambda: self.btnSet.setStyleSheet('color:red')
@@ -258,8 +291,8 @@ class Main(QMainWindow,UI.Ui_Main):
         self.load.triggered.connect(load_and_setexam)
         self.exit.triggered.connect(self.close)
         self.cut_calc.triggered.connect(lambda: self.__show_window(Cut_calc))
-        #self.license.triggered.connect()
-        #self.about.triggered.connect()
+        self.license.triggered.connect(self.__opensource_notice)
+        self.about.triggered.connect(self.__license)
 
     def closeEvent(self,event):
         if ASK_ON_CLOSE and not saved:
@@ -344,18 +377,24 @@ class Main(QMainWindow,UI.Ui_Main):
     def __show_window(self,window):
         self.__win.append(window(self))
         self.__win[-1].show()
-
-'''
-#진행 바(연속형)
-class Progbar(QMainWindow,UI.Ui_Progbar):
-    def __init__(self,title,txt,leng=200,time=5):
-        super().__init__(parent)
-        self.setupUI(self)
-
-        prog=Progressbar(self,mode='indeterminate',length=leng)
-        prog.pack()
-        prog.start(interval=time)
-'''
+    
+    def __opensource_notice(self):
+        if not self.__opensource_notice_win:
+            if os.path.isfile(PROGRAM_PATH+'NOTICE'):
+                with open(PROGRAM_PATH+'NOTICE','r',encoding='utf-8') as file:
+                    self.__opensource_notice_win=Info(self,'오픈 소스 라이선스',file.read(),True)
+            else:
+                self.__opensource_notice_win=Info(self,'오픈 소스 라이선스','Notice File is Missed',True)
+        self.__opensource_notice_win.show()
+    
+    def __license(self):
+        if not self.__license_win:
+            if os.path.isfile(PROGRAM_PATH+'LICENSE'):
+                with open(PROGRAM_PATH+'LICENSE','r',encoding='utf-8') as file:
+                    self.__license_win=Info(self,'정보',file.read())
+            else:
+                self.__license_win=Info(self,'정보','License File is Missed')
+        self.__license_win.show()
 
 #과목 입력
 class Subject_In(QMainWindow,UI.Ui_SubjectIn):
