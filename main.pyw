@@ -4,12 +4,13 @@ from PySide2.QtGui import QFont, QIcon, QCloseEvent, QKeySequence
 from PySide2.QtWidgets import *
 import UI
 
-import os,sys,json
+import os,sys,json,traceback
 from decimal import Decimal as dec
 from copy import deepcopy
 import numpy as np
 
-ASK_ON_CLOSE=True
+ASK_ON_CLOSE     = True
+COMBO_INIT_ORDER = (1,0,0)
 
 
 #전역 불변 변수 정의
@@ -134,7 +135,7 @@ def load(name=None,*,parent=None):
                 tmp=QMessageBox.critical(
                     parent,
                     'Load Error',
-                    f'데이터 불러오기 오류 발생\nTraceBack:\n{e}\n재시도?',
+                    f'파일 읽기 오류 발생\nTraceBack:\n{e}\n재시도?',
                     QMessageBox.Retry|QMessageBox.Cancel
                 )
                 if tmp==QMessageBox.Retry:
@@ -142,7 +143,7 @@ def load(name=None,*,parent=None):
             except json.JSONDecodeError as e:
                 QMessageBox.critical(parent,'Error','파일 형식 오류')
             except ValueError as e:
-                QMessageBox.critical(parent,'Error','파일 형식 오류')
+                QMessageBox.critical(parent,'Error','파일 내용 오류')
             else:
                 saved=True
                 last_file=name
@@ -229,10 +230,7 @@ class Main(QMainWindow,UI.Ui_Main):
         
         super().__init__()
         
-        #pre-define Variables
-        order=(2,0,0)
-        
-        self.setupUI(self,order)
+        self.setupUI(self,COMBO_INIT_ORDER)
         load_and_setexam('save.json')
         
         #Define Variables
@@ -481,18 +479,19 @@ class Grading_Controller:
     
     def __write_result(self,data):
         global current_wrong,saved
-        def callback(btnRole):
-            print('destroy')
+        def callback(btn):
+            btnRole=msgbox.buttonRole(btn)
             if btnRole==QMessageBox.YesRole:
-                Grad_detail(self.__parent,data[0])
+                detail_win=Grad_detail(self.__parent,data[0])
+                detail_win.show()
         
         msgbox=QMessageBox(self.__parent)
         msgbox.setWindowTitle('Result')
-        msgbox.addButton('상세보기',QMessageBox.YesRole)
         msgbox.addButton('닫기',QMessageBox.NoRole)
         msgbox.buttonClicked.connect(callback)
         
         if data[1] or data[2]:
+            msgbox.addButton('상세보기',QMessageBox.YesRole)
             score=100
             for err1 in data[1].values():
                 score=score-dec(err1[2])
@@ -502,9 +501,10 @@ class Grading_Controller:
         else:
             msgbox.setText('만점!\n점수: 100')
         
-        msgbox.exec_()
         current_wrong[self.__subject]=(data[1],data[2])
         saved=False
+        
+        msgbox.exec_()
 
 
 class Grading1(QMainWindow,UI.Ui_Grading1):
@@ -535,9 +535,6 @@ class Grading2(QMainWindow,UI.Ui_Grading2):
     def __init__(self,parent):
         super().__init__(parent)
         self.setupUI(self)
-        
-        self.__err1={}
-        self.__err2={}
 
         self.__inputs=(
             (
@@ -570,32 +567,36 @@ class Grading2(QMainWindow,UI.Ui_Grading2):
         try:
             for j in range(2):
                 for k in range(3):
+                    print(11)
                     #응답,정답 불러오기
                     a=self.__inputs[0][j][k].text().replace(' ','')
                     b=self.__inputs[1][j][k].text().replace(' ','')
+                    print(12)
                     #응답,정답 오류검사->저장
-                    if len(a)!=len(b) or len(a)>5:
-                        raise ValueError
+                    if len(a)!=len(b):
+                        raise ValueError(f'Error with input({j},{k}):\nLength of answer({len(a)})\nis not equal length of correct({len(b)})')
                     if a and b:
                         a=list(a); b=list(b)
+                        print(a,b)
                         for x in range(len(a)):
                             a[x]=int(a[x])
                             b[x]=int(b[x])
                             if 0<a[x]<6:
                                 if b[x]<1 or b[x]>5:
-                                    raise ValueError
+                                    raise ValueError(f'\nError with input({j},{k},{x}):\nanswer({a[x]}) and correct({b[x]})')
                             elif a[x]==6 or a[x]==7:
                                 if b[x]!=0:
-                                    raise ValueError
+                                    raise ValueError(f'\nError with input({j},{k},{x}):\nanswer({a[x]}) and correct({b[x]})')
                             else:
-                                raise ValueError
+                                raise ValueError(f'\nError with input({j},{k},{x}):\nanswer({a[x]}) and correct({b[x]})')
                         ans+=a; cor+=b
-        except ValueError as e:
+        except ValueError:
             msgbox=QMessageBox(self)
             msgbox.setWindowTitle('ERROR')
             msgbox.setText('값 입력 오류')
             msgbox.setIcon(QMessageBox.Warning)
-            msgbox.setDetailedText(str(e))
+            #msgbox.setDetailedText(str(e))
+            msgbox.setDetailedText(''.join(traceback.format_exception(*sys.exc_info())))
             msgbox.exec_()
         else:
             if len(ans)==len(cor):
@@ -608,6 +609,10 @@ class Grading2(QMainWindow,UI.Ui_Grading2):
         self.stat_sig.emit((-1,parent))
     
     def __next(self): #다음 창으로 진행
+        
+        self.__err1={}
+        self.__err2={}
+        
         x=self.__get_input()
         if x:
             for k in range(len(x[0])):
@@ -755,8 +760,9 @@ class Grad_result(QMainWindow,UI.Ui_GradResult):
         if respond:
             saved=False
             for chk,subject in zip(self.__chk,current_subjects):
-                if chk.isChecked() and subject in current_wrong.keys():
-                    del current_wrong[subject]
+                if chk:
+                    if chk.isChecked() and subject in current_wrong.keys():
+                        del current_wrong[subject]
             self.deleteLater()
             if current_wrong:
                 grad_win=Grad_result(self.__parent)
@@ -794,9 +800,11 @@ class Grad_detail(QMainWindow,UI.Ui_GradDetail):
                 msgbox.setWindowTitle('ERROR')
                 msgbox.setText('오류 발생')
                 msgbox.setIcon(QMessageBox.Critical)
-                #msgbox.setDetailedText(str(e))
-                msgbox.setDetailedText(str(e.with_traceback(None)))
+                msgbox.setDetailedText(''.join(traceback.format_exception(*sys.exc_info())))
                 msgbox.exec_()
+                self.deleteLater()
+            else:
+                resize_window(self,self.centralwidget)
             
             QShortcut(ESCAPE_SEQ,self).activated.connect(self.deleteLater)
             self.btnClose.clicked.connect(self.deleteLater)
@@ -959,6 +967,15 @@ class Exam_input(QMainWindow,UI.Ui_ExamInput):
                 
                 if not score_in:
                     QMessageBox.warning(self,'Error','점수 미입력')
+                    all_entered=False
+                    results.append((score_in,None,None))
+                elif not (grade_in and count_in):
+                    grade=int(grade_in)
+                    count=int(count_in)
+                    results.append((score_in,grade,count))
+                
+                if not score_in:
+                    QMessageBox.warning(self,'Error','점수 미입력')
                 elif not (grade_in and count_in):
                     all_entered=False
                 
@@ -970,9 +987,11 @@ class Exam_input(QMainWindow,UI.Ui_ExamInput):
         except ValueError:
             QMessageBox.warning(self,'Error','입력 값 오류')
         else:
-            if not all_entered:
-                proceed_blank=QMessageBox.information(self,'Info','빈 칸 존재\n성적입력?')
-            if all_entered or proceed_blank:
+            if not all_score_entered:
+                proceed_with_blank=QMessageBox.warning(self,'진행?','점수 미입력\n성적입력?')
+            elif not all_entered:
+                proceed_with_blank=QMessageBox.warning(self,'진행?','빈 칸 존재\n성적입력?')
+            if all_entered or proceed_with_blank:
                 saved=False
                 k=0
                 for subject,result in zip(current_subjects,results):
