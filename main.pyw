@@ -297,7 +297,6 @@ class Main(QMainWindow,UI.Ui_Main):
         semester=''
         for wid in (self.comboYear,self.comboSemester,self.comboExam): #과목 불러오기
             semester+=str(wid.currentIndex()+1)
-        #print(semester,current_exam)
         
         #시험 결과 저장/불러오기
         if save:
@@ -305,12 +304,10 @@ class Main(QMainWindow,UI.Ui_Main):
         if semester[2]=='3': #학기말
             current_exam=semester
             current_num,current_result=result_semester[current_exam[:2]]
-            #print(result_semester,result_exam,current_exam,current_num,current_result)
         else: #중간고사or기말고사
             current_exam=semester
             current_num=result_semester[current_exam[:2]][0]
             current_wrong,current_result=result_exam[current_exam]
-            #print(result_semester,result_exam,current_exam,current_num,current_wrong,current_result)
         
         #버튼 상태 설정
         self.update_btn()
@@ -413,8 +410,6 @@ class Subject_In(QMainWindow,UI.Ui_SubjectIn):
 #가채점 입력
 class Grading_Controller:
     def __init__(self,parent):
-        print(current_subjects)
-        
         self.__parent=parent
         
         self.__grd1=Grading1(parent,current_subjects)
@@ -430,7 +425,6 @@ class Grading_Controller:
         self.__grd1.show()
     
     def __sig_1(self,response):
-        print(response,response[0],response[0]==-1)
         if response[0]==-1:
             self.__grd1.deleteLater()
             self.__grd2.deleteLater()
@@ -443,7 +437,6 @@ class Grading_Controller:
             raise ValueError
     
     def __sig_2(self,response):
-        print(response)
         if response[0]==-1:
             self.__grd1.show(response[1:])
         elif response[0]==0:
@@ -456,7 +449,6 @@ class Grading_Controller:
             raise ValueError
     
     def __sig_31(self,response):
-        print(response)
         if response[0]==-1:
             self.__grd2.show(response[1:])
         elif response[0]==0:
@@ -467,7 +459,6 @@ class Grading_Controller:
             raise ValueError
     
     def __sig_32(self,response):
-        print(response)
         if response[0]==-2:
             self.__grd2.show(response[1:])
         elif response[0]==-1:
@@ -567,17 +558,14 @@ class Grading2(QMainWindow,UI.Ui_Grading2):
         try:
             for j in range(2):
                 for k in range(3):
-                    print(11)
                     #응답,정답 불러오기
                     a=self.__inputs[0][j][k].text().replace(' ','')
                     b=self.__inputs[1][j][k].text().replace(' ','')
-                    print(12)
                     #응답,정답 오류검사->저장
                     if len(a)!=len(b):
                         raise ValueError(f'Error with input({j},{k}):\nLength of answer({len(a)})\nis not equal length of correct({len(b)})')
                     if a and b:
                         a=list(a); b=list(b)
-                        print(a,b)
                         for x in range(len(a)):
                             a[x]=int(a[x])
                             b[x]=int(b[x])
@@ -625,7 +613,6 @@ class Grading2(QMainWindow,UI.Ui_Grading2):
                 "오답 확인",
                 f"<오답 개수>\n선택형: {len(self.__err1)}\n서답형: {len(self.__err2)}\n채점 진행?"
             )
-            print(response)
             if response==QMessageBox.Yes:
                 self.setVisible(False)
                 if self.__err1:
@@ -777,7 +764,6 @@ class Grad_result(QMainWindow,UI.Ui_GradResult):
 
 class Grad_detail(QMainWindow,UI.Ui_GradDetail):
     def __init__(self,parent,subject):
-        print(subject)
         if subject in current_subjects:
             super().__init__(parent)
             self.setupUI(self)
@@ -1056,23 +1042,6 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
         percent=rank/person*100
         cuts=(np.array(CUT_RATIO)*person*0.01).round()
         return np.searchsorted(cuts,rank)+1,percent
-    
-    '''
-        grade=0
-        for k in range(9):
-            if rank<=cuts[k]:
-                grade=k+1
-                break
-        if not grade:
-            grade=9
-        return grade,percent
-    
-    def get_cuts(person):
-        cuts=(np.array(CUT_RATIO)*person*0.01).round()
-        for k in range(1,person+1):
-            print(f'{k}: {np.searchsorted(cuts,k)+1}',end=' / ')
-        return cuts
-    '''
 
     def __get_total_grade(self,num,grd):
         array_num=np.array(num)
