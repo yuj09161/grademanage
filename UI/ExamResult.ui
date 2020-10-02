@@ -1,66 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Grading31</class>
- <widget class="QMainWindow" name="Grading31">
+ <class>ExamResult</class>
+ <widget class="QMainWindow" name="ExamResult">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>215</width>
-    <height>103</height>
+    <width>252</width>
+    <height>72</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>선택형 배점</string>
+   <string>시험결과</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="glMain">
-    <item row="0" column="0">
-     <widget class="QLabel" name="lbNum">
-      <property name="text">
-       <string>번호</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="1">
-     <widget class="QLabel" name="lbPoint">
+     <widget class="QLabel" name="lbTitleNum">
       <property name="text">
-       <string>배점</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
+       <string>시수</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="lbNo">
+    <item row="0" column="4">
+     <widget class="QLabel" name="lbTitleGrade">
       <property name="text">
-       <string>111</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
+       <string>등급</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit">
-      <property name="inputMask">
-       <string>D.d</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    <item row="0" column="2">
+     <widget class="QLabel" name="lbTitleScore">
+      <property name="text">
+       <string>점수</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0" colspan="2">
-     <widget class="QWidget" name="widBot" native="true">
+    <item row="0" column="3">
+     <widget class="QLabel" name="lbTitleRank">
+      <property name="text">
+       <string>석차</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="lbTitleSubject">
+      <property name="text">
+       <string>과목</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="5">
+     <widget class="QLabel" name="lbTitlePercent">
+      <property name="text">
+       <string>백분위</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="6">
+     <widget class="QWidget" name="widget" native="true">
       <layout class="QHBoxLayout" name="hlBot">
-       <property name="spacing">
-        <number>0</number>
-       </property>
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -74,14 +73,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QPushButton" name="btnBack">
-         <property name="text">
-          <string>이전</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="spH">
+        <spacer name="sp">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -94,9 +86,9 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="btnNext">
+        <widget class="QPushButton" name="btnClose">
          <property name="text">
-          <string>다음</string>
+          <string>닫기</string>
          </property>
         </widget>
        </item>
@@ -107,9 +99,7 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>lineEdit</tabstop>
-  <tabstop>btnBack</tabstop>
-  <tabstop>btnNext</tabstop>
+  <tabstop>btnClose</tabstop>
  </tabstops>
  <resources/>
  <connections/>
