@@ -910,7 +910,7 @@ class Ui_GradDetail(object):
             lbNum = QLabel(self.widSel)
             lbNum.setObjectName(u"lbNum")
             lbNum.setAlignment(Qt.AlignCenter)
-            lbNum.setText(QCoreApplication.translate("GradDetail", num, None))
+            lbNum.setText(QCoreApplication.translate("GradDetail", str(num), None))
             self.glSupply.addWidget(lbNum, k+1, 1, 1, 1)
 
             lbGet = QLabel(self.widSel)
@@ -1557,10 +1557,12 @@ class Ui_Main(object):
     def setupUI(self, Main, order):
         if not Main.objectName():
             Main.setObjectName(u"Main")
-        Main.resize(442, 300)
+        Main.resize(400, 300)
         
         self.save = QAction(Main)
         self.save.setObjectName(u"save")
+        self.saveAs = QAction(Main)
+        self.saveAs.setObjectName(u"saveAs")
         self.exit = QAction(Main)
         self.exit.setObjectName(u"exit")
         self.load = QAction(Main)
@@ -1666,11 +1668,13 @@ class Ui_Main(object):
             self.comboExam.addItem(option)
             self.comboExam.setCurrentIndex(order[2])
 
+        '''
         self.btnSet = QPushButton(self.widYear)
         self.btnSet.setObjectName(u"btnSet")
         sizePolicy_FF.setHeightForWidth(self.btnSet.sizePolicy().hasHeightForWidth())
         self.btnSet.setSizePolicy(sizePolicy_FF)
         self.hlYear.addWidget(self.btnSet)
+        '''
         self.glMain.addWidget(self.widYear, 0, 0, 1, 2)
 
         Main.setCentralWidget(self.centralwidget)
@@ -1695,6 +1699,7 @@ class Ui_Main(object):
         
         self.file.addAction(self.load)
         self.file.addAction(self.save)
+        self.file.addAction(self.saveAs)
         self.file.addSeparator()
         self.file.addAction(self.exit)
         
@@ -1712,6 +1717,7 @@ class Ui_Main(object):
     def retranslateUi(self, Main):
         Main.setWindowTitle(QCoreApplication.translate("Main", u"\uc131\uc801\uad00\ub9ac", None))
         self.save.setText(QCoreApplication.translate("Main", u"\uc800\uc7a5", None))
+        self.saveAs.setText(QCoreApplication.translate("Main", u"\ub2e4\ub978 \uc774\ub984\uc73c\ub85c \uc800\uc7a5", None))
         self.exit.setText(QCoreApplication.translate("Main", u"\uc885\ub8cc", None))
         self.load.setText(QCoreApplication.translate("Main", u"\ubd88\ub7ec\uc624\uae30", None))
         self.cut_calc.setText(QCoreApplication.translate("Main", u"\ub4f1\uae09\uc778\uc6d0\uacc4\uc0b0", None))
@@ -1727,7 +1733,7 @@ class Ui_Main(object):
         self.btnGrading.setText(QCoreApplication.translate("Main", u"\uac00\ucc44\uc810 \uc785\ub825", None))
         self.btnGradingRes.setText(QCoreApplication.translate("Main", u"\uac00\ucc44\uc810 \uacb0\uacfc", None))
         self.widYear.setTitle(QCoreApplication.translate("Main", u"\ud559\ub144\ub3c4", None))
-        self.btnSet.setText(QCoreApplication.translate("Main", u"\uc124\uc815", None))
+        #self.btnSet.setText(QCoreApplication.translate("Main", u"\uc124\uc815", None))
         self.file.setTitle(QCoreApplication.translate("Main", u"\ud30c\uc77c", None))
         self.tools.setTitle(QCoreApplication.translate("Main", u"\ub3c4\uad6c", None))
         self.info.setTitle(QCoreApplication.translate("Main", u"\uc815\ubcf4", None))

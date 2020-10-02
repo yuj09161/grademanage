@@ -121,7 +121,6 @@ def load(name=None,*,parent=None):
     def loader():
         global result_semester,result_exam,saved,last_file
         if name:
-            #prog=Progbar('Load','Loading...')
             try:
                 global current_num,current_wrong,current_result
                 with open(name,'r',encoding='utf-8') as file:
@@ -149,7 +148,6 @@ def load(name=None,*,parent=None):
                 last_file=name
             finally:
                 pass
-                #prog.destroy()
     if not name:
         name,_=QFileDialog.getOpenFileName(parent,'저장',CURRENT_PATH)
     if saved:
@@ -176,7 +174,6 @@ def save(last=False,*,name=None,parent=None):
     if not name:
         name,_=QFileDialog.getSaveFileName(parent,'저장',CURRENT_PATH)
     if name:
-        #prog=Progbar('Save','Saving...')
         if current_exam[2]=='3': #학기말
             result_semester[current_exam[:2]]=[current_num,current_result]
         else: #중간고사or기말고사
@@ -197,9 +194,6 @@ def save(last=False,*,name=None,parent=None):
         else:
             last_file=name
             saved=True
-        finally:
-            pass
-            #prog.destroy()
 
 
 '''창 클래스들'''
@@ -270,10 +264,9 @@ class Main(QMainWindow,UI.Ui_Main):
         self.__license_win           = None
         
         #Connect Slots (QComboBox)
-        btn_change=lambda: self.btnSet.setStyleSheet('color:red')
-        self.comboYear.currentIndexChanged.connect(btn_change)
-        self.comboSemester.currentIndexChanged.connect(btn_change)
-        self.comboExam.currentIndexChanged.connect(btn_change)
+        self.comboYear.currentIndexChanged.connect(self.__set_exam)
+        self.comboSemester.currentIndexChanged.connect(self.__set_exam)
+        self.comboExam.currentIndexChanged.connect(self.__set_exam)
         
         #Connect Slots (QButtons)
         self.btnSubject.clicked.connect(lambda: self.__show_window(Subject_In))
@@ -282,12 +275,12 @@ class Main(QMainWindow,UI.Ui_Main):
         self.btnCalc.clicked.connect(lambda: self.__show_window(Grade_calc))
         self.btnInput.clicked.connect(lambda: self.__show_window(Exam_input))
         self.btnRes.clicked.connect(lambda: self.__show_window(Exam_result))
-        self.btnSet.clicked.connect(self.__set_exam)
         #self.btnManage.clicked.connect()
         self.btnManage.setEnabled(False)
         
         #Connect Slots (QAction)
-        self.save.triggered.connect(save)
+        self.save.triggered.connect(lambda: save(True))
+        self.saveAs.triggered.connect(save)
         self.load.triggered.connect(load_and_setexam)
         self.exit.triggered.connect(self.close)
         self.cut_calc.triggered.connect(lambda: self.__show_window(Cut_calc))
@@ -350,7 +343,6 @@ class Main(QMainWindow,UI.Ui_Main):
     
     #버튼 상태 업데이트
     def update_btn(self):
-        self.btnSet.setStyleSheet('color:black')
         if current_num:
             if current_exam[2]=='3':
                 self.btnGrading.setEnabled(False)
