@@ -595,6 +595,16 @@ class Ui_ExamResult(object):
         self.hlBot = QHBoxLayout(self.widBot)
         self.hlBot.setObjectName(u"hlBot")
         self.hlBot.setContentsMargins(0, 0, 0, 0)
+
+        self.btnCutCalc = QPushButton(self.widBot)
+        self.btnCutCalc.setObjectName(u"btnCutCalc")
+        self.hlBot.addWidget(self.btnCutCalc)
+        self.glMain.addWidget(self.widBot, k+2, 0, 1, 6)
+
+        self.btnGradeCalc = QPushButton(self.widBot)
+        self.btnGradeCalc.setObjectName(u"btnGradeCalc")
+        self.hlBot.addWidget(self.btnGradeCalc)
+        self.glMain.addWidget(self.widBot, k+2, 0, 1, 6)
         
         self.sp = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.hlBot.addItem(self.sp)
@@ -619,6 +629,8 @@ class Ui_ExamResult(object):
         self.lbTitleGrade.setText(QCoreApplication.translate("ExamResult", u"\ub4f1\uae09", None))
         self.lbTitleRank.setText(QCoreApplication.translate("ExamResult", u"\uc11d\ucc28", None))
         self.lbTitlePercent.setText(QCoreApplication.translate("ExamResult", u"\ubc31\ubd84\uc704", None))
+        self.btnCutCalc.setText(QCoreApplication.translate("ExamResult", u"\ub4f1\uae09\uc778\uc6d0\uacc4\uc0b0", None))
+        self.btnGradeCalc.setText(QCoreApplication.translate("ExamResult", u"\ub4f1\uae09\uacc4\uc0b0", None))
         self.btnClose.setText(QCoreApplication.translate("ExamResult", u"\ub2eb\uae30", None))
     # retranslateUi
 

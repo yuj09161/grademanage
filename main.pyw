@@ -6,7 +6,6 @@ import UI
 
 import os,sys,json,traceback,re
 from decimal import Decimal as dec
-from copy import deepcopy
 import numpy as np
 
 ASK_ON_CLOSE     = True
@@ -197,6 +196,34 @@ def save(last=False,*,name=None,parent=None):
 
 
 '''창 클래스들'''
+
+class DetailErr(QMessageBox):
+    def __init__(self,parent,title,text,detail_text,icon=QMessageBox.Warning):
+        super().__init__(parent)
+        
+        self.setWindowTitle(title)
+        self.setText(text)
+        self.setIcon(QMessageBox.Critical)
+        
+        if type(detail_text) is str:
+            self.setDetailedText(detail_text)
+        elif type(detail_text) is tuple:
+            try:
+                self.setDetailedText(''.join(traceback.format_exception(*detail_text)))
+            except Exception:
+                err_win=DetailErr(
+                    self,
+                    'Error',
+                    '타입 오류',
+                    f'detail_text 타입 오류: {type(detail_text)}'
+                )
+        else:
+            err_win=DetailErr(
+                self,
+                'Error',
+                '타입 오류',
+                f'detail_text 타입 오류: {type(detail_text)}'
+            )
 
 class Info(QMainWindow):
     def __init__(self,parent,title,info_text,display_qtinfo=False):
@@ -610,12 +637,12 @@ class Grading2(QMainWindow,UI.Ui_Grading2):
                                 raise ValueError(f'\nError with input({j},{k},{x}):\nanswer({a[x]}) and correct({b[x]})')
                         ans+=a; cor+=b
         except ValueError:
-            msgbox=QMessageBox(self)
-            msgbox.setWindowTitle('ERROR')
-            msgbox.setText('값 입력 오류')
-            msgbox.setIcon(QMessageBox.Warning)
-            #msgbox.setDetailedText(str(e))
-            msgbox.setDetailedText(''.join(traceback.format_exception(*sys.exc_info())))
+            msgbox=QMessageBox(
+                self,
+                'ERROR',
+                '값 입력 오류',
+                sys.exc_info()
+            )
             msgbox.exec_()
         else:
             if len(ans)==len(cor):
@@ -813,10 +840,13 @@ class Grad_detail(QMainWindow,UI.Ui_GradDetail):
                         self.widSupply.sizeHint().height()
                     )
             except Exception as e:
-                msgbox=QMessageBox(self)
-                msgbox.setWindowTitle('ERROR')
-                msgbox.setText('오류 발생')
-                msgbox.setIcon(QMessageBox.Critical)
+                msgbox=QMessageBox(
+                    self,
+                    'ERROR',
+                    '오류 발생',
+                    sys.exc_info(),
+                    QMessageBox.Critical
+                )
                 msgbox.setDetailedText(''.join(traceback.format_exception(*sys.exc_info())))
                 msgbox.exec_()
                 self.deleteLater()
@@ -877,8 +907,7 @@ class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
             if not total_num:
                 raise ValueError
         except (ValueError,AssertionError) as e:
-            QMessageBox.critical(self,'Error','잘못된 입력')
-            print(e)
+            DetailErr(self,'Error','잘못된 입력',sys.exc_info())
         else:
             QMessageBox.information(
                 self,
@@ -942,14 +971,15 @@ class Exam_input(QMainWindow,UI.Ui_ExamInput):
                     if subject in current_result:
                         score,rank,person=current_result[subject]
                         self.ent[k][0].setText(score)
-                        self.ent[k][1].setText(str(rank))
-                        self.ent[k][2].setText(str(person))
+                        if rank and person:
+                            self.ent[k][1].setText(str(rank))
+                            self.ent[k][2].setText(str(person))
             
             for k,btn in enumerate(self.del_btn):
                 connect(k,btn)
             self.btnClear.clicked.connect(lambda: self.__del_subject())
             self.btnCancel.clicked.connect(self.deleteLater)
-            self.btnSet.clicked.connect(self.__end)
+            self.btnSet.clicked.connect(self.__get_input_and_close)
             
             #resize_window(self,self.centralwidget)
         else:
@@ -968,55 +998,49 @@ class Exam_input(QMainWindow,UI.Ui_ExamInput):
             self.ent[n][1].setText('')
             self.ent[n][2].setText('')
     
-    def __end(self):
+    def __get_input_and_close(self):
         global saved
-        all_entered=True; results=[]
+        all_score_inputed = True
+        all_inputed       = True
+        results={}
         try:
-            for k in range(current_subject_cnt):
-                '''
-                score_in=self.ent[k][0].text().replace('. ','').replace(' ','')
-                grade_in=self.ent[k][1].text().replace('. ','').replace(' ','')
-                count_in=self.ent[k][2].text().replace('. ','').replace(' ','')
-                '''
-                score_in=self.ent[k][0].text()
-                grade_in=self.ent[k][1].text()
-                count_in=self.ent[k][2].text()
+            for ent,subject in zip(self.ent,current_subjects):
+                score_in  = ent[0].text()
+                rank_in   = ent[1].text()
+                person_in = ent[2].text()
                 
-                if not score_in:
-                    QMessageBox.warning(self,'Error','점수 미입력')
-                    all_entered=False
-                    results.append((score_in,None,None))
-                elif not (grade_in and count_in):
-                    grade=int(grade_in)
-                    count=int(count_in)
-                    results.append((score_in,grade,count))
-                
-                if not score_in:
-                    QMessageBox.warning(self,'Error','점수 미입력')
-                elif not (grade_in and count_in):
-                    all_entered=False
-                
-                #float(score_in) #=score
-                grade=int(grade_in)
-                count=int(count_in)
-                
-                results.append((score_in,grade,count))
+                if score_in:
+                    if rank_in and person_in:
+                        rank   = int(rank_in)
+                        person = int(person_in)
+                        results[subject] =(score_in,rank,person)
+                    else:
+                        all_inputed=False
+                        results[subject]=(score_in,None,None)
+                else:
+                    all_score_inputed=False
         except ValueError:
-            QMessageBox.warning(self,'Error','입력 값 오류')
+            err_win=DetailErr(self,'Error','입력 값 오류',sys.exc_info())
+            err_win.exec_()
         else:
-            if not all_score_entered:
+            if not all_score_inputed:
                 proceed_with_blank=QMessageBox.warning(self,'진행?','점수 미입력\n성적입력?')
-            elif not all_entered:
+            elif not all_inputed:
                 proceed_with_blank=QMessageBox.warning(self,'진행?','빈 칸 존재\n성적입력?')
-            if all_entered or proceed_with_blank:
+            if (all_inputed or proceed_with_blank) and results:
+                global current_result
                 saved=False
+                current_result=results
+                '''
                 k=0
-                for subject,result in zip(current_subjects,results):
+                for subject in current_subjects:
+                    result=results[subject]
                     if all(result):
                         current_result[subject]=result
                     elif result[0]:
                         current_result[subject]=(result[0],None,None)
                     k+=1
+                '''
                 self.deleteLater()
                 result_win=Exam_result(self.__parent)
                 result_win.show()
@@ -1027,6 +1051,9 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
         super().__init__(parent)
         if current_result:
             inputed_subjects=list(current_result.keys())
+            
+            self.__grade_win = []
+            self.__cut_win   = []
             
             nums     = []
             scores   = []
@@ -1050,13 +1077,19 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
                         percents.append(round(percent,2))
                         if all_rank_inputed:
                             grades.append(grade)
+                        else:
+                            grades.append(None)
                     else:
                         all_rank_inputed=False
                         percents.append(None)
+                        grades.append(None)
                 else:
                     all_rank_inputed=False
                     nums.append(current_num[subject][0])
                     scores.append(None)
+                    grades.append(None)
+                    rank_str.append(None)
+                    percents.append(None)
             
             if all_rank_inputed:
                 total_grade=self.__get_total_grade(ranks,grades)
@@ -1065,6 +1098,8 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
             
             self.setupUI(self,current_subjects,nums,scores,grades,rank_str,percents,total_grade)
             
+            self.btnCutCalc.clicked.connect(self.__cutcalc)
+            self.btnGradeCalc.clicked.connect(self.__gradecalc)
             self.btnClose.clicked.connect(self.deleteLater)
             
         elif current_subjects:
@@ -1085,8 +1120,13 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
         n=array_num.sum()
         return round(result/n,4)
 
-    def __to_grading(self):
-        Grade_calc(self.__grades)
+    def __cutcalc(self):
+        self.__cut_win.append(Cut_calc(self))
+        self.__cut_win[-1].show()
+    
+    def __gradecalc(self):
+        self.__grade_win.append(Grade_calc(self))
+        self.__grade_win[-1].show()
 
 
 #등급인원계산
