@@ -108,12 +108,27 @@ def get_current_num(*,name=False,dictionary=False):
             QMessageBox.critical(None,'Error',f'Unknown Error: var type: {type(var)}\nvalue: {var}'+base_err)
 
 
-def resize_window(window,*wid):
+def resize_all(window,*wid):
+    app.processEvents()
+    for wid in reversed(wid):
+        wid.resize(wid.sizeHint().width(),wid.sizeHint().height())
+    window.resize(window.sizeHint().width(),window.sizeHint().height())
+    app.processEvents()
+
+
+def resize_height(window,*wid):
     app.processEvents()
     for wid in reversed(wid):
         wid.resize(wid.width(),wid.sizeHint().height())
-    window.setFixedSize(window.width(),window.sizeHint().height())
+    window.resize(window.width(),window.sizeHint().height())
     app.processEvents()
+
+
+def center_geometry(win_size):
+    x,y=screen_size
+    w=win_size.width()
+    h=win_size.height()
+    return QRect((x-w)//2,(y-h)//2,w,h)
 
 
 #읽기
@@ -298,7 +313,7 @@ class Main(QMainWindow,UI.Ui_Main):
         
         #Connect Slots (QButtons)
         self.btnSubject.clicked.connect(lambda: self.__show_window(Subject_In))
-        self.btnGrading.clicked.connect(lambda: self.__win.append(Grading_Controller(self)))
+        self.btnGrading.clicked.connect(lambda: self.__win.append(Grading_Controller()))
         self.btnGradingRes.clicked.connect(lambda: self.__show_window(Grad_result))
         self.btnCalc.clicked.connect(lambda: self.__show_window(Grade_calc))
         self.btnInput.clicked.connect(lambda: self.__show_window(Exam_input))
@@ -329,6 +344,7 @@ class Main(QMainWindow,UI.Ui_Main):
                 sys.exit(0)
             elif response==QMessageBox.Discard:
                 event.accept()
+                sys.exit(0)
             elif response==QMessageBox.Cancel:
                 event.ignore()
         else:
@@ -395,30 +411,31 @@ class Main(QMainWindow,UI.Ui_Main):
             self.btnRes.setEnabled(False)
     
     def __show_window(self,window):
-        self.__win.append(window(self))
+        self.__win.append(window(None))
         self.__win[-1].show()
+        self.__win[-1].setGeometry(center_geometry(self.__win[-1].geometry()))
     
     def __opensource_notice(self):
         if not self.__opensource_notice_win:
             if os.path.isfile(PROGRAM_PATH+'NOTICE'):
                 with open(PROGRAM_PATH+'NOTICE','r',encoding='utf-8') as file:
-                    self.__opensource_notice_win=Info(self,'오픈 소스 라이선스',file.read(),True)
+                    self.__opensource_notice_win=Info(None,'오픈 소스 라이선스',file.read(),True)
             else:
-                self.__opensource_notice_win=Info(self,'오픈 소스 라이선스','Notice File is Missed',True)
+                self.__opensource_notice_win=Info(None,'오픈 소스 라이선스','Notice File is Missed',True)
         self.__opensource_notice_win.show()
     
     def __license(self):
         if not self.__license_win:
             if os.path.isfile(PROGRAM_PATH+'LICENSE'):
                 with open(PROGRAM_PATH+'LICENSE','r',encoding='utf-8') as file:
-                    self.__license_win=Info(self,'정보',file.read())
+                    self.__license_win=Info(None,'정보',file.read())
             else:
-                self.__license_win=Info(self,'정보','License File is Missed')
+                self.__license_win=Info(None,'정보','License File is Missed')
         self.__license_win.show()
 
 #과목 입력
 class Subject_In(QMainWindow,UI.Ui_SubjectIn):
-    def __init__(self,parent):
+    def __init__(self,parent=None):
         super().__init__(parent)
         self.setupUI(self)
         
@@ -438,7 +455,7 @@ class Subject_In(QMainWindow,UI.Ui_SubjectIn):
         wids=self.addWidgets(n,subject,value)
         wids[4].clicked.connect(lambda: self.__del_subject(n))
         self.__inbox.append(wids)
-        QTimer.singleShot(100,lambda: resize_window(self,self.centralwidget,self.widCent))
+        QTimer.singleShot(100,lambda: resize_height(self,self.centralwidget,self.widCent))
 
     def __del_subject(self,n):
         for a in range(5):
@@ -468,7 +485,7 @@ class Subject_In(QMainWindow,UI.Ui_SubjectIn):
 
 #가채점 입력
 class Grading_Controller:
-    def __init__(self,parent):
+    def __init__(self,parent=None):
         self.__parent=parent
         
         self.__grd1=Grading1(parent,current_subjects)
@@ -532,7 +549,7 @@ class Grading_Controller:
         def callback(btn):
             btnRole=msgbox.buttonRole(btn)
             if btnRole==QMessageBox.YesRole:
-                detail_win=Grad_detail(self.__parent,data[0])
+                detail_win=Grad_detail(None,data[0])
                 detail_win.show()
         
         msgbox=QMessageBox(self.__parent)
@@ -582,7 +599,7 @@ class Grading1(QMainWindow,UI.Ui_Grading1):
 
 class Grading2(QMainWindow,UI.Ui_Grading2):
     stat_sig=Signal(tuple)
-    def __init__(self,parent):
+    def __init__(self,parent=None):
         super().__init__(parent)
         self.setupUI(self)
 
@@ -684,7 +701,7 @@ class Grading2(QMainWindow,UI.Ui_Grading2):
 
 class Grading31(QMainWindow,UI.Ui_Grading31):
     stat_sig=Signal(tuple)
-    def __init__(self,parent):
+    def __init__(self,parent=None):
         super().__init__(parent)
         self.setupUI(self)
         
@@ -701,7 +718,7 @@ class Grading31(QMainWindow,UI.Ui_Grading31):
         for k,err in enumerate(self.__err1):
             self.__score.append(self.addWidgets(k,err))
         
-        resize_window(self,self.centralwidget,self.widCent)
+        resize_height(self,self.centralwidget,self.widCent)
     
     def __priv(self):
         self.stat_sig.emit((-1,self.__subject))
@@ -724,7 +741,7 @@ class Grading31(QMainWindow,UI.Ui_Grading31):
 
 class Grading32(QMainWindow,UI.Ui_Grading32):
     stat_sig=Signal(tuple)
-    def __init__(self,parent):
+    def __init__(self,parent=None):
         super().__init__(parent)
         self.setupUI(self)
         
@@ -739,7 +756,7 @@ class Grading32(QMainWindow,UI.Ui_Grading32):
         for k,err in enumerate(self.__err2):
             self.__score.append(self.addWidgets(k,err))
         
-        resize_window(self,self.centralwidget,self.widCent)
+        resize_height(self,self.centralwidget,self.widCent)
     
     def __priv(self):
         self.setVisible(False)
@@ -764,7 +781,7 @@ class Grading32(QMainWindow,UI.Ui_Grading32):
 
 
 class Grad_result(QMainWindow,UI.Ui_GradResult):
-    def __init__(self,parent):
+    def __init__(self,parent=None):
         def do_connect(signal,func,*args):
             signal.connect(lambda: func(*args))
         
@@ -796,6 +813,7 @@ class Grad_result(QMainWindow,UI.Ui_GradResult):
                 self.addWidgets(k,subject,None,None)
                 self.__chk.append(None)
         
+        resize_all(self,self.centralwidget,self.widCent)
         QShortcut(ESCAPE_SEQ,self).activated.connect(self.deleteLater)
         self.btnClose.clicked.connect(self.deleteLater)
         self.btnDel.clicked.connect(self.__del_res)
@@ -811,13 +829,13 @@ class Grad_result(QMainWindow,UI.Ui_GradResult):
                         del current_wrong[subject]
             self.deleteLater()
             if current_wrong:
-                grad_win=Grad_result(self.__parent)
+                grad_win=Grad_result()
                 grad_win.show()
             else:
                 self.__parent.update_btn()
     
     def __show_detail(self,parent,subject):
-        self.__subject_win.append(Grad_detail(parent,subject))
+        self.__subject_win.append(Grad_detail(None,subject))
         self.__subject_win[-1].show()
 
 
@@ -851,7 +869,7 @@ class Grad_detail(QMainWindow,UI.Ui_GradDetail):
                 msgbox.exec_()
                 self.deleteLater()
             else:
-                resize_window(self,self.centralwidget)
+                resize_height(self,self.centralwidget)
             
             QShortcut(ESCAPE_SEQ,self).activated.connect(self.deleteLater)
             self.btnClose.clicked.connect(self.deleteLater)
@@ -863,7 +881,7 @@ class Grad_detail(QMainWindow,UI.Ui_GradDetail):
 class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
     def __init__(self,parent,grades=None):
         def cut_calc():
-            self.__cut_calc.append(Cut_calc(self))
+            self.__cut_calc.append(Cut_calc())
             self.__cut_calc[-1].show()
         
         super().__init__(parent)
@@ -879,7 +897,6 @@ class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
                 self.__input.append(self.addWidgets(k,subject,current_num[subject][0]))
             
             QShortcut(ESCAPE_SEQ,self).activated.connect(self.deleteLater)
-            
             self.btnCutCalc.clicked.connect(cut_calc)
             self.btnClear.clicked.connect(self.__del_all)
             self.btnCalc.clicked.connect(self.__calc)
@@ -955,7 +972,7 @@ class Grade_calc(QMainWindow,UI.Ui_GradeCalc):
 
 #성적 입력
 class Exam_input(QMainWindow,UI.Ui_ExamInput):
-    def __init__(self,parent):
+    def __init__(self,parent=None):
         global current_result
         def connect(k,btn):
             btn.clicked.connect(lambda: self.__del_subject(k))
@@ -981,7 +998,7 @@ class Exam_input(QMainWindow,UI.Ui_ExamInput):
             self.btnCancel.clicked.connect(self.deleteLater)
             self.btnSet.clicked.connect(self.__get_input_and_close)
             
-            #resize_window(self,self.centralwidget)
+            #resize_height(self,self.centralwidget)
         else:
             QMessageBox.warning(self,'Error','과목 입력 안됨')
     
@@ -1036,12 +1053,12 @@ class Exam_input(QMainWindow,UI.Ui_ExamInput):
                     current_result=results
                     
                     self.deleteLater()
-                    result_win=Exam_result(self.__parent)
+                    result_win=Exam_result()
                     result_win.show()
 
 #시혐 결과
 class Exam_result(QMainWindow,UI.Ui_ExamResult):
-    def __init__(self,parent):
+    def __init__(self,parent=None):
         super().__init__(parent)
         if current_result:
             inputed_subjects=list(current_result.keys())
@@ -1113,17 +1130,17 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
         return round(result/n,4)
 
     def __cutcalc(self):
-        self.__cut_win.append(Cut_calc(self))
+        self.__cut_win.append(Cut_calc(None))
         self.__cut_win[-1].show()
     
     def __gradecalc(self):
-        self.__grade_win.append(Grade_calc(self))
+        self.__grade_win.append(Grade_calc(None))
         self.__grade_win[-1].show()
 
 
 #등급인원계산
 class Cut_calc(QMainWindow,UI.Ui_CutCalc):
-    def __init__(self,parent):
+    def __init__(self,parent=None):
         super().__init__(parent)
         self.setupUI(self)
         
@@ -1153,7 +1170,13 @@ if __name__=='__main__':
     
     app=QApplication()
     
+    
     main=Main()
+    
+    tmp=app.desktop().screenGeometry(main)
+    screen_size=(tmp.width(),tmp.height())
+    
+    main.setGeometry(center_geometry(main))
     main.show()
     
     sys.exit(app.exec_())
