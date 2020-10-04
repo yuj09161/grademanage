@@ -1083,7 +1083,7 @@ class Exam_result(QMainWindow,UI.Ui_ExamResult):
                     percents.append(None)
             
             if all_rank_inputed:
-                total_grade=self.__get_total_grade(ranks,grades)
+                total_grade=self.__get_total_grade(nums,grades)
             else:
                 total_grade=0
             
