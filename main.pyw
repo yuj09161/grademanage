@@ -1169,7 +1169,7 @@ if __name__=='__main__':
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
     
     app=QApplication()
-    
+    app.setWindowIcon(QIcon(PROGRAM_PATH+'icon.png'))
     
     main=Main()
     
