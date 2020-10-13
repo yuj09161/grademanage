@@ -1145,8 +1145,8 @@ class Cut_calc(QMainWindow,UI.Ui_CutCalc):
         self.setupUI(self)
         
         for k,(ratio,lbGrade,lbRatio) in enumerate(zip(CUT_RATIO,self.lbGrades,self.lbRatios)):
-            lbGrade.setText(str(k))
-            lbRatio.setText(str(ratio))
+            lbGrade.setText(str(k+1))
+            lbRatio.setText(f'{ratio}%')
         
         QShortcut(ESCAPE_SEQ,self).activated.connect(self.deleteLater)
         QShortcut(QKeySequence.fromString('Enter'),self).activated.connect(self.__set_cuts)
