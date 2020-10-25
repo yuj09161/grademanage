@@ -219,14 +219,14 @@ class DetailErr(QMessageBox):
         
         self.setWindowTitle(title)
         self.setText(text)
-        self.setIcon(QMessageBox.Critical)
+        self.setIcon(icon)
         
         if type(detail_text) is str:
             self.setDetailedText(detail_text)
         elif type(detail_text) is tuple:
             try:
                 self.setDetailedText(''.join(traceback.format_exception(*detail_text)))
-            except Exception:
+            except:
                 err_win=DetailErr(
                     self,
                     'Error',
